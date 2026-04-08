@@ -1,80 +1,71 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[DisallowMultipleComponent]
-[RequireComponent(typeof(CharacterController))]
-public sealed class PlayerMovement : MonoBehaviour
+namespace Player
 {
-    [SerializeField] private InputActionAsset inputActions;
-    [SerializeField] private string actionMapName = "Player";
-    [SerializeField] private string moveActionName = "Move";
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float turnSpeed = 720f;
-    [SerializeField] private float gravity = -20f;
-    [SerializeField] private float groundedVerticalVelocity = -2f;
-
-    private CharacterController characterController;
-    private InputAction moveAction;
-    private float verticalVelocity;
-
-    private void Awake()
+    [DisallowMultipleComponent]
+    [RequireComponent(typeof(CharacterController))]
+    public sealed class PlayerMovement : MonoBehaviour
     {
-        characterController = GetComponent<CharacterController>();
-        moveAction = inputActions != null
-            ? inputActions.FindAction($"{actionMapName}/{moveActionName}", true)
-            : null;
+        [SerializeField] private InputActionReference moveActionReference;
 
-        if (moveAction == null)
+        [SerializeField] private float moveSpeed = 5f;
+        [SerializeField] private float turnSpeed = 720f;
+        [SerializeField] private float gravity = -20f;
+        [SerializeField] private float groundedVerticalVelocity = -2f;
+
+        private CharacterController _characterController;
+        private float _verticalVelocity;
+        
+        /// <summary>
+        /// Обрабатывает инпуты движения игрока
+        /// </summary>
+        private void HandleMovement()
         {
-            Debug.LogError("PlayerMovement could not find the configured Move action.", this);
-            enabled = false;
+            if (_characterController.isGrounded && _verticalVelocity < 0f)
+                _verticalVelocity = groundedVerticalVelocity;
+
+            Vector2 input = moveActionReference.action.ReadValue<Vector2>();
+            Vector3 movement = new Vector3(input.x, 0f, input.y);
+            
+            if (movement.sqrMagnitude > 0.01f)
+            {
+                if (movement.sqrMagnitude > 1f)
+                    movement.Normalize();
+            
+                Quaternion targetRotation = Quaternion.LookRotation(movement, Vector3.up);
+                transform.rotation = Quaternion.RotateTowards(
+                    transform.rotation,
+                    targetRotation,
+                    turnSpeed * Time.deltaTime);
+            }
+
+            _verticalVelocity += gravity * Time.deltaTime;
+
+            Vector3 frameMotion = movement * moveSpeed;
+            frameMotion.y = _verticalVelocity;
+
+            _characterController.Move(frameMotion * Time.deltaTime);
         }
-    }
-
-    private void OnEnable()
-    {
-        moveAction?.Enable();
-    }
-
-    private void OnDisable()
-    {
-        moveAction?.Disable();
-    }
-
-    private void Update()
-    {
-        if (moveAction == null)
+        
+        private void Awake()
         {
-            return;
+            _characterController = GetComponent<CharacterController>();
+        
+            if (moveActionReference == null)
+            {
+                Debug.LogError("Move Action Reference is missing.", this);
+                enabled = false;
+            }
         }
 
-        if (characterController.isGrounded && verticalVelocity < 0f)
+        private void OnEnable() => moveActionReference?.action.Enable();
+
+        private void OnDisable() => moveActionReference?.action.Disable();
+
+        private void Update()
         {
-            verticalVelocity = groundedVerticalVelocity;
+            HandleMovement();
         }
-
-        Vector2 input = moveAction.ReadValue<Vector2>();
-        Vector3 movement = new Vector3(input.x, 0f, input.y);
-
-        if (movement.sqrMagnitude > 1f)
-        {
-            movement.Normalize();
-        }
-
-        if (movement.sqrMagnitude > 0.0001f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(movement, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(
-                transform.rotation,
-                targetRotation,
-                turnSpeed * Time.deltaTime);
-        }
-
-        verticalVelocity += gravity * Time.deltaTime;
-
-        Vector3 frameMotion = movement * moveSpeed;
-        frameMotion.y = verticalVelocity;
-
-        characterController.Move(frameMotion * Time.deltaTime);
     }
 }
