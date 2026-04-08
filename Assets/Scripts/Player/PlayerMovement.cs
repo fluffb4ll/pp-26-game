@@ -8,17 +8,19 @@ namespace Player
     public sealed class PlayerMovement : MonoBehaviour
     {
         [SerializeField] private InputActionReference moveActionReference;
+        [SerializeField] private Transform cameraTransform;
 
         [SerializeField] private float moveSpeed = 5f;
-        [SerializeField] private float turnSpeed = 720f;
+        [SerializeField] private float turnSpeed = 90f;
         [SerializeField] private float gravity = -20f;
         [SerializeField] private float groundedVerticalVelocity = -2f;
 
         private CharacterController _characterController;
         private float _verticalVelocity;
+        private Transform _transform;
         
         /// <summary>
-        /// Обрабатывает инпуты движения игрока
+        /// Обрабатывает движение игрока
         /// </summary>
         private void HandleMovement()
         {
@@ -26,7 +28,17 @@ namespace Player
                 _verticalVelocity = groundedVerticalVelocity;
 
             Vector2 input = moveActionReference.action.ReadValue<Vector2>();
-            Vector3 movement = new Vector3(input.x, 0f, input.y);
+            
+            // вычисление направления поворота относительно камеры
+            Vector3 camForward = cameraTransform.forward;
+            Vector3 camRight = cameraTransform.right;
+
+            camForward.y = 0f;
+            camRight.y = 0f;
+            camForward = camForward.normalized;
+            camRight = camRight.normalized;
+            
+            Vector3 movement = camForward * input.y + camRight * input.x;
             
             if (movement.sqrMagnitude > 0.01f)
             {
