@@ -832,17 +832,17 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Android: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2
-    LinuxHeadlessSimulation: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2
-    Nintendo Switch: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2
-    PS4: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2
-    PS5: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2
-    Standalone: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2
-    WebGL: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2
-    Windows Store Apps: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2
-    XboxOne: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2
-    iPhone: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2
-    tvOS: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2
+    Android: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;InterstitialAdv_yg;RewardedAdv_yg;Authorization_yg;Storage_yg;PlayerStats_yg;RedefinePlayerPrefs_yg;Leaderboards_yg;Payments_yg;Metrica_yg;ServerTime_yg;Fullscreen_yg
+    LinuxHeadlessSimulation: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;InterstitialAdv_yg;RewardedAdv_yg;Authorization_yg;Storage_yg;PlayerStats_yg;RedefinePlayerPrefs_yg;Leaderboards_yg;Payments_yg;Metrica_yg;ServerTime_yg;Fullscreen_yg
+    Nintendo Switch: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;InterstitialAdv_yg;RewardedAdv_yg;Authorization_yg;Storage_yg;PlayerStats_yg;RedefinePlayerPrefs_yg;Leaderboards_yg;Payments_yg;Metrica_yg;ServerTime_yg;Fullscreen_yg
+    PS4: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;InterstitialAdv_yg;RewardedAdv_yg;Authorization_yg;Storage_yg;PlayerStats_yg;RedefinePlayerPrefs_yg;Leaderboards_yg;Payments_yg;Metrica_yg;ServerTime_yg;Fullscreen_yg
+    PS5: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;InterstitialAdv_yg;RewardedAdv_yg;Authorization_yg;Storage_yg;PlayerStats_yg;RedefinePlayerPrefs_yg;Leaderboards_yg;Payments_yg;Metrica_yg;ServerTime_yg;Fullscreen_yg
+    Standalone: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;InterstitialAdv_yg;RewardedAdv_yg;Authorization_yg;Storage_yg;PlayerStats_yg;RedefinePlayerPrefs_yg;Leaderboards_yg;Payments_yg;Metrica_yg;ServerTime_yg;Fullscreen_yg
+    WebGL: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;InterstitialAdv_yg;RewardedAdv_yg;Authorization_yg;Storage_yg;PlayerStats_yg;RedefinePlayerPrefs_yg;Leaderboards_yg;Payments_yg;Metrica_yg;ServerTime_yg;Fullscreen_yg
+    Windows Store Apps: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;InterstitialAdv_yg;RewardedAdv_yg;Authorization_yg;Storage_yg;PlayerStats_yg;RedefinePlayerPrefs_yg;Leaderboards_yg;Payments_yg;Metrica_yg;ServerTime_yg;Fullscreen_yg
+    XboxOne: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;InterstitialAdv_yg;RewardedAdv_yg;Authorization_yg;Storage_yg;PlayerStats_yg;RedefinePlayerPrefs_yg;Leaderboards_yg;Payments_yg;Metrica_yg;ServerTime_yg;Fullscreen_yg
+    iPhone: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;InterstitialAdv_yg;RewardedAdv_yg;Authorization_yg;Storage_yg;PlayerStats_yg;RedefinePlayerPrefs_yg;Leaderboards_yg;Payments_yg;Metrica_yg;ServerTime_yg;Fullscreen_yg
+    tvOS: YandexGamesPlatform_yg;PLUGIN_YG_2;TMP_YG2;RU_YG2;InterstitialAdv_yg;RewardedAdv_yg;Authorization_yg;Storage_yg;PlayerStats_yg;RedefinePlayerPrefs_yg;Leaderboards_yg;Payments_yg;Metrica_yg;ServerTime_yg;Fullscreen_yg
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
