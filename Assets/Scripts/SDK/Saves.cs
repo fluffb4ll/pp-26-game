@@ -6,7 +6,9 @@ namespace YG
     /// </summary>
     public partial class SavesYG
     {
-        public int coins = 5;   // TODO: разобраться, нужно ли инициализировать со значением
+        // TODO: разобраться, нужно ли инициализировать значения
+        public long lastDailyRewardTime;
+        public int coins = 5;
     }
 }
 
