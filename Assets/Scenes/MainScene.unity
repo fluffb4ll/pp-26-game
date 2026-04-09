@@ -172,6 +172,11 @@ MonoBehaviour:
   knobSize: 96
   backgroundOpacity: 0.18
   knobOpacity: 0.45
+--- !u!4 &320725906 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1121518365823419834, guid: 0014352602f851c4cb1c31280b5ff84c, type: 3}
+  m_PrefabInstance: {fileID: 4121179556610975504}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,6 +433,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3101674446757614384, guid: 0014352602f851c4cb1c31280b5ff84c, type: 3}
+      propertyPath: followSmoothTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5331626465089573998, guid: 0014352602f851c4cb1c31280b5ff84c, type: 3}
+      propertyPath: turnSpeed
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 5331626465089573998, guid: 0014352602f851c4cb1c31280b5ff84c, type: 3}
+      propertyPath: visualRoot
+      value: 
+      objectReference: {fileID: 320725906}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
