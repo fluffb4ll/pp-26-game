@@ -156,7 +156,7 @@ MonoBehaviour:
   lookActionName: Look
   pivotHeight: 1.6
   distance: 6
-  followSmoothTime: 0.06
+  followSmoothTime: 0
   minPitch: -10
   maxPitch: 70
   mouseSensitivity: 0.1
@@ -237,9 +237,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveActionReference: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   cameraTransform: {fileID: 2863124034491044215}
-  visualRoot: {fileID: 1121518365823419834}
   moveSpeed: 5
-  turnSpeed: 540
+  turnSpeed: 500
   gravity: -20
   groundedVerticalVelocity: -2
 --- !u!1 &5700222025507402230
