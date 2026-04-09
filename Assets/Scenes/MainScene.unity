@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 120000021}
   - component: {fileID: 120000022}
   m_Layer: 0
-  m_Name: TouchControls
+  m_Name: UIRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,18 +160,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 120000020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c41be6af4cb3456eb1b08e9c737f4e8a, type: 3}
+  m_Script: {fileID: 11500000, guid: c6f4e3d0d91b4eaf939dbf457db63234, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasName: TouchCanvas
-  eventSystemName: EventSystem
-  joystickName: MoveJoystick
-  joystickSize: {x: 220, y: 220}
-  handleSize: 96
-  screenOffset: {x: 120, y: 120}
+  referenceResolution: {x: 1920, y: 1080}
+  matchWidthOrHeight: 0.5
+  showTouchControlsInEditor: 1
+  joystickSize: {x: 240, y: 240}
+  joystickMargin: {x: 36, y: 36}
+  movementRange: 90
+  knobSize: 96
   backgroundOpacity: 0.18
-  handleOpacity: 0.45
-  showInEditor: 1
+  knobOpacity: 0.45
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,19 +398,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2863124034491044215, guid: 0014352602f851c4cb1c31280b5ff84c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.74
+      value: 3.85
       objectReference: {fileID: 0}
     - target: {fileID: 2863124034491044215, guid: 0014352602f851c4cb1c31280b5ff84c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.66
+      value: -5.56
       objectReference: {fileID: 0}
     - target: {fileID: 2863124034491044215, guid: 0014352602f851c4cb1c31280b5ff84c, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9888865
+      value: 0.98162717
       objectReference: {fileID: 0}
     - target: {fileID: 2863124034491044215, guid: 0014352602f851c4cb1c31280b5ff84c, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.14867245
+      value: 0.190809
       objectReference: {fileID: 0}
     - target: {fileID: 2863124034491044215, guid: 0014352602f851c4cb1c31280b5ff84c, type: 3}
       propertyPath: m_LocalRotation.y
@@ -422,7 +422,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2863124034491044215, guid: 0014352602f851c4cb1c31280b5ff84c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 17.1
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 3040924242304209542, guid: 0014352602f851c4cb1c31280b5ff84c, type: 3}
       propertyPath: m_Name

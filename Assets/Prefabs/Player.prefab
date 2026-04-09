@@ -28,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1136689123810821260}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.97, z: -10}
+  m_LocalRotation: {x: 0.190809, y: 0, z: 0, w: 0.98162717}
+  m_LocalPosition: {x: 0, y: 3.85, z: -5.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1197920724790490409}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 22, y: 0, z: 0}
 --- !u!20 &8279339638171617916
 Camera:
   m_ObjectHideFlags: 0
@@ -151,10 +151,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1197920724790490409}
-  offset: {x: 0, y: 6, z: -7}
-  followSmoothTime: 0.18
-  rotationSmoothSpeed: 10
-  lookAtHeight: 1.2
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  actionMapName: Player
+  lookActionName: Look
+  pivotHeight: 1.6
+  distance: 6
+  followSmoothTime: 0.06
+  minPitch: -10
+  maxPitch: 70
+  mouseSensitivity: 0.1
+  touchSensitivity: 0.08
+  gamepadLookSpeed: 140
+  lockCursorWhileRotating: 1
 --- !u!1 &3040924242304209542
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,8 +237,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveActionReference: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   cameraTransform: {fileID: 2863124034491044215}
+  visualRoot: {fileID: 1121518365823419834}
   moveSpeed: 5
-  turnSpeed: 90
+  turnSpeed: 540
   gravity: -20
   groundedVerticalVelocity: -2
 --- !u!1 &5700222025507402230

@@ -1,83 +1,105 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Player
+[DisallowMultipleComponent]
+[RequireComponent(typeof(CharacterController))]
+public sealed class PlayerMovement : MonoBehaviour
 {
-    [DisallowMultipleComponent]
-    [RequireComponent(typeof(CharacterController))]
-    public sealed class PlayerMovement : MonoBehaviour
+    [SerializeField] private InputActionReference moveActionReference;
+    [SerializeField] private Transform cameraTransform;
+    [SerializeField] private Transform visualRoot;
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float turnSpeed = 540f;
+    [SerializeField] private float gravity = -20f;
+    [SerializeField] private float groundedVerticalVelocity = -2f;
+
+    private CharacterController characterController;
+    private Transform cachedTransform;
+    private Transform cachedVisualRoot;
+    private float verticalVelocity;
+
+    private void Awake()
     {
-        [SerializeField] private InputActionReference moveActionReference;
-        [SerializeField] private Transform cameraTransform;
+        characterController = GetComponent<CharacterController>();
+        cachedTransform = transform;
+        cachedVisualRoot = visualRoot != null ? visualRoot : cachedTransform;
 
-        [SerializeField] private float moveSpeed = 5f;
-        [SerializeField] private float turnSpeed = 90f;
-        [SerializeField] private float gravity = -20f;
-        [SerializeField] private float groundedVerticalVelocity = -2f;
-
-        private CharacterController _characterController;
-        private float _verticalVelocity;
-        private Transform _transform;
-        
-        /// <summary>
-        /// Обрабатывает движение игрока
-        /// </summary>
-        private void HandleMovement()
+        if (moveActionReference == null || moveActionReference.action == null)
         {
-            if (_characterController.isGrounded && _verticalVelocity < 0f)
-                _verticalVelocity = groundedVerticalVelocity;
-
-            Vector2 input = moveActionReference.action.ReadValue<Vector2>();
-            
-            // вычисление направления поворота относительно камеры
-            Vector3 camForward = cameraTransform.forward;
-            Vector3 camRight = cameraTransform.right;
-
-            camForward.y = 0f;
-            camRight.y = 0f;
-            camForward = camForward.normalized;
-            camRight = camRight.normalized;
-            
-            Vector3 movement = camForward * input.y + camRight * input.x;
-            
-            if (movement.sqrMagnitude > 0.01f)
-            {
-                if (movement.sqrMagnitude > 1f)
-                    movement.Normalize();
-            
-                Quaternion targetRotation = Quaternion.LookRotation(movement, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(
-                    transform.rotation,
-                    targetRotation,
-                    turnSpeed * Time.deltaTime);
-            }
-
-            _verticalVelocity += gravity * Time.deltaTime;
-
-            Vector3 frameMotion = movement * moveSpeed;
-            frameMotion.y = _verticalVelocity;
-
-            _characterController.Move(frameMotion * Time.deltaTime);
+            Debug.LogError("Move Action Reference is missing.", this);
+            enabled = false;
         }
-        
-        private void Awake()
+    }
+
+    private void OnEnable()
+    {
+        moveActionReference?.action?.Enable();
+    }
+
+    private void OnDisable()
+    {
+        moveActionReference?.action?.Disable();
+    }
+
+    private void Update()
+    {
+        if (moveActionReference == null || moveActionReference.action == null)
         {
-            _characterController = GetComponent<CharacterController>();
-        
-            if (moveActionReference == null)
-            {
-                Debug.LogError("Move Action Reference is missing.", this);
-                enabled = false;
-            }
+            return;
         }
 
-        private void OnEnable() => moveActionReference?.action.Enable();
+        Transform movementCamera = cameraTransform != null ? cameraTransform : Camera.main?.transform;
+        Vector2 input = moveActionReference.action.ReadValue<Vector2>();
+        Vector3 movement = GetCameraRelativeMovement(input, movementCamera);
 
-        private void OnDisable() => moveActionReference?.action.Disable();
-
-        private void Update()
+        if (characterController.isGrounded && verticalVelocity < 0f)
         {
-            HandleMovement();
+            verticalVelocity = groundedVerticalVelocity;
         }
+
+        if (movement.sqrMagnitude > 0.0001f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(movement, Vector3.up);
+            cachedVisualRoot.rotation = Quaternion.RotateTowards(
+                cachedVisualRoot.rotation,
+                targetRotation,
+                turnSpeed * Time.deltaTime);
+        }
+
+        verticalVelocity += gravity * Time.deltaTime;
+
+        Vector3 frameMotion = movement * moveSpeed;
+        frameMotion.y = verticalVelocity;
+
+        characterController.Move(frameMotion * Time.deltaTime);
+    }
+
+    private static Vector3 GetCameraRelativeMovement(Vector2 input, Transform movementCamera)
+    {
+        if (input.sqrMagnitude <= 0f)
+        {
+            return Vector3.zero;
+        }
+
+        Vector3 forward = Vector3.forward;
+        Vector3 right = Vector3.right;
+
+        if (movementCamera != null)
+        {
+            forward = movementCamera.forward;
+            right = movementCamera.right;
+            forward.y = 0f;
+            right.y = 0f;
+            forward.Normalize();
+            right.Normalize();
+        }
+
+        Vector3 movement = forward * input.y + right * input.x;
+        if (movement.sqrMagnitude > 1f)
+        {
+            movement.Normalize();
+        }
+
+        return movement;
     }
 }
