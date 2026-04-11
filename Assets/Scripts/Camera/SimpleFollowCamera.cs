@@ -1,132 +1,116 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// держит камеру рядом с игроком и крутит ее только от ввода
+/// </summary>
 [DisallowMultipleComponent]
 public sealed class SimpleFollowCamera : MonoBehaviour
 {
     [SerializeField] private Transform target;
-    [SerializeField] private InputActionAsset inputActions;
-    [SerializeField] private string actionMapName = "Player";
-    [SerializeField] private string lookActionName = "Look";
+    [SerializeField] private InputActionReference lookActionReference;
     [SerializeField] private float pivotHeight = 1.6f;
     [SerializeField] private float distance = 6f;
-    [SerializeField] private float followSmoothTime = 0.06f;
     [SerializeField] private float minPitch = -10f;
     [SerializeField] private float maxPitch = 70f;
-    [SerializeField] private float mouseSensitivity = 0.1f;
-    [SerializeField] private float touchSensitivity = 0.08f;
-    [SerializeField] private float gamepadLookSpeed = 140f;
+    [SerializeField] private float mouseSensitivity = 0.18f;
+    [SerializeField] private float gamepadLookSpeed = 220f;
     [SerializeField] private bool lockCursorWhileRotating = true;
 
-    private InputAction lookAction;
-    private Transform cachedTransform;
-    private Vector3 followVelocity;
-    private bool cursorLockedByCamera;
-    private float yaw;
-    private float pitch;
+    private InputAction _lookAction;
+    private Transform _transform;
+    private bool _cursorLockedByCamera;
+    private float _yaw;
+    private float _pitch;
 
+    /// <summary>
+    /// забираем ссылки и стартовые углы камеры
+    /// </summary>
     private void Awake()
     {
-        cachedTransform = transform;
-        lookAction = inputActions != null
-            ? inputActions.FindAction($"{actionMapName}/{lookActionName}", false)
-            : null;
+        _lookAction = lookActionReference.action;
+        _transform = transform;
 
-        if (lookAction == null)
-        {
-            Debug.LogError("SimpleFollowCamera could not find the configured Look action.", this);
-            enabled = false;
-            return;
-        }
-
-        Vector3 eulerAngles = cachedTransform.eulerAngles;
-        yaw = NormalizeAngle(eulerAngles.y);
-        pitch = Mathf.Clamp(NormalizeAngle(eulerAngles.x), minPitch, maxPitch);
+        Vector3 eulerAngles = _transform.eulerAngles;
+        _yaw = NormalizeAngle(eulerAngles.y);
+        _pitch = Mathf.Clamp(NormalizeAngle(eulerAngles.x), minPitch, maxPitch);
     }
 
-    private void OnEnable()
-    {
-        lookAction?.Enable();
-    }
+    /// <summary>
+    /// включаем look пока камера активна
+    /// </summary>
+    private void OnEnable() => _lookAction.Enable();
 
+    /// <summary>
+    /// отпускаем ввод который забрала камера
+    /// </summary>
     private void OnDisable()
     {
-        lookAction?.Disable();
+        _lookAction.Disable();
         ReleaseCursor();
     }
 
+    /// <summary>
+    /// отпускаем курсор если камеру удалили во время поворота
+    /// </summary>
     private void OnDestroy()
     {
         ReleaseCursor();
     }
 
+    /// <summary>
+    /// не даем курсору залипнуть после потери фокуса
+    /// </summary>
     private void OnApplicationFocus(bool hasFocus)
     {
         if (!hasFocus)
-        {
             ReleaseCursor();
-        }
     }
 
+    /// <summary>
+    /// ставим камеру после движения игрока
+    /// </summary>
     private void LateUpdate()
     {
-        if (target == null || lookAction == null)
-        {
-            return;
-        }
-
         Vector2 lookInput = ReadLookInput();
-        yaw += lookInput.x;
-        pitch = Mathf.Clamp(pitch - lookInput.y, minPitch, maxPitch);
+        _yaw += lookInput.x;
+        _pitch = Mathf.Clamp(_pitch - lookInput.y, minPitch, maxPitch);
 
-        Quaternion orbitRotation = Quaternion.Euler(pitch, yaw, 0f);
+        Quaternion orbitRotation = Quaternion.Euler(_pitch, _yaw, 0f);
         Vector3 pivotPosition = target.position + Vector3.up * pivotHeight;
-        Vector3 desiredPosition = pivotPosition + orbitRotation * (Vector3.back * distance);
 
-        if (followSmoothTime > 0f)
-        {
-            cachedTransform.position = Vector3.SmoothDamp(
-                cachedTransform.position,
-                desiredPosition,
-                ref followVelocity,
-                followSmoothTime);
-        }
-        else
-        {
-            cachedTransform.position = desiredPosition;
-        }
-
-        cachedTransform.rotation = orbitRotation;
+        _transform.position = pivotPosition + orbitRotation * (Vector3.back * distance);
+        _transform.rotation = orbitRotation;
     }
 
+    /// <summary>
+    /// переводим look в поворот камеры
+    /// </summary>
     private Vector2 ReadLookInput()
     {
         UpdateCursorState();
 
-        if (TryReadTouchLook(out Vector2 touchLook))
-        {
-            return touchLook * touchSensitivity;
-        }
+        Vector2 rawInput = _lookAction.ReadValue<Vector2>();
+        if (rawInput.sqrMagnitude <= 0.0001f)
+            return Vector2.zero;
 
-        Vector2 rawInput = lookAction.ReadValue<Vector2>();
-        InputDevice activeDevice = lookAction.activeControl?.device;
+        InputDevice activeDevice = _lookAction.activeControl.device;
 
-        if (activeDevice is Gamepad)
-        {
+        if (activeDevice is Gamepad or Joystick)
             return rawInput * (gamepadLookSpeed * Time.deltaTime);
-        }
 
-        if (activeDevice is Mouse && Mouse.current != null && Mouse.current.rightButton.isPressed)
-        {
+        if (activeDevice is Mouse && Mouse.current is not null && Mouse.current.rightButton.isPressed)
             return rawInput * mouseSensitivity;
-        }
 
         return Vector2.zero;
     }
 
+    /// <summary>
+    /// прячем курсор только пока игрок крутит камеру пкм
+    /// </summary>
     private void UpdateCursorState()
     {
-        if (!lockCursorWhileRotating || Mouse.current == null)
+        if (!lockCursorWhileRotating || Mouse.current is null)
         {
             ReleaseCursor();
             return;
@@ -136,70 +120,36 @@ public sealed class SimpleFollowCamera : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            cursorLockedByCamera = true;
+            _cursorLockedByCamera = true;
             return;
         }
 
         ReleaseCursor();
     }
 
+    /// <summary>
+    /// возвращаем курсор если его забрала эта камера
+    /// </summary>
     private void ReleaseCursor()
     {
-        if (!cursorLockedByCamera)
-        {
+        if (!_cursorLockedByCamera)
             return;
-        }
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        cursorLockedByCamera = false;
+        _cursorLockedByCamera = false;
     }
 
-    private static bool TryReadTouchLook(out Vector2 touchLook)
-    {
-        touchLook = Vector2.zero;
-
-        if (Touchscreen.current == null)
-        {
-            return false;
-        }
-
-        foreach (var touch in Touchscreen.current.touches)
-        {
-            if (!touch.press.isPressed)
-            {
-                continue;
-            }
-
-            if (touch.position.ReadValue().x < Screen.width * 0.5f)
-            {
-                continue;
-            }
-
-            Vector2 delta = touch.delta.ReadValue();
-            if (delta.sqrMagnitude <= 0f)
-            {
-                continue;
-            }
-
-            touchLook = delta;
-            return true;
-        }
-
-        return false;
-    }
-
+    /// <summary>
+    /// приводим угол к нормальному диапазону
+    /// </summary>
     private static float NormalizeAngle(float angle)
     {
         while (angle > 180f)
-        {
             angle -= 360f;
-        }
 
         while (angle < -180f)
-        {
             angle += 360f;
-        }
 
         return angle;
     }

@@ -3,6 +3,9 @@ using UnityEngine.InputSystem;
 
 namespace Player
 {
+    /// <summary>
+    /// двигает игрока по xz относительно камеры
+    /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(CharacterController))]
     public sealed class PlayerMovement : MonoBehaviour
@@ -11,28 +14,57 @@ namespace Player
         [SerializeField] private Transform cameraTransform;
 
         [SerializeField] private float moveSpeed = 5f;
-        [SerializeField] private float turnSpeed = 90f;
+        [SerializeField] private float turnSpeed = 720f;
         [SerializeField] private float gravity = -20f;
         [SerializeField] private float groundedVerticalVelocity = -2f;
 
         private CharacterController _characterController;
+        private InputAction _moveAction;
         private float _verticalVelocity;
         private Transform _transform;
-        
+
         /// <summary>
-        /// Обрабатывает движение игрока
+        /// забираем ссылки один раз на старте
+        /// </summary>
+        private void Awake()
+        {
+            _characterController = GetComponent<CharacterController>();
+            _moveAction = moveActionReference.action;
+            _transform = transform;
+        }
+
+        /// <summary>
+        /// включаем move когда игрок активен
+        /// </summary>
+        private void OnEnable() => _moveAction.Enable();
+
+        /// <summary>
+        /// выключаем move вместе с игроком
+        /// </summary>
+        private void OnDisable() => _moveAction.Disable();
+
+        /// <summary>
+        /// обновляем движение каждый кадр
+        /// </summary>
+        private void Update()
+        {
+            HandleMovement();
+        }
+
+        /// <summary>
+        /// считаем движение и поворот игрока
         /// </summary>
         private void HandleMovement()
         {
             if (_characterController.isGrounded && _verticalVelocity < 0f)
                 _verticalVelocity = groundedVerticalVelocity;
 
-            Vector2 input = moveActionReference.action.ReadValue<Vector2>();
+            Vector2 input = _moveAction.ReadValue<Vector2>();
             Vector3 movement = Vector3.zero;
-            
+
             if (input.sqrMagnitude > 0.01f)
             {
-                // вычисление направления поворота относительно камеры
+                // берем направление камеры без наклона вверх вниз
                 Vector3 camForward = cameraTransform.forward;
                 Vector3 camRight = cameraTransform.right;
 
@@ -40,15 +72,15 @@ namespace Player
                 camRight.y = 0f;
                 camForward = camForward.normalized;
                 camRight = camRight.normalized;
-            
+
                 movement = camForward * input.y + camRight * input.x;
-                
+
                 if (movement.sqrMagnitude > 1f)
                     movement.Normalize();
-            
+
                 Quaternion targetRotation = Quaternion.LookRotation(movement, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(
-                    transform.rotation,
+                _transform.rotation = Quaternion.RotateTowards(
+                    _transform.rotation,
                     targetRotation,
                     turnSpeed * Time.deltaTime);
             }
@@ -57,29 +89,8 @@ namespace Player
 
             Vector3 frameMotion = movement * moveSpeed;
             frameMotion.y = _verticalVelocity;
-            
-            if (frameMotion.sqrMagnitude > 1f) 
-                _characterController.Move(frameMotion * Time.deltaTime);
-        }
-        
-        private void Awake()
-        {
-            _characterController = GetComponent<CharacterController>();
-        
-            if (moveActionReference == null)
-            {
-                Debug.LogError("Move Action Reference is missing.", this);
-                enabled = false;
-            }
-        }
 
-        private void OnEnable() => moveActionReference?.action.Enable();
-
-        private void OnDisable() => moveActionReference?.action.Disable();
-
-        private void Update()
-        {
-            HandleMovement();
+            _characterController.Move(frameMotion * Time.deltaTime);
         }
     }
 }
