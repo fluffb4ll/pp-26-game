@@ -28,7 +28,7 @@ public class Workbench : MonoBehaviour
     /// </summary>
     private void CalculateProduce()
     {
-        if (insertedBrainrot is null || storedProduce - produceStoreCap < _diff)
+        if (insertedBrainrot is null || produceStoreCap - storedProduce < _diff)
             return;
         
         storedProduce += (baseProduce + insertedBrainrot.produce) * Time.deltaTime;
