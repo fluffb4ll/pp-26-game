@@ -19,7 +19,7 @@ public enum BrainrotType
 }
 
 /// <summary>
-/// Конфигурация редкости - соотносим редкость с множителями времени жизни и выработки  
+/// Конфигурация редкости - соотносим редкость с множителями времени жизни и выработки и шансом выпадения
 /// </summary>
 [Serializable]
 public struct RarityConfig
@@ -27,6 +27,7 @@ public struct RarityConfig
     public Rarity rarity;
     public float lifetimeMult;
     public float produceMult;
+    [Range(0, 100)] public int dropWeight;
 }
 
 /// <summary>
@@ -40,4 +41,28 @@ public class BrainrotLib : ScriptableObject
     public float baseLifetime;
     
     public List<RarityConfig> rarityPool;
+    
+    /// <summary>
+    /// Возвращает случайно выбранную редкость на основе весов, представленных в <c>rarityPool</c>
+    /// </summary>
+    /// <returns>Выбранный объект <see cref="RarityConfig"/></returns>
+    public RarityConfig getRandomizedRarity()
+    {
+        var totalWeight = 0;
+        foreach (var config in rarityPool)
+            totalWeight += config.dropWeight;
+        
+        var random = UnityEngine.Random.Range(0, totalWeight);
+        var currentSum = 0;
+
+        foreach (var config in rarityPool)
+        {
+            currentSum += config.dropWeight;
+            if (random <= currentSum)
+                return config;
+        }
+        
+        // не возвращаю null на случай, если проебались и не хотим, чтобы всё пошло по пизде :)
+        return rarityPool[0];
+    }
 }

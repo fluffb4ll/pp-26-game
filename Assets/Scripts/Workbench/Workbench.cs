@@ -31,7 +31,7 @@ public class Workbench : MonoBehaviour
         if (insertedBrainrot is null || storedProduce - produceStoreCap < _diff)
             return;
         
-        storedProduce += (baseProduce + insertedBrainrot.baseProduce) * Time.deltaTime;
+        storedProduce += (baseProduce + insertedBrainrot.produce) * Time.deltaTime;
         
         if (storedProduce > produceStoreCap)
             storedProduce = produceStoreCap;
