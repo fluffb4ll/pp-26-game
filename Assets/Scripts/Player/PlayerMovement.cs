@@ -64,7 +64,7 @@ namespace Player
 
             if (input.sqrMagnitude > 0.01f)
             {
-                // берем направление камеры без наклона вверх вниз
+                // вычисление направления движения относительно поворота камеры
                 Vector3 camForward = cameraTransform.forward;
                 Vector3 camRight = cameraTransform.right;
 

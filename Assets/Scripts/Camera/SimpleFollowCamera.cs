@@ -8,7 +8,8 @@ using UnityEngine.InputSystem;
 public sealed class SimpleFollowCamera : MonoBehaviour
 {
     [SerializeField] private Transform target;
-    [SerializeField] private InputActionReference lookActionReference;
+    [SerializeField] private InputActionReference lookCamMovementActionReference;
+    [SerializeField] private InputActionReference lookLockPtrActionReference;
     [SerializeField] private float pivotHeight = 1.6f;
     [SerializeField] private float distance = 6f;
     [SerializeField] private float minPitch = -10f;
@@ -17,7 +18,8 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     [SerializeField] private float gamepadLookSpeed = 220f;
     [SerializeField] private bool lockCursorWhileRotating = true;
 
-    private InputAction _lookAction;
+    private InputAction _lookCamMovementAction;
+    private InputAction _lookLockPtrAction;
     private Transform _transform;
     private bool _cursorLockedByCamera;
     private float _yaw;
@@ -28,7 +30,8 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        _lookAction = lookActionReference.action;
+        _lookCamMovementAction = lookCamMovementActionReference.action;
+        _lookLockPtrAction = lookLockPtrActionReference.action;
         _transform = transform;
 
         Vector3 eulerAngles = _transform.eulerAngles;
@@ -39,14 +42,14 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     /// <summary>
     /// включаем look пока камера активна
     /// </summary>
-    private void OnEnable() => _lookAction.Enable();
+    private void OnEnable() => _lookCamMovementAction.Enable();
 
     /// <summary>
     /// отпускаем ввод который забрала камера
     /// </summary>
     private void OnDisable()
     {
-        _lookAction.Disable();
+        _lookCamMovementAction.Disable();
         ReleaseCursor();
     }
 
@@ -90,23 +93,23 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     {
         UpdateCursorState();
 
-        Vector2 rawInput = _lookAction.ReadValue<Vector2>();
+        Vector2 rawInput = _lookCamMovementAction.ReadValue<Vector2>();
         if (rawInput.sqrMagnitude <= 0.0001f)
             return Vector2.zero;
 
-        InputDevice activeDevice = _lookAction.activeControl.device;
+        InputDevice activeDevice = _lookCamMovementAction.activeControl.device;
 
-        if (activeDevice is Gamepad or Joystick)
+        if (activeDevice is Gamepad)
             return rawInput * (gamepadLookSpeed * Time.deltaTime);
 
-        if (activeDevice is Mouse && Mouse.current is not null && Mouse.current.rightButton.isPressed)
+        if (activeDevice is Mouse && Mouse.current is not null && _lookLockPtrAction.IsPressed())
             return rawInput * mouseSensitivity;
 
         return Vector2.zero;
     }
 
     /// <summary>
-    /// прячем курсор только пока игрок крутит камеру пкм
+    /// прячем курсор только пока игрок крутит камеру
     /// </summary>
     private void UpdateCursorState()
     {
@@ -116,7 +119,7 @@ public sealed class SimpleFollowCamera : MonoBehaviour
             return;
         }
 
-        if (Mouse.current.rightButton.isPressed)
+        if (_lookLockPtrAction.IsPressed())
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
