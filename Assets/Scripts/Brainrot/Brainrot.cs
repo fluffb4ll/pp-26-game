@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class Brainrot : MonoBehaviour
+public class Brainrot : MonoBehaviour, IInteractable
 {
-    [SerializeField] public float produce;
-    [SerializeField] public float lifetime;
+    public float produce;
+    public float lifetime;
     [SerializeField] private BrainrotLib data;
 
-    [SerializeField] public Rarity rarity;
+    public Rarity rarity;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,9 +19,29 @@ public class Brainrot : MonoBehaviour
         Debug.Log($"Pulled: {rarity} {data.type}.");
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+            Debug.Log("Collided with player");
+    }
+    
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void Interact(PlayerInteraction player)
+    {
+        if (player.heldBrainrot is null)
+            PickUp(player);
+    }
+
+    private void PickUp(PlayerInteraction player)
+    {
+        player.heldBrainrot = this;
+        
+        transform.SetParent(player.brainrotCarryPoint);
+        transform.localPosition = Vector3.zero;
     }
 }

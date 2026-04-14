@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 1197920724790490409}
   - component: {fileID: 5832480355012601793}
   - component: {fileID: 5331626465089573998}
-  m_Layer: 0
+  - component: {fileID: 3854168048117944823}
+  m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,6 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1121518365823419834}
+  - {fileID: 4355748610893246613}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &5832480355012601793
@@ -77,6 +79,23 @@ MonoBehaviour:
   turnSpeed: 720
   gravity: -20
   groundedVerticalVelocity: -2
+--- !u!114 &3854168048117944823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3040924242304209542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e851dc7b19b2f74ba6b05cf4eff5244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
+  interactionDistance: 3
+  cameraTransform: {fileID: 0}
+  interact: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  brainrotCarryPoint: {fileID: 4355748610893246613}
+  heldBrainrot: {fileID: 0}
 --- !u!1 &5700222025507402230
 GameObject:
   m_ObjectHideFlags: 0
@@ -88,7 +107,7 @@ GameObject:
   - component: {fileID: 1121518365823419834}
   - component: {fileID: 7996376326689406863}
   - component: {fileID: 454487147802126913}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,3 +186,34 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &7988218672988441655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4355748610893246613}
+  m_Layer: 2
+  m_Name: Brainrot Carrying Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4355748610893246613
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7988218672988441655}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.473, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1197920724790490409}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

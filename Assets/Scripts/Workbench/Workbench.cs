@@ -1,13 +1,14 @@
 using UnityEngine;
+using YG;
 
-public class Workbench : MonoBehaviour
+public class Workbench : MonoBehaviour, IInteractable
 {
-    [SerializeField] public float baseProduce;
-    [SerializeField] public float produceStoreCap;
+    public float baseProduce;
+    public float produceStoreCap;
+    public float storedProduce;
     
-    [SerializeField] public Transform brainrotInsertionPos;
-    [SerializeField] public Brainrot insertedBrainrot;
-    [SerializeField] public float storedProduce;
+    [SerializeField] private Transform brainrotInsertionPos;
+    [SerializeField] private Brainrot insertedBrainrot;
 
     private float _diff = 0.0001f;
     
@@ -43,5 +44,26 @@ public class Workbench : MonoBehaviour
         
         Destroy(insertedBrainrot.gameObject);
         insertedBrainrot = null;
+    }
+
+    public void Interact(PlayerInteraction player)
+    {
+        if (player.heldBrainrot is not null)
+            InsertBrainrot(player);
+        else
+        {
+            YG2.saves.coins += Mathf.RoundToInt(storedProduce);
+            storedProduce = 0;
+            Debug.Log($"New balance: {YG2.saves.coins}");
+        }
+    }
+
+    private void InsertBrainrot(PlayerInteraction player)
+    {
+        insertedBrainrot = player.heldBrainrot;
+        player.heldBrainrot = null;
+        
+        insertedBrainrot.transform.SetParent(brainrotInsertionPos);
+        insertedBrainrot.transform.position = brainrotInsertionPos.position;
     }
 }
