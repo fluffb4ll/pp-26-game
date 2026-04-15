@@ -128,7 +128,6 @@
     <Compile Include="Assets\PluginYourGames\Modules\RedefinePlayerPrefs\Scripts\RedefinePlayerPrefs_interface.cs" />
     <Compile Include="Assets\PluginYourGames\Scripts\Basic\GamePause.cs" />
     <Compile Include="Assets\PluginYourGames\Modules\PlayerStats\Example\Scripts\PlayerStatsExample.cs" />
-    <Compile Include="Assets\Scripts\Brainrot\Brainrot.cs" />
     <Compile Include="Assets\PluginYourGames\Modules\InterstitialAdv\Scripts\InterAdv_info.cs" />
     <Compile Include="Assets\PluginYourGames\Modules\Leaderboards\Example\Scripts\CustomLBExample.cs" />
     <Compile Include="Assets\PluginYourGames\Modules\Storage\Scripts\Storage_info.cs" />
@@ -159,6 +158,7 @@
     <Compile Include="Assets\PluginYourGames\Modules\RewardedAdv\Scripts\RewardedAdv_projectSettings.cs" />
     <Compile Include="Assets\PluginYourGames\Scripts\EditorScr\Attributes\ColorYGAttribute.cs" />
     <Compile Include="Assets\PluginYourGames\Modules\Leaderboards\Scripts\UtilsLB.cs" />
+    <Compile Include="Assets\Scripts\Brainrot\BrainrotObject.cs" />
     <Compile Include="Assets\Scripts\SDK\AdManager.cs" />
     <Compile Include="Assets\PluginYourGames\Scripts\EditorScr\FileYG.cs" />
     <Compile Include="Assets\PluginYourGames\Modules\RewardedAdv\Scripts\RewardedAdvLockTimer.cs" />

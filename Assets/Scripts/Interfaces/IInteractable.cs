@@ -1,6 +1,12 @@
-using UnityEngine;
+using Player;
 
-public interface IInteractable
+namespace Interfaces
 {
-    void Interact(PlayerInteraction player);
+    /// <summary>
+    /// Объявляет общие для всех объектов, с которыми можно взаимодействовать, методы 
+    /// </summary>
+    public interface IInteractable
+    {
+        void Interact(PlayerInteraction player);
+    }
 }

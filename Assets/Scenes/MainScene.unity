@@ -756,10 +756,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Workbench
       objectReference: {fileID: 0}
-    - target: {fileID: 8080194416658569817, guid: efbfa3e86bd89c246940bb21f905697e, type: 3}
-      propertyPath: produceStoreCap
-      value: 200
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
