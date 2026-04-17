@@ -12,7 +12,6 @@ namespace Player
     public class PlayerInteraction : MonoBehaviour
     {
         [SerializeField] private float interactionDistance = 3f;
-        [SerializeField] private Transform cameraTransform; 
         [SerializeField] private InputActionReference interact;
     
         public Transform brainrotCarryPoint;
