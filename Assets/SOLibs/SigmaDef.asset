@@ -12,7 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc6a5497a423b2f45b40403981b28163, type: 3}
   m_Name: SigmaDef
   m_EditorClassIdentifier: Assembly-CSharp::Brainrot.BrainrotLib
-  type: 0
-  baseProduce: 0
-  baseLifetime: 0
-  rarityPool: []
+  type: 1
+  baseProduce: 1
+  baseLifetime: 10
+  rarityPool:
+  - rarity: 0
+    lifetimeMult: 0.75
+    produceMult: 0.75
+    dropWeight: 50
+  - rarity: 1
+    lifetimeMult: 1
+    produceMult: 1
+    dropWeight: 30
+  - rarity: 2
+    lifetimeMult: 1.25
+    produceMult: 1.25
+    dropWeight: 20

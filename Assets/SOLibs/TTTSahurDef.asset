@@ -12,7 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc6a5497a423b2f45b40403981b28163, type: 3}
   m_Name: TTTSahurDef
   m_EditorClassIdentifier: Assembly-CSharp::Brainrot.BrainrotLib
-  type: 0
-  baseProduce: 0
-  baseLifetime: 0
-  rarityPool: []
+  type: 2
+  baseProduce: 20
+  baseLifetime: 60
+  rarityPool:
+  - rarity: 4
+    lifetimeMult: 5
+    produceMult: 5
+    dropWeight: 10
+  - rarity: 3
+    lifetimeMult: 2
+    produceMult: 2
+    dropWeight: 30
+  - rarity: 2
+    lifetimeMult: 1
+    produceMult: 1
+    dropWeight: 60
