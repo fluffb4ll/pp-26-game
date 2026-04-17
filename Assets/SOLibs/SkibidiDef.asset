@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: SkibidiDef
   m_EditorClassIdentifier: Assembly-CSharp::BrainrotLib
   type: 0
-  baseProduce: 1
-  baseLifetime: 1
+  baseProduce: 2
+  baseLifetime: 20
   rarityPool:
   - rarity: 4
     lifetimeMult: 1.25
