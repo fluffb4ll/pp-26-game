@@ -1,5 +1,6 @@
 using System;
 using Interfaces;
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -11,8 +12,9 @@ namespace Player
     {
         [SerializeField] private PlayerInteraction playerInteraction;
         [SerializeField] private PlayerMovement playerMovement;
-        [SerializeField] private Transform spawnPoint;
+        [SerializeField] public GameManager gameManager;
         [SerializeField] private CharacterController charController;
+        [SerializeField] private Transform spawnPoint;
         [SerializeField] private float deathAnimationSpeed;
         
         [SerializeField] private InputActionReference respawnBindings;
@@ -40,8 +42,8 @@ namespace Player
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("DamageZone"))
-                Die();
+            other.TryGetComponent(out ITriggerable triggerable);
+            triggerable?.Execute(this);
         }
         
         private void OnRespawn(InputAction.CallbackContext context)
@@ -60,6 +62,7 @@ namespace Player
 
         public void Die()
         {
+            gameManager.ChangeGameState(GameState.GameOver);
             health = 0;
             _isDying = true;
             charController.enabled = playerMovement.enabled = playerInteraction.enabled = false;
@@ -75,6 +78,7 @@ namespace Player
         
         private void Respawn()
         {
+            gameManager.ChangeGameState(GameState.Home);
             _isDying = false;
             health = maxHealth;
             transform.position = spawnPoint.position;

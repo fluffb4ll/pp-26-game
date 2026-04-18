@@ -155,6 +155,7 @@ GameObject:
   - component: {fileID: 5969585404300560205}
   - component: {fileID: 8689055322315956931}
   - component: {fileID: 7153260880036205716}
+  - component: {fileID: 8706094582422613423}
   m_Layer: 0
   m_Name: ZoneTransitionTrigger
   m_TagString: Untagged
@@ -255,6 +256,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8706094582422613423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2991849018765775809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 192f54fd0e589d46287040925ea5d873, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZoneChangeTrigger
+  targetState: 1
 --- !u!1 &3574412111308747698
 GameObject:
   m_ObjectHideFlags: 0
