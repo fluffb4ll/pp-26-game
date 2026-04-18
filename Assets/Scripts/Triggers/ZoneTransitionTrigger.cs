@@ -5,10 +5,14 @@ using UnityEngine;
 
 namespace Triggers
 {
-    public class ZoneChangeTrigger : MonoBehaviour, ITriggerable
+    /// <summary>
+    /// Триггер смены зоны
+    /// </summary>
+    public class ZoneTransitionTrigger : MonoBehaviour, ITriggerable
     {
         public GameState targetState;
 
+        /// <inheritdoc/>
         public void Execute(PlayerController playerController)
         {
             GameState tempState = targetState;
