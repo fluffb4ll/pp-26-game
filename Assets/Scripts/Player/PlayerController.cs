@@ -34,12 +34,12 @@ namespace Player
         
         void OnEnable()
         {
-            gameManager.OnGameStateStart += OnHomeEnter;
+            gameManager.OnGameStateChange += OnHomeEnter;
         }
 
         void OnDisable()
         {
-            gameManager.OnGameStateStart -= OnHomeEnter;
+            gameManager.OnGameStateChange -= OnHomeEnter;
         }
         
         // Update is called once per frame

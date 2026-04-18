@@ -823,6 +823,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Managers.GameManager
   currentState: 0
+  spawnableBrainrots:
+  - {fileID: 1337268276677933175, guid: e0619c7d76a9ff64cbf5539fbbcac479, type: 3}
+  - {fileID: 871746005220737714, guid: 03143b03b288b3d418f69389b579b2f9, type: 3}
+  - {fileID: 5145043209413951014, guid: 923210b3946029de6a59bf0acf05ffdb, type: 3}
 --- !u!4 &1483602129
 Transform:
   m_ObjectHideFlags: 0
