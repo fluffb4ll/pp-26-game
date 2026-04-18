@@ -2,6 +2,7 @@ using Interfaces;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Player
 {
@@ -19,8 +20,9 @@ namespace Player
         
         public GameManager gameManager;
         public int maxHealth;
+        public int currentHealth;
+        
         public int damage;
-        public int health;
 
         private bool _isDying;
         private InputAction _respawnAction;
@@ -29,7 +31,7 @@ namespace Player
         void Start()
         {
             _respawnAction = respawnBindings.action;
-            health = maxHealth;
+            currentHealth = maxHealth;
         }
         
         void OnEnable()
@@ -78,26 +80,26 @@ namespace Player
         /// <inheritdoc/>
         public void TakeDamage(int damageAmount)
         {
-            health -= damageAmount;
+            currentHealth -= damageAmount;
             
-            if (health <= 0)
+            if (currentHealth <= 0)
                 Die();
         }
         
         /// <inheritdoc/>
         public void Heal(int healAmount)
         {
-            health += healAmount;
+            currentHealth += healAmount;
             
-            if (health > maxHealth)
-                health = maxHealth;
+            if (currentHealth > maxHealth)
+                currentHealth = maxHealth;
         }
 
         /// <inheritdoc/>
         public void Die()
         {
             gameManager.ChangeGameState(GameState.GameOver);
-            health = 0;
+            currentHealth = 0;
             _isDying = true;
             charController.enabled = playerMovement.enabled = playerInteraction.enabled = false;
             _respawnAction.performed += OnRespawn;
@@ -121,7 +123,7 @@ namespace Player
         {
             gameManager.ChangeGameState(GameState.Home);
             _isDying = false;
-            health = maxHealth;
+            currentHealth = maxHealth;
             transform.position = spawnPoint.position;
             transform.rotation = Quaternion.identity;
             

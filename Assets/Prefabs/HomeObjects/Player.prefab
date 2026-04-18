@@ -76,13 +76,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerController
   playerInteraction: {fileID: 3854168048117944823}
   playerMovement: {fileID: 5331626465089573998}
-  spawnPoint: {fileID: 0}
   charController: {fileID: 5832480355012601793}
+  spawnPoint: {fileID: 0}
   deathAnimationSpeed: 400
   respawnBindings: {fileID: 3601099568889547787, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  gameManager: {fileID: 0}
   maxHealth: 100
-  damage: 0
-  health: 100
+  currentHealth: 100
+  damage: 10
 --- !u!114 &5331626465089573998
 MonoBehaviour:
   m_ObjectHideFlags: 0
