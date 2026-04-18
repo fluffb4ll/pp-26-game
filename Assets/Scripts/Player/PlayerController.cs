@@ -1,10 +1,7 @@
-using System;
 using Interfaces;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
-using UnityEngine.TextCore.Text;
 
 namespace Player
 {
@@ -12,18 +9,17 @@ namespace Player
     {
         [SerializeField] private PlayerInteraction playerInteraction;
         [SerializeField] private PlayerMovement playerMovement;
-        [SerializeField] public GameManager gameManager;
         [SerializeField] private CharacterController charController;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private float deathAnimationSpeed;
-        
         [SerializeField] private InputActionReference respawnBindings;
         
+        public GameManager gameManager;
         public int maxHealth;
         public int damage;
         public int health;
 
-        private bool _isDying = false;
+        private bool _isDying;
         private InputAction _respawnAction;
         
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -31,6 +27,16 @@ namespace Player
         {
             _respawnAction = respawnBindings.action;
             health = maxHealth;
+        }
+
+        void OnEnable()
+        {
+            gameManager.OnGameStateStart += OnHomeEnter;
+        }
+
+        void OnDisable()
+        {
+            gameManager.OnGameStateStart -= OnHomeEnter;
         }
         
         // Update is called once per frame
@@ -50,6 +56,12 @@ namespace Player
         {
             _respawnAction.performed -= OnRespawn;
             Respawn();
+        }
+
+        private void OnHomeEnter(GameState newState)
+        {
+            if (newState == GameState.Home)
+                health = maxHealth;
         }
         
         public void TakeDamage(int damageAmount)

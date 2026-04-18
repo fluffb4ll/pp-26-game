@@ -27,6 +27,18 @@ namespace Managers
         {
         
         }
+        
+        public event Action<GameState> OnGameStateFinish
+        {
+            add => _onGameStateFinish += value;
+            remove => _onGameStateFinish -= value;
+        }
+        
+        public event Action<GameState> OnGameStateStart
+        {
+            add => _onGameStateStart += value;
+            remove => _onGameStateStart -= value;
+        }
 
         public void ChangeGameState(GameState newState)
         {

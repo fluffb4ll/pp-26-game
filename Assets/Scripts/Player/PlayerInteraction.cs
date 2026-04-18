@@ -45,12 +45,6 @@ namespace Player
             _interactAction.Disable();
             _interactAction.performed -= OnInteract;
         }
-    
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
 
         /// <summary>
         /// Действие, которое необходимо выполнять при нажатии кнопки взаимодействия
