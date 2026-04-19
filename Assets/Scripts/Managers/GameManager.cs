@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Player;
 using UnityEngine;
 
 namespace Managers
@@ -20,6 +21,7 @@ namespace Managers
         
         public GameState currentState;
         public Transform playerTransform;
+        public PlayerController playerController;
         public List<GameObject> spawnableBrainrots;
         private Action<GameState> _onGameStateStart;
         private Action<GameState> _onGameStateEnd;

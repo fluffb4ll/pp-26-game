@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7703104744880264002}
   - component: {fileID: 945599116529309602}
   - component: {fileID: 3313519240275006991}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 3690622453329445399}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.13, y: 0, z: 2.59}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -122,7 +122,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4013131671097225995}
   - component: {fileID: 5988903961048020760}
-  m_Layer: 0
+  - component: {fileID: 6584427899930752052}
+  m_Layer: 6
   m_Name: DefaultEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +139,7 @@ Transform:
   m_GameObject: {fileID: 5116946552645475411}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.59851, y: 0.6, z: 25.93197}
+  m_LocalPosition: {x: 0, y: 0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -158,11 +159,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy.DefaultEnemyController
   spawnableBrainrot: {fileID: 0}
-  timeBeforeDestroyingBody: 0
-  deathAnimationSpeed: 0
+  timeBeforeDestroyingBody: 10
+  deathAnimationSpeed: 400
+  maxHealth: 100
+  currentHealth: 100
+  damage: 10
+  attackRate: 1.5
+  attackDistance: 1.6
+  spawnManager: {fileID: 0}
+--- !u!114 &6584427899930752052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5116946552645475411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae2e799fa4b1c1649ba5a0491902ee7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyMovement
   moveSpeed: 1
   stoppingDistance: 1.4
   rotationSpeed: 360
-  maxHealth: 0
-  currentHealth: 0
-  damage: 0

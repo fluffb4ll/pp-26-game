@@ -79,8 +79,17 @@ MonoBehaviour:
   charController: {fileID: 5832480355012601793}
   spawnPoint: {fileID: 0}
   deathAnimationSpeed: 400
+  attackCooldownRate: 0
   respawnBindings: {fileID: 3601099568889547787, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  gameManager: {fileID: 0}
+  mainCameraReference: {fileID: 0}
+  attackActionReference: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  attackDistance: 20
+  raycastLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   maxHealth: 100
   currentHealth: 100
   damage: 10

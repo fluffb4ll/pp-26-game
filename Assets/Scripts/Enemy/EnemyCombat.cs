@@ -1,48 +1,42 @@
 using Interfaces;
 using Managers;
+using Player;
 using UnityEngine;
 
 namespace Enemy
 {
-    public class DefaultEnemyController : MonoBehaviour, IDamageable
+    public class EnemyCombat : MonoBehaviour, IDamageable
     {
         [SerializeField] private GameObject spawnableBrainrot;
         [SerializeField] private float timeBeforeDestroyingBody;
         [SerializeField] private float deathAnimationSpeed;
         
-        [Header("Movement")]
-        [SerializeField] private float moveSpeed = 1f;
-        [SerializeField] private float stoppingDistance = 1.4f;
-        [SerializeField] private float rotationSpeed = 360f;
-    
-        [Header("Health and Damage")]
-        public int maxHealth;
-        public int currentHealth;
-        public int damage;
+        [SerializeField] private int maxHealth;
+        [SerializeField] private int currentHealth;
+        [SerializeField] private int damage;
+        [SerializeField] private float attackRate;
+        [SerializeField] private float attackDistance;
         
-        private bool _isDying;
+        public SpawnManager spawnManager;
         private GameManager _gameManager;
         private Transform _playerTransform;
-        public SpawnManager spawnManager;
+        private bool _isDying;
+        private float _attackTimer;
+        private PlayerController _playerController;
         
         void Awake()
         {
+            currentHealth = maxHealth;
             _gameManager = GameManager.Instance;
             _playerTransform = _gameManager.playerTransform;
+            _playerController = _gameManager.playerController;
+            _attackTimer = attackRate;
         }
         
         void Update()
         {
-            if (_isDying)
-            {
-                if (transform.rotation.x > -0.5f)
-                    PlayDeathAnimation();
-                else if (timeBeforeDestroyingBody > 0)
-                    timeBeforeDestroyingBody -= Time.deltaTime;
-                else
-                    Destroy(gameObject);
-            }
-            HandleMovement();
+            HandleDeath();
+            HandleDamageByProximity();
         }
         
         /// <inheritdoc/>
@@ -69,7 +63,9 @@ namespace Enemy
             currentHealth = 0;
             _isDying = true;
             spawnManager.UnregisterEnemy(gameObject);
-            SpawnBrainrot();
+            
+            if (spawnManager is not null)
+                SpawnBrainrot();
         }
     
         /// <summary>
@@ -93,35 +89,42 @@ namespace Enemy
         {
             Instantiate(spawnableBrainrot, transform.position, Quaternion.identity);
         }
+    
+        /// <summary>
+        /// Проигрывает анимацию смерти, затем, спустя некоторое время, уничтожает врага
+        /// </summary>
+        private void HandleDeath()
+        {
+            if (!_isDying)
+                return;
+            
+            if (transform.rotation.x > -0.5f)
+                PlayDeathAnimation();
+            else if (timeBeforeDestroyingBody > 0)
+                timeBeforeDestroyingBody -= Time.deltaTime;
+            else
+                Destroy(gameObject);
+        }
 
         /// <summary>
-        /// Обрабатывает движение врага к игроку
+        /// Пробует нанести урон по игроку при приближении к нему
         /// </summary>
-        private void HandleMovement()
+        private void HandleDamageByProximity()
         {
             if (_gameManager.currentState != GameState.Combat)
                 return;
+            
+            if (_attackTimer > 0f)
+                _attackTimer -= Time.deltaTime;
 
             var toPlayer = _playerTransform.position - transform.position;
             toPlayer.y = 0f;
 
-            var sqrDistance = toPlayer.sqrMagnitude;
-            var sqrStoppingDistance = stoppingDistance * stoppingDistance;
-
-            if (sqrDistance <= sqrStoppingDistance || sqrDistance <= 0.0001f)
+            if (toPlayer.sqrMagnitude > attackDistance * attackDistance || _attackTimer > 0f)
                 return;
 
-            var distance = Mathf.Sqrt(sqrDistance);
-            var direction = toPlayer / distance;
-            var step = Mathf.Min(moveSpeed * Time.deltaTime, distance - stoppingDistance);
-
-            transform.position += direction * step;
-
-            var targetRotation = Quaternion.LookRotation(direction, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(
-                transform.rotation,
-                targetRotation,
-                rotationSpeed * Time.deltaTime);
+            _playerController.TakeDamage(damage);
+            _attackTimer = attackRate;
         }
     }
 }

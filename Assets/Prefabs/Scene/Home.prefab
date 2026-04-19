@@ -269,6 +269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZoneChangeTrigger
   targetState: 1
+  respawnAction: {fileID: 3601099568889547787, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &3574412111308747698
 GameObject:
   m_ObjectHideFlags: 0

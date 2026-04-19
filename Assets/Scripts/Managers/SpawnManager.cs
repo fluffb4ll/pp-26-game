@@ -54,20 +54,22 @@ namespace Managers
                 return;
             
             var spawnedEnemy = Instantiate(spawnablePrefab, transform.position, transform.rotation);
-            spawnedEnemy.GetComponent<DefaultEnemyController>().spawnManager = this;
+            spawnedEnemy.GetComponent<EnemyCombat>().spawnManager = this;
             _spawnedEnemies.Add(spawnedEnemy);
             _spawnTimer = spawnRate;
         }
         
         private void OnCombatStart(GameState newState)
         {
+            Debug.Log(_spawnedEnemies.Count);
             if (newState == GameState.Combat)
                 _isSpawning = true;
         }
 
         private void OnCombatEnd(GameState oldState)
         {
-            if (oldState != GameState.Combat) return;
+            if (oldState != GameState.Combat) 
+                return;
             
             _isSpawning = false;
 
