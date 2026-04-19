@@ -16,39 +16,46 @@ namespace Managers
     /// </summary>
     public class GameManager : MonoBehaviour
     {
+        public static GameManager Instance { get; private set; }
+        
         public GameState currentState;
+        public Transform playerTransform;
         public List<GameObject> spawnableBrainrots;
-        private Action<GameState> _onGameStateChange;
-        
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-        
-        }
+        private Action<GameState> _onGameStateStart;
+        private Action<GameState> _onGameStateEnd;
 
-        // Update is called once per frame
-        void Update()
+        void Awake()
         {
-        
+            Instance = this;
         }
         
         /// <summary>
         /// Событие, вызываемое в момент смены старого геймстейта на новый
         /// </summary>
-        public event Action<GameState> OnGameStateChange
+        public event Action<GameState> OnGameStateStart
         {
-            add => _onGameStateChange += value;
-            remove => _onGameStateChange -= value;
+            add => _onGameStateStart += value;
+            remove => _onGameStateStart -= value;
         }
         
+        /// <summary>
+        /// Событие, вызываемое в момент смены старого геймстейта на новый
+        /// </summary>
+        public event Action<GameState> OnGameStateEnd
+        {
+            add => _onGameStateEnd += value;
+            remove => _onGameStateEnd -= value;
+        }
+
         /// <summary>
         /// Изменяет текущий геймстейт на указанный
         /// </summary>
         /// <param name="newState">Новый геймстейт</param>
         public void ChangeGameState(GameState newState)
         {
+            _onGameStateEnd?.Invoke(currentState);
             currentState = newState;
-            _onGameStateChange?.Invoke(newState);
+            _onGameStateStart?.Invoke(newState);
         }
     }
 }

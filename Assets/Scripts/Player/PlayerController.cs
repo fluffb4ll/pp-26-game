@@ -36,12 +36,12 @@ namespace Player
         
         void OnEnable()
         {
-            gameManager.OnGameStateChange += OnHomeEnter;
+            gameManager.OnGameStateStart += OnHomeEnter;
         }
 
         void OnDisable()
         {
-            gameManager.OnGameStateChange -= OnHomeEnter;
+            gameManager.OnGameStateStart -= OnHomeEnter;
         }
         
         // Update is called once per frame
@@ -111,8 +111,8 @@ namespace Player
         /// <param name="rotationSpeed">Скорость вращения</param>
         private void PlayDeathAnimation(float rotationSpeed)
         {
-            Quaternion currentRot = transform.rotation;
-            Quaternion targetRot = currentRot * Quaternion.AngleAxis(90f, new Vector3(-90f, currentRot.y, 0f));
+            var currentRot = transform.rotation;
+            var targetRot = currentRot * Quaternion.AngleAxis(90f, new Vector3(-90f, currentRot.y, 0f));
             transform.rotation = Quaternion.RotateTowards(currentRot, targetRot, Time.deltaTime * rotationSpeed);
         }
         

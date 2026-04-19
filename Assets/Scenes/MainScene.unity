@@ -512,6 +512,26 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0619c7d76a9ff64cbf5539fbbcac479, type: 3}
+--- !u!1 &793474825 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1144314719905214581, guid: 7163dd4b2b8ac21478220a5814610517, type: 3}
+  m_PrefabInstance: {fileID: 2124445144}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &793474827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 793474825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 674c960875893b3b599df615a4d3e920, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Managers.SpawnManager
+  spawnablePrefab: {fileID: 5116946552645475411, guid: 8578c4ebd776e2c16a73969f75a1cd09, type: 3}
+  enemyLimit: 2
+  spawnRate: 3
 --- !u!1001 &850478020
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -823,6 +843,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Managers.GameManager
   currentState: 0
+  playerTransform: {fileID: 1544940369}
   spawnableBrainrots:
   - {fileID: 1337268276677933175, guid: e0619c7d76a9ff64cbf5539fbbcac479, type: 3}
   - {fileID: 871746005220737714, guid: 03143b03b288b3d418f69389b579b2f9, type: 3}
@@ -986,9 +1007,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1144314719905214581, guid: 7163dd4b2b8ac21478220a5814610517, type: 3}
+      propertyPath: m_Name
+      value: EnemySpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 1144314719905214581, guid: 7163dd4b2b8ac21478220a5814610517, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3880703021445635468, guid: 7163dd4b2b8ac21478220a5814610517, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
     - target: {fileID: 4894293162657696160, guid: 7163dd4b2b8ac21478220a5814610517, type: 3}
       propertyPath: m_Name
-      value: MiniGameZone
+      value: CombatZone
       objectReference: {fileID: 0}
     - target: {fileID: 5964040784003176232, guid: 7163dd4b2b8ac21478220a5814610517, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1006,7 +1039,10 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 1904472636756660105, guid: 7163dd4b2b8ac21478220a5814610517, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1144314719905214581, guid: 7163dd4b2b8ac21478220a5814610517, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 793474827}
   m_SourcePrefab: {fileID: 100100000, guid: 7163dd4b2b8ac21478220a5814610517, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

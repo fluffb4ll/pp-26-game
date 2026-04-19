@@ -64,9 +64,9 @@ namespace Player
         /// </summary>
         /// <param name="callback">Метод, выполняемый при попадании луча в цель</param>
         /// <param name="raycastDistance">Дальность броска луча</param>
-        public void PerformRaycast(Action<RaycastHit> callback, float raycastDistance)
+        private void PerformRaycast(Action<RaycastHit> callback, float raycastDistance)
         {
-            Ray ray = new Ray(transform.position, transform.forward);
+            var ray = new Ray(transform.position, transform.forward);
             if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance))
                 callback.Invoke(hit);
         }
