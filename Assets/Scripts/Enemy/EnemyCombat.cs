@@ -10,6 +10,8 @@ namespace Enemy
     /// </summary>
     public class EnemyCombat : MonoBehaviour, IDamageable
     {
+        private const int MaxAttackHits = 8;
+
         [SerializeField] private GameObject spawnableBrainrot;
         [SerializeField] private float timeBeforeDestroyingBody;
         [SerializeField] private float deathAnimationSpeed;
@@ -34,6 +36,7 @@ namespace Enemy
         private Quaternion _deathTargetRotation;
         private PlayerController _playerController;
         private EnemyMovement _enemyMovement;
+        private readonly RaycastHit[] _attackHits = new RaycastHit[MaxAttackHits];
 
         /// <summary>
         /// кешируем нужные ссылки один раз
@@ -157,7 +160,16 @@ namespace Enemy
                 return;
             }
 
-            if (!IsPlayerInAttackRange() || !HasDirectHitToPlayer())
+            var enemyPosition = _transform.position;
+            var playerPosition = _playerTransform.position;
+            var toPlayer = playerPosition - enemyPosition;
+            var horizontalToPlayer = toPlayer;
+            horizontalToPlayer.y = 0f;
+
+            if (horizontalToPlayer.sqrMagnitude > attackDistance * attackDistance)
+                return;
+
+            if (!HasDirectHitToPlayer(toPlayer))
                 return;
 
             _playerController.TakeDamage(damage);
@@ -167,30 +179,55 @@ namespace Enemy
         /// <summary>
         /// проверяет настоящую 3d дистанцию до игрока
         /// </summary>
-        private bool IsPlayerInAttackRange()
-        {
-            var toPlayer = _playerTransform.position - _transform.position;
-            return toPlayer.sqrMagnitude <= attackDistance * attackDistance;
-        }
-
         /// <summary>
         /// проверяет что между врагом и игроком нет стены или стола
         /// </summary>
-        private bool HasDirectHitToPlayer()
+        private bool HasDirectHitToPlayer(Vector3 toPlayer)
         {
-            var origin = _transform.position + attackRayOffset;
-            var target = _playerTransform.position + playerRayOffset;
-            var rayDirection = target - origin;
+            var rayDirection = toPlayer + playerRayOffset - attackRayOffset;
             var rayDistance = rayDirection.magnitude;
 
             if (rayDistance <= 0.0001f)
                 return true;
 
-            if (!Physics.Raycast(origin, rayDirection / rayDistance, out var hit, rayDistance, attackRaycastMask, QueryTriggerInteraction.Ignore))
+            var hitCount = Physics.RaycastNonAlloc(
+                _transform.position + attackRayOffset,
+                rayDirection / rayDistance,
+                _attackHits,
+                rayDistance,
+                attackRaycastMask,
+                QueryTriggerInteraction.Ignore);
+
+            if (hitCount <= 0)
+                return false;
+
+            if (!TryGetClosestVisibleHit(hitCount, out var hit))
                 return false;
 
             var hitPlayer = hit.collider.GetComponentInParent<PlayerController>();
             return ReferenceEquals(hitPlayer, _playerController);
+        }
+
+        private bool TryGetClosestVisibleHit(int hitCount, out RaycastHit closestHit)
+        {
+            closestHit = default;
+            var closestDistance = float.PositiveInfinity;
+
+            for (int i = 0; i < hitCount; i++)
+            {
+                var hit = _attackHits[i];
+
+                if (hit.collider.transform.IsChildOf(_transform))
+                    continue;
+
+                if (hit.distance >= closestDistance)
+                    continue;
+
+                closestHit = hit;
+                closestDistance = hit.distance;
+            }
+
+            return closestDistance < float.PositiveInfinity;
         }
     }
 }
