@@ -30,6 +30,8 @@ namespace Enemy
         private Transform _transform;
         private bool _isDying;
         private float _attackTimer;
+        private float _destroyTimer;
+        private Quaternion _deathTargetRotation;
         private PlayerController _playerController;
         private EnemyMovement _enemyMovement;
 
@@ -90,6 +92,8 @@ namespace Enemy
 
             currentHealth = 0;
             _isDying = true;
+            _destroyTimer = timeBeforeDestroyingBody;
+            _deathTargetRotation = _transform.rotation * Quaternion.Euler(-90f, 0f, 0f);
 
             if (!ReferenceEquals(_enemyMovement, null))
                 _enemyMovement.enabled = false;
@@ -103,15 +107,14 @@ namespace Enemy
         /// <summary>
         /// проигрывает простую анимацию смерти через поворот
         /// </summary>
-        private void PlayDeathAnimation()
+        private bool PlayDeathAnimation()
         {
-            Quaternion currentRot = _transform.rotation;
-            Quaternion targetRot = currentRot * Quaternion.AngleAxis(90f, new Vector3(-90f, currentRot.y, 0f));
-            _transform.rotation =
-                Quaternion.RotateTowards(
-                    currentRot,
-                    targetRot,
-                    Time.deltaTime * deathAnimationSpeed);
+            _transform.rotation = Quaternion.RotateTowards(
+                _transform.rotation,
+                _deathTargetRotation,
+                Time.deltaTime * deathAnimationSpeed);
+
+            return Quaternion.Angle(_transform.rotation, _deathTargetRotation) <= 0.1f;
         }
 
         /// <summary>
@@ -128,12 +131,16 @@ namespace Enemy
         /// </summary>
         private void HandleDeath()
         {
-            if (_transform.rotation.x > -0.5f)
-                PlayDeathAnimation();
-            else if (timeBeforeDestroyingBody > 0f)
-                timeBeforeDestroyingBody -= Time.deltaTime;
-            else
-                Destroy(gameObject);
+            if (!PlayDeathAnimation())
+                return;
+
+            if (_destroyTimer > 0f)
+            {
+                _destroyTimer -= Time.deltaTime;
+                return;
+            }
+
+            Destroy(gameObject);
         }
 
         /// <summary>
