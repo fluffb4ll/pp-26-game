@@ -14,8 +14,6 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     [SerializeField] private float distance = 6f;
     [SerializeField] private float minPitch = -10f;
     [SerializeField] private float maxPitch = 70f;
-    [SerializeField] private float mouseSensitivity = 0.18f;
-    [SerializeField] private float gamepadLookSpeed = 220f;
     [SerializeField] private bool lockCursorWhileRotating = true;
 
     private InputAction _lookCamMovementAction;
@@ -99,20 +97,7 @@ public sealed class SimpleFollowCamera : MonoBehaviour
         UpdateCursorState();
 
         Vector2 rawInput = _lookCamMovementAction.ReadValue<Vector2>();
-
-        if (rawInput.sqrMagnitude <= 0.0001f)
-            return Vector2.zero;
-
-        var activeControl = _lookCamMovementAction.activeControl;
-        var activeDevice = ReferenceEquals(activeControl, null) ? null : activeControl.device;
-
-        if (activeDevice is Mouse)
-            return _lookLockPtrAction.IsPressed() ? rawInput * mouseSensitivity : Vector2.zero;
-
-        if (activeDevice is Touchscreen)
-            return Vector2.zero;
-
-        return rawInput * (gamepadLookSpeed * Time.deltaTime);
+        return rawInput.sqrMagnitude <= 0.0001f ? Vector2.zero : rawInput;
     }
 
     /// <summary>

@@ -173,8 +173,6 @@ MonoBehaviour:
   distance: 6
   minPitch: -10
   maxPitch: 70
-  mouseSensitivity: 0.18
-  gamepadLookSpeed: 220
   lockCursorWhileRotating: 1
 --- !u!114 &155497300
 MonoBehaviour:
