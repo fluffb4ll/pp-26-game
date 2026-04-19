@@ -43,6 +43,8 @@ ExportedObj/
 *.csproj
 *.unityproj
 *.sln
+/pp-26-game-combat.slnx
+.vsconfig
 *.suo
 *.tmp
 *.user
