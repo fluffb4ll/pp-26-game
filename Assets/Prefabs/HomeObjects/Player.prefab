@@ -106,9 +106,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveActionReference: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  jumpActionReference: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   cameraTransform: {fileID: 0}
   moveSpeed: 5
   turnSpeed: 720
+  jumpStrength: 6
   gravity: -20
   groundedVerticalVelocity: -2
 --- !u!114 &3854168048117944823
