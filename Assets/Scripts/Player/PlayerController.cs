@@ -8,12 +8,12 @@ using UnityEngine.InputSystem.Controls;
 namespace Player
 {
     /// <summary>
-    /// Имплементирует механику боя для игрока
+    /// отвечает за здоровье смерть и атаку игрока
     /// </summary>
     public class PlayerController : MonoBehaviour, IDamageable
     {
-        private const int MAX_RAYCAST_HITS = 16;
-        
+        private const int MaxRaycastHits = 16;
+
         [SerializeField] private PlayerInteraction playerInteraction;
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private CharacterController charController;
@@ -21,40 +21,47 @@ namespace Player
         [SerializeField] private float deathAnimationSpeed;
         [SerializeField] private float attackCooldownRate;
         [SerializeField] private InputActionReference respawnBindings;
-        
+
         [SerializeField] private Camera mainCameraReference;
         [SerializeField] private InputActionReference attackActionReference;
         [SerializeField] private float attackDistance = 20f;
         [SerializeField] private LayerMask raycastLayerMask = ~0;
         [SerializeField] private LayerMask enemyLayerMask;
-        
+
         public int maxHealth;
         public int currentHealth;
         public int damage;
 
         private bool _isDying;
         private InputAction _respawnAction;
+        private InputAction _attackAction;
         private GameManager _gameManager;
         private float _attackCooldownTimer;
-        
-        private readonly RaycastHit[] _raycastHits = new RaycastHit[MAX_RAYCAST_HITS];
-        private InputAction _attackAction;
-        
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-            currentHealth = maxHealth;
-            _attackCooldownTimer = attackCooldownRate;
-        }
+        private readonly RaycastHit[] _raycastHits = new RaycastHit[MaxRaycastHits];
 
-        void Awake()
+        /// <summary>
+        /// кешируем ссылки на старте
+        /// </summary>
+        private void Awake()
         {
             _gameManager = GameManager.Instance;
             _respawnAction = respawnBindings.action;
             _attackAction = attackActionReference.action;
         }
-        
-        void OnEnable()
+
+        /// <summary>
+        /// выставляем стартовое здоровье
+        /// </summary>
+        private void Start()
+        {
+            currentHealth = maxHealth;
+            _attackCooldownTimer = 0f;
+        }
+
+        /// <summary>
+        /// включаем события и actions игрока
+        /// </summary>
+        private void OnEnable()
         {
             _gameManager.OnGameStateStart += OnHomeEnter;
             _respawnAction.Enable();
@@ -62,34 +69,39 @@ namespace Player
             _attackAction.performed += OnAttack;
         }
 
-        void OnDisable()
+        /// <summary>
+        /// выключаем события и actions игрока
+        /// </summary>
+        private void OnDisable()
         {
             _gameManager.OnGameStateStart -= OnHomeEnter;
             _respawnAction.Disable();
-            _attackAction.Disable();
+            _respawnAction.performed -= OnRespawn;
             _attackAction.performed -= OnAttack;
+            _attackAction.Disable();
         }
-        
-        // Update is called once per frame
-        void Update()
+
+        /// <summary>
+        /// обновляем смерть и кулдаун атаки
+        /// </summary>
+        private void Update()
         {
             if (_isDying && transform.rotation.x > -0.5f)
                 PlayDeathAnimation(deathAnimationSpeed);
-            
-            if (_attackCooldownTimer > 0)
+
+            if (_attackCooldownTimer > 0f)
                 _attackCooldownTimer -= Time.deltaTime;
         }
-        
+
         private void OnTriggerEnter(Collider other)
         {
             other.TryGetComponent(out ITriggerable triggerable);
             triggerable?.Execute(this);
         }
-        
+
         /// <summary>
-        /// Вызывается при нажатии бинда возрождения
+        /// вызывается по кнопке возрождения
         /// </summary>
-        /// <param name="context">Информация о том, что вызвало <c>InputAction</c></param>
         private void OnRespawn(InputAction.CallbackContext context)
         {
             _respawnAction.performed -= OnRespawn;
@@ -97,30 +109,28 @@ namespace Player
         }
 
         /// <summary>
-        /// Лечит игрока при входе в зону <c>Home</c>
+        /// лечит игрока при входе домой
         /// </summary>
-        /// <param name="newState">Новый геймстейт</param>
         private void OnHomeEnter(GameState newState)
         {
             if (newState == GameState.Home)
                 Heal(maxHealth);
         }
-        
+
         /// <inheritdoc/>
         public void TakeDamage(int damageAmount)
         {
             currentHealth -= damageAmount;
-            _attackCooldownTimer = attackCooldownRate;
-            
+
             if (currentHealth <= 0)
                 Die();
         }
-        
+
         /// <inheritdoc/>
         public void Heal(int healAmount)
         {
             currentHealth += healAmount;
-            
+
             if (currentHealth > maxHealth)
                 currentHealth = maxHealth;
         }
@@ -136,18 +146,17 @@ namespace Player
         }
 
         /// <summary>
-        /// Проигрывает анимацию смерти - переворачивает игрока на "спину"
+        /// проигрывает простую анимацию смерти через поворот
         /// </summary>
-        /// <param name="rotationSpeed">Скорость вращения</param>
         private void PlayDeathAnimation(float rotationSpeed)
         {
             var currentRot = transform.rotation;
             var targetRot = currentRot * Quaternion.AngleAxis(90f, new Vector3(-90f, currentRot.y, 0f));
             transform.rotation = Quaternion.RotateTowards(currentRot, targetRot, Time.deltaTime * rotationSpeed);
         }
-        
+
         /// <summary>
-        /// Возрождает игрока на <c>spawnPoint</c>
+        /// возвращает игрока на точку спавна
         /// </summary>
         private void Respawn()
         {
@@ -156,26 +165,38 @@ namespace Player
             currentHealth = maxHealth;
             transform.position = spawnPoint.position;
             transform.rotation = Quaternion.identity;
-            
+
             charController.enabled = playerMovement.enabled = playerInteraction.enabled = true;
-        }
-        
-        private void OnAttack(InputAction.CallbackContext context)
-        {
-            if (!TryGetPointerPosition(context.control, out Vector2 screenPosition, out int pointerId))
-                screenPosition = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
-            
-            if (pointerId >= 0 && IsPointerOverUi(pointerId))
-                return;
-            
-            if (pointerId < 0 && IsPointerOverUi())
-                return;
-            
-            AttackAt(screenPosition);
         }
 
         /// <summary>
-        /// выпускает луч и бьет только первого видимого врага
+        /// запускает атаку по указателю или по центру экрана
+        /// </summary>
+        private void OnAttack(InputAction.CallbackContext context)
+        {
+            if (_isDying || _attackCooldownTimer > 0f)
+                return;
+
+            bool hasPointer = TryGetPointerPosition(context.control, out Vector2 screenPosition, out int pointerId);
+
+            if (!hasPointer)
+                screenPosition = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+
+            if (hasPointer)
+            {
+                if (pointerId >= 0 && IsPointerOverUi(pointerId))
+                    return;
+
+                if (pointerId < 0 && IsPointerOverUi())
+                    return;
+            }
+
+            AttackAt(screenPosition);
+            _attackCooldownTimer = attackCooldownRate;
+        }
+
+        /// <summary>
+        /// выпускает луч и бьёт только первого видимого врага
         /// </summary>
         private void AttackAt(Vector2 screenPosition)
         {
@@ -184,26 +205,25 @@ namespace Player
                 ray,
                 _raycastHits,
                 attackDistance,
-                enemyLayerMask,
+                raycastLayerMask,
                 QueryTriggerInteraction.Ignore);
 
             if (!TryGetClosestHit(hitCount, out var hit))
                 return;
 
+            if (!IsInLayerMask(hit.collider.gameObject.layer, enemyLayerMask))
+                return;
+
             var damageable = hit.collider.GetComponentInParent<IDamageable>();
-            
-            // TODO: проверить, нельзя ли без этого простреливать стены
-            // if (damageable is not MonoBehaviour monoBehaviour) 
-            //     return;
-            //
-            // if (!IsInLayerMask(monoBehaviour.gameObject.layer, enemyLayerMask))
-            //     return;
-            
+
+            if (ReferenceEquals(damageable, null))
+                return;
+
             damageable.TakeDamage(damage);
         }
 
         /// <summary>
-        /// берет ближайшее попадание не по самому игроку
+        /// берёт ближайшее попадание не по самому игроку
         /// </summary>
         private bool TryGetClosestHit(int hitCount, out RaycastHit closestHit)
         {
@@ -228,7 +248,7 @@ namespace Player
         }
 
         /// <summary>
-        /// берет позицию указателя если она есть
+        /// берёт позицию указателя если атака пришла от мыши или touch
         /// </summary>
         private static bool TryGetPointerPosition(InputControl control, out Vector2 screenPosition, out int pointerId)
         {

@@ -121,6 +121,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4013131671097225995}
+  - component: {fileID: 700000001}
   - component: {fileID: 5988903961048020760}
   - component: {fileID: 6584427899930752052}
   m_Layer: 6
@@ -146,6 +147,31 @@ Transform:
   - {fileID: 9151886871294589649}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!143 &700000001
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5116946552645475411}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.2
+  m_Radius: 0.45
+  m_SlopeLimit: 45
+  m_StepOffset: 0.2
+  m_SkinWidth: 0.04
+  m_MinMoveDistance: 0
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5988903961048020760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,7 +183,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cbb099d2352567e259901213984d66d1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy.DefaultEnemyController
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyCombat
   spawnableBrainrot: {fileID: 0}
   timeBeforeDestroyingBody: 10
   deathAnimationSpeed: 400
@@ -166,6 +192,11 @@ MonoBehaviour:
   damage: 10
   attackRate: 1.5
   attackDistance: 1.6
+  attackRayOffset: {x: 0, y: 0.6, z: 0}
+  playerRayOffset: {x: 0, y: 0.9, z: 0}
+  attackRaycastMask:
+    serializedVersion: 2
+    m_Bits: -1
   spawnManager: {fileID: 0}
 --- !u!114 &6584427899930752052
 MonoBehaviour:
@@ -182,3 +213,5 @@ MonoBehaviour:
   moveSpeed: 1
   stoppingDistance: 1.4
   rotationSpeed: 360
+  gravity: -20
+  groundedVerticalVelocity: -2
