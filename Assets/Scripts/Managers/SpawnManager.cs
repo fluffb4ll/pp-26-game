@@ -61,7 +61,6 @@ namespace Managers
         
         private void OnCombatStart(GameState newState)
         {
-            Debug.Log(_spawnedEnemies.Count);
             if (newState == GameState.Combat)
                 _isSpawning = true;
         }

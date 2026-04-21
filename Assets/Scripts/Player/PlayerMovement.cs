@@ -68,19 +68,19 @@ namespace Player
         /// </summary>
         private void HandleMovement()
         {
-            bool isGrounded = _characterController.isGrounded;
+            var isGrounded = _characterController.isGrounded;
 
             if (isGrounded && _verticalVelocity < 0f)
                 _verticalVelocity = groundedVerticalVelocity;
 
-            Vector2 input = _moveAction.ReadValue<Vector2>();
-            Vector3 movement = Vector3.zero;
+            var input = _moveAction.ReadValue<Vector2>();
+            var movement = Vector3.zero;
 
             if (input.sqrMagnitude > 0.01f)
             {
                 // вычисление направления движения относительно поворота камеры
-                Vector3 camForward = cameraTransform.forward;
-                Vector3 camRight = cameraTransform.right;
+                var camForward = cameraTransform.forward;
+                var camRight = cameraTransform.right;
 
                 camForward.y = 0f;
                 camRight.y = 0f;
@@ -92,7 +92,7 @@ namespace Player
                 if (movement.sqrMagnitude > 1f)
                     movement.Normalize();
 
-                Quaternion targetRotation = Quaternion.LookRotation(movement, Vector3.up);
+                var targetRotation = Quaternion.LookRotation(movement, Vector3.up);
                 _transform.rotation = Quaternion.RotateTowards(
                     _transform.rotation,
                     targetRotation,
@@ -104,7 +104,7 @@ namespace Player
 
             _verticalVelocity += gravity * Time.deltaTime;
 
-            Vector3 frameMotion = movement * moveSpeed;
+            var frameMotion = movement * moveSpeed;
             frameMotion.y = _verticalVelocity;
 
             _characterController.Move(frameMotion * Time.deltaTime);

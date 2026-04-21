@@ -15,6 +15,7 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     [SerializeField] private float minPitch = -10f;
     [SerializeField] private float maxPitch = 70f;
     [SerializeField] private bool lockCursorWhileRotating = true;
+    [SerializeField] [Range(0, 100)] private int lookSensitivity = 100;
 
     private InputAction _lookCamMovementAction;
     private InputAction _lookLockPtrAction;
@@ -32,7 +33,7 @@ public sealed class SimpleFollowCamera : MonoBehaviour
         _lookLockPtrAction = lookLockPtrActionReference.action;
         _transform = transform;
 
-        Vector3 eulerAngles = _transform.eulerAngles;
+        var eulerAngles = _transform.eulerAngles;
         _yaw = NormalizeAngle(eulerAngles.y);
         _pitch = Mathf.Clamp(NormalizeAngle(eulerAngles.x), minPitch, maxPitch);
     }
@@ -78,12 +79,13 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     /// </summary>
     private void LateUpdate()
     {
-        Vector2 lookInput = ReadLookInput();
-        _yaw += lookInput.x;
-        _pitch = Mathf.Clamp(_pitch - lookInput.y, minPitch, maxPitch);
+        var lookInput = ReadLookInput();
+        _yaw += lookInput.x * Time.deltaTime * lookSensitivity;
+        _pitch -= lookInput.y * Time.deltaTime * lookSensitivity;
+        _pitch = Mathf.Clamp(_pitch, minPitch, maxPitch);
 
-        Quaternion orbitRotation = Quaternion.Euler(_pitch, _yaw, 0f);
-        Vector3 pivotPosition = target.position + Vector3.up * pivotHeight;
+        var orbitRotation = Quaternion.Euler(_pitch, _yaw, 0f);
+        var pivotPosition = target.position + Vector3.up * pivotHeight;
 
         _transform.position = pivotPosition + orbitRotation * (Vector3.back * distance);
         _transform.rotation = orbitRotation;
@@ -95,8 +97,7 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     private Vector2 ReadLookInput()
     {
         UpdateCursorState();
-
-        Vector2 rawInput = _lookCamMovementAction.ReadValue<Vector2>();
+        var rawInput = _lookCamMovementAction.ReadValue<Vector2>();
         return rawInput.sqrMagnitude <= 0.0001f ? Vector2.zero : rawInput;
     }
 

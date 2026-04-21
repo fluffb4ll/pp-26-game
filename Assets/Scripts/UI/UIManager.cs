@@ -53,8 +53,8 @@ public sealed class UIManager : MonoBehaviour
     /// </summary>
     private void RefreshLayout(bool force)
     {
-        Vector2Int screenSize = new Vector2Int(Screen.width, Screen.height);
-        Rect safeArea = Screen.safeArea;
+        var screenSize = new Vector2Int(Screen.width, Screen.height);
+        var safeArea = Screen.safeArea;
 
         if (!force && screenSize == _lastScreenSize && safeArea == _lastSafeArea)
             return;

@@ -21,8 +21,8 @@ namespace Enemy
         [SerializeField] private int damage;
         [SerializeField] private float attackRate;
         [SerializeField] private float attackDistance;
-        [SerializeField] private Vector3 attackRayOffset = new Vector3(0f, 0.6f, 0f);
-        [SerializeField] private Vector3 playerRayOffset = new Vector3(0f, 0.9f, 0f);
+        [SerializeField] private Vector3 attackRayOffset = new (0f, 0.6f, 0f);
+        [SerializeField] private Vector3 playerRayOffset = new (0f, 0.9f, 0f);
         [SerializeField] private LayerMask attackRaycastMask = ~0;
 
         public SpawnManager spawnManager;
@@ -35,7 +35,6 @@ namespace Enemy
         private float _destroyTimer;
         private Quaternion _deathTargetRotation;
         private PlayerController _playerController;
-        private EnemyMovement _enemyMovement;
         private readonly RaycastHit[] _attackHits = new RaycastHit[MaxAttackHits];
 
         /// <summary>
@@ -47,7 +46,6 @@ namespace Enemy
             _gameManager = GameManager.Instance;
             _playerTransform = _gameManager.playerTransform;
             _playerController = _gameManager.playerController;
-            _enemyMovement = GetComponent<EnemyMovement>();
             _transform = transform;
             _attackTimer = attackRate;
         }
@@ -98,11 +96,7 @@ namespace Enemy
             _destroyTimer = timeBeforeDestroyingBody;
             _deathTargetRotation = _transform.rotation * Quaternion.Euler(-90f, 0f, 0f);
 
-            if (!ReferenceEquals(_enemyMovement, null))
-                _enemyMovement.enabled = false;
-
-            if (!ReferenceEquals(spawnManager, null))
-                spawnManager.UnregisterEnemy(gameObject);
+            spawnManager?.UnregisterEnemy(gameObject);
 
             SpawnBrainrot();
         }
@@ -125,7 +119,7 @@ namespace Enemy
         /// </summary>
         private void SpawnBrainrot()
         {
-            if (!ReferenceEquals(spawnableBrainrot, null))
+            if (spawnableBrainrot is not null)
                 Instantiate(spawnableBrainrot, _transform.position, Quaternion.identity);
         }
 
@@ -175,10 +169,7 @@ namespace Enemy
             _playerController.TakeDamage(damage);
             _attackTimer = attackRate;
         }
-
-        /// <summary>
-        /// проверяет настоящую 3d дистанцию до игрока
-        /// </summary>
+        
         /// <summary>
         /// проверяет что между врагом и игроком нет стены или стола
         /// </summary>
@@ -213,7 +204,7 @@ namespace Enemy
             closestHit = default;
             var closestDistance = float.PositiveInfinity;
 
-            for (int i = 0; i < hitCount; i++)
+            for (var i = 0; i < hitCount; i++)
             {
                 var hit = _attackHits[i];
 

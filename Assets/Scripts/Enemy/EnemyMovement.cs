@@ -49,7 +49,7 @@ namespace Enemy
             if (_characterController.isGrounded && _verticalVelocity < 0f)
                 _verticalVelocity = groundedVerticalVelocity;
 
-            Vector3 frameMotion = Vector3.zero;
+            var frameMotion = Vector3.zero;
 
             if (_gameManager.currentState == GameState.Combat)
                 frameMotion = GetHorizontalMotion();

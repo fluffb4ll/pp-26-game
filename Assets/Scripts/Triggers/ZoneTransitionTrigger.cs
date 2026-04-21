@@ -38,7 +38,7 @@ namespace Triggers
         /// <inheritdoc/>
         public void Execute(PlayerController playerController)
         {
-            GameState tempState = targetState;
+            var tempState = targetState;
             targetState = _gameManager.currentState;
             _gameManager.ChangeGameState(tempState);
         }

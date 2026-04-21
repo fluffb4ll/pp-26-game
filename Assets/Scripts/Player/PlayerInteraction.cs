@@ -22,8 +22,7 @@ namespace Player
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            if (_interactAction is null)
-                _interactAction = interact.action;
+            _interactAction ??= interact.action;
         }
 
         /// <summary>
@@ -54,7 +53,7 @@ namespace Player
         {
             PerformRaycast((hit) =>
             {
-                IInteractable interactable = hit.collider.GetComponentInParent<IInteractable>();
+                var interactable = hit.collider.GetComponentInParent<IInteractable>();
                 interactable?.Interact(this);
             }, interactionDistance);
         }
@@ -67,7 +66,7 @@ namespace Player
         private void PerformRaycast(Action<RaycastHit> callback, float raycastDistance)
         {
             var ray = new Ray(transform.position, transform.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance))
+            if (Physics.Raycast(ray, out var hit, raycastDistance))
                 callback.Invoke(hit);
         }
     }

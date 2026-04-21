@@ -8,7 +8,7 @@ using UnityEngine.InputSystem.Controls;
 namespace Player
 {
     /// <summary>
-    /// отвечает за здоровье смерть и атаку игрока
+    /// Имплементирует механику боя для игрока
     /// </summary>
     public class PlayerController : MonoBehaviour, IDamageable
     {
@@ -39,9 +39,7 @@ namespace Player
         private float _attackCooldownTimer;
         private readonly RaycastHit[] _raycastHits = new RaycastHit[MaxRaycastHits];
 
-        /// <summary>
-        /// кешируем ссылки на старте
-        /// </summary>
+        
         private void Awake()
         {
             _gameManager = GameManager.Instance;
@@ -49,18 +47,14 @@ namespace Player
             _attackAction = attackActionReference.action;
         }
 
-        /// <summary>
-        /// выставляем стартовое здоровье
-        /// </summary>
+        
         private void Start()
         {
             currentHealth = maxHealth;
             _attackCooldownTimer = 0f;
         }
 
-        /// <summary>
-        /// включаем события и actions игрока
-        /// </summary>
+        
         private void OnEnable()
         {
             _gameManager.OnGameStateStart += OnHomeEnter;
@@ -69,9 +63,7 @@ namespace Player
             _attackAction.performed += OnAttack;
         }
 
-        /// <summary>
-        /// выключаем события и actions игрока
-        /// </summary>
+        
         private void OnDisable()
         {
             _gameManager.OnGameStateStart -= OnHomeEnter;
@@ -81,9 +73,7 @@ namespace Player
             _attackAction.Disable();
         }
 
-        /// <summary>
-        /// обновляем смерть и кулдаун атаки
-        /// </summary>
+        
         private void Update()
         {
             if (_isDying && transform.rotation.x > -0.5f)
@@ -100,8 +90,9 @@ namespace Player
         }
 
         /// <summary>
-        /// вызывается по кнопке возрождения
+        /// Вызывается при нажатии бинда возрождения
         /// </summary>
+        /// <param name="context">Информация о том, что вызвало <c>InputAction</c></param>
         private void OnRespawn(InputAction.CallbackContext context)
         {
             _respawnAction.performed -= OnRespawn;
@@ -109,8 +100,9 @@ namespace Player
         }
 
         /// <summary>
-        /// лечит игрока при входе домой
+        /// Лечит игрока при входе в зону <c>Home</c>
         /// </summary>
+        /// <param name="newState">Новый геймстейт</param>
         private void OnHomeEnter(GameState newState)
         {
             if (newState == GameState.Home)
@@ -138,6 +130,9 @@ namespace Player
         /// <inheritdoc/>
         public void Die()
         {
+            if (_isDying)
+                return;
+            
             _gameManager.ChangeGameState(GameState.GameOver);
             currentHealth = 0;
             _isDying = true;
@@ -146,8 +141,9 @@ namespace Player
         }
 
         /// <summary>
-        /// проигрывает простую анимацию смерти через поворот
+        /// Проигрывает анимацию смерти - переворачивает игрока на "спину"
         /// </summary>
+        /// <param name="rotationSpeed">Скорость вращения</param>
         private void PlayDeathAnimation(float rotationSpeed)
         {
             var currentRot = transform.rotation;
@@ -156,7 +152,7 @@ namespace Player
         }
 
         /// <summary>
-        /// возвращает игрока на точку спавна
+        /// Возрождает игрока на <c>spawnPoint</c>
         /// </summary>
         private void Respawn()
         {
@@ -177,17 +173,15 @@ namespace Player
             if (_isDying || _attackCooldownTimer > 0f)
                 return;
 
-            bool hasPointer = TryGetPointerPosition(context.control, out Vector2 screenPosition, out int pointerId);
+            var hasPointer = TryGetPointerPosition(context.control, out var screenPosition, out var pointerId);
 
-            if (!hasPointer)
-                screenPosition = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
-
-            if (hasPointer)
+            switch (hasPointer)
             {
-                if (pointerId >= 0 && IsPointerOverUi(pointerId))
-                    return;
-
-                if (pointerId < 0 && IsPointerOverUi())
+                case false:
+                    screenPosition = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+                    break;
+                case true when pointerId >= 0 && IsPointerOverUi(pointerId):
+                case true when pointerId < 0 && IsPointerOverUi():
                     return;
             }
 
@@ -207,19 +201,17 @@ namespace Player
                 attackDistance,
                 raycastLayerMask,
                 QueryTriggerInteraction.Ignore);
-
+            
+            
             if (!TryGetClosestHit(hitCount, out var hit))
                 return;
 
             if (!IsInLayerMask(hit.collider.gameObject.layer, enemyLayerMask))
                 return;
-
+            
             var damageable = hit.collider.GetComponentInParent<IDamageable>();
 
-            if (ReferenceEquals(damageable, null))
-                return;
-
-            damageable.TakeDamage(damage);
+            damageable?.TakeDamage(damage);
         }
 
         /// <summary>
@@ -228,11 +220,11 @@ namespace Player
         private bool TryGetClosestHit(int hitCount, out RaycastHit closestHit)
         {
             closestHit = default;
-            float closestDistance = float.PositiveInfinity;
+            var closestDistance = float.PositiveInfinity;
 
-            for (int i = 0; i < hitCount; i++)
+            for (var i = 0; i < hitCount; i++)
             {
-                RaycastHit hit = _raycastHits[i];
+                var hit = _raycastHits[i];
 
                 if (hit.collider.transform.IsChildOf(transform))
                     continue;
@@ -252,7 +244,7 @@ namespace Player
         /// </summary>
         private static bool TryGetPointerPosition(InputControl control, out Vector2 screenPosition, out int pointerId)
         {
-            if (TryGetTouchControl(control, out TouchControl touch))
+            if (TryGetTouchControl(control, out var touch))
             {
                 screenPosition = touch.position.ReadValue();
                 pointerId = touch.touchId.ReadValue();
@@ -276,13 +268,13 @@ namespace Player
         /// </summary>
         private static bool TryGetTouchControl(InputControl control, out TouchControl touch)
         {
-            for (InputControl current = control; current != null; current = current.parent)
+            for (var current = control; current != null; current = current.parent)
             {
-                if (current is TouchControl touchControl)
-                {
-                    touch = touchControl;
-                    return true;
-                }
+                if (current is not TouchControl touchControl) 
+                    continue;
+                
+                touch = touchControl;
+                return true;
             }
 
             touch = null;
