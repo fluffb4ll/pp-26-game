@@ -17,6 +17,9 @@ namespace Managers
     /// </summary>
     public class GameManager : MonoBehaviour
     {
+        [SerializeField] private int spawnHealthBonusStep = 5;
+        [SerializeField] private int killHealthBonusStep = 10;
+
         public static GameManager Instance { get; private set; }
         
         public GameState currentState;
@@ -25,6 +28,9 @@ namespace Managers
         public List<GameObject> spawnableBrainrots;
         private Action<GameState> _onGameStateStart;
         private Action<GameState> _onGameStateEnd;
+        private readonly HashSet<SpawnManager> _spawnManagers = new();
+        private int _combatSpawnHealthBonus;
+        private int _killHealthBonus;
 
         void Awake()
         {
@@ -58,6 +64,38 @@ namespace Managers
             _onGameStateEnd?.Invoke(currentState);
             currentState = newState;
             _onGameStateStart?.Invoke(newState);
+        }
+
+        public int GetNextEnemyHealthBonus()
+        {
+            _combatSpawnHealthBonus += spawnHealthBonusStep;
+            return _combatSpawnHealthBonus + _killHealthBonus;
+        }
+
+        public void RegisterEnemyKill()
+        {
+            _killHealthBonus += killHealthBonusStep;
+        }
+
+        public void ResetCombatSpawnHealthBonus()
+        {
+            _combatSpawnHealthBonus = 0;
+        }
+
+        public void RegisterSpawnManager(SpawnManager spawnManager)
+        {
+            _spawnManagers.Add(spawnManager);
+        }
+
+        public void UnregisterSpawnManager(SpawnManager spawnManager)
+        {
+            _spawnManagers.Remove(spawnManager);
+        }
+
+        public void ClearEnemiesOnMap()
+        {
+            foreach (var spawnManager in _spawnManagers)
+                spawnManager.ClearSpawnedEnemies();
         }
     }
 }

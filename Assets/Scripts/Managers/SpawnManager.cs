@@ -27,12 +27,14 @@ namespace Managers
 
         void OnEnable()
         {
+            _gameManager.RegisterSpawnManager(this);
             _gameManager.OnGameStateEnd += OnCombatEnd;
             _gameManager.OnGameStateStart += OnCombatStart;
         }
 
         void OnDisable()
         {
+            _gameManager.UnregisterSpawnManager(this);
             _gameManager.OnGameStateEnd -= OnCombatEnd;
             _gameManager.OnGameStateStart -= OnCombatStart;
         }
@@ -54,7 +56,15 @@ namespace Managers
                 return;
             
             var spawnedEnemy = Instantiate(spawnablePrefab, transform.position, transform.rotation);
-            spawnedEnemy.GetComponent<EnemyCombat>().spawnManager = this;
+
+            if (!spawnedEnemy.TryGetComponent(out EnemyCombat enemyCombat))
+            {
+                Destroy(spawnedEnemy);
+                _spawnTimer = spawnRate;
+                return;
+            }
+
+            enemyCombat.InitializeSpawn(this, _gameManager.GetNextEnemyHealthBonus());
             _spawnedEnemies.Add(spawnedEnemy);
             _spawnTimer = spawnRate;
         }
@@ -71,17 +81,22 @@ namespace Managers
                 return;
             
             _isSpawning = false;
-
-            foreach (var obj in _spawnedEnemies)
-                Destroy(obj);
-            
+            ClearSpawnedEnemies();
             _spawnTimer = spawnRate;
-            _spawnedEnemies.Clear();
+            _gameManager.ResetCombatSpawnHealthBonus();
         }
 
         public void UnregisterEnemy(GameObject enemy)
         {
             _spawnedEnemies.Remove(enemy);
+        }
+
+        public void ClearSpawnedEnemies()
+        {
+            foreach (var enemy in _spawnedEnemies)
+                Destroy(enemy);
+
+            _spawnedEnemies.Clear();
         }
     }
 }

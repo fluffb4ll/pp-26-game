@@ -184,11 +184,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbb099d2352567e259901213984d66d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyCombat
-  spawnableBrainrot: {fileID: 0}
+  spawnableBrainrot: {fileID: 1337268276677933175, guid: e0619c7d76a9ff64cbf5539fbbcac479, type: 3}
   timeBeforeDestroyingBody: 10
   deathAnimationSpeed: 400
-  maxHealth: 100
-  currentHealth: 100
+  maxHealth: 150
+  currentHealth: 150
   damage: 10
   attackRate: 1.5
   attackDistance: 1.6

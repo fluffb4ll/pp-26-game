@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using UnityEngine;
@@ -19,12 +20,14 @@ namespace Player
         [SerializeField] private CharacterController charController;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private float deathAnimationSpeed;
+        [SerializeField] private float respawnDelay = 1.25f;
         [SerializeField] private float attackCooldownRate;
         [SerializeField] private InputActionReference respawnBindings;
 
         [SerializeField] private Camera mainCameraReference;
         [SerializeField] private InputActionReference attackActionReference;
-        [SerializeField] private float attackDistance = 20f;
+        [SerializeField] private float attackDistance = 3f;
+        [SerializeField] private float attackRayDistance = 30f;
         [SerializeField] private LayerMask raycastLayerMask = ~0;
         [SerializeField] private LayerMask enemyLayerMask;
 
@@ -37,7 +40,11 @@ namespace Player
         private InputAction _attackAction;
         private GameManager _gameManager;
         private float _attackCooldownTimer;
+        private float _respawnTimer;
         private readonly RaycastHit[] _raycastHits = new RaycastHit[MaxRaycastHits];
+        private readonly List<RaycastResult> _uiRaycastResults = new(8);
+        private EventSystem _uiEventSystem;
+        private PointerEventData _uiPointerEventData;
 
         
         private void Awake()
@@ -76,8 +83,11 @@ namespace Player
         
         private void Update()
         {
-            if (_isDying && transform.rotation.x > -0.5f)
-                PlayDeathAnimation(deathAnimationSpeed);
+            if (_isDying)
+            {
+                HandleRespawnAfterDeath();
+                return;
+            }
 
             if (_attackCooldownTimer > 0f)
                 _attackCooldownTimer -= Time.deltaTime;
@@ -133,10 +143,13 @@ namespace Player
             if (_isDying)
                 return;
             
-            _gameManager.ChangeGameState(GameState.GameOver);
             currentHealth = 0;
             _isDying = true;
+            _respawnTimer = respawnDelay;
+            _gameManager.ChangeGameState(GameState.GameOver);
+            _gameManager.ClearEnemiesOnMap();
             charController.enabled = playerMovement.enabled = playerInteraction.enabled = false;
+            _respawnAction.performed -= OnRespawn;
             _respawnAction.performed += OnRespawn;
         }
 
@@ -151,18 +164,33 @@ namespace Player
             transform.rotation = Quaternion.RotateTowards(currentRot, targetRot, Time.deltaTime * rotationSpeed);
         }
 
+        private void HandleRespawnAfterDeath()
+        {
+            if (transform.rotation.x > -0.5f)
+                PlayDeathAnimation(deathAnimationSpeed);
+
+            _respawnTimer -= Time.deltaTime;
+
+            if (_respawnTimer > 0f)
+                return;
+
+            _respawnAction.performed -= OnRespawn;
+            Respawn();
+        }
+
         /// <summary>
         /// Возрождает игрока на <c>spawnPoint</c>
         /// </summary>
         private void Respawn()
         {
-            _gameManager.ChangeGameState(GameState.Home);
             _isDying = false;
+            _respawnTimer = 0f;
             currentHealth = maxHealth;
             transform.position = spawnPoint.position;
             transform.rotation = Quaternion.identity;
 
             charController.enabled = playerMovement.enabled = playerInteraction.enabled = true;
+            _gameManager.ChangeGameState(GameState.Home);
         }
 
         /// <summary>
@@ -173,17 +201,12 @@ namespace Player
             if (_isDying || _attackCooldownTimer > 0f)
                 return;
 
-            var hasPointer = TryGetPointerPosition(context.control, out var screenPosition, out var pointerId);
+            var hasPointer = TryGetPointerPosition(context.control, out var screenPosition);
 
-            switch (hasPointer)
-            {
-                case false:
-                    screenPosition = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
-                    break;
-                case true when pointerId >= 0 && IsPointerOverUi(pointerId):
-                case true when pointerId < 0 && IsPointerOverUi():
-                    return;
-            }
+            if (!hasPointer)
+                screenPosition = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+            else if (IsPointerOverUi(screenPosition))
+                return;
 
             AttackAt(screenPosition);
             _attackCooldownTimer = attackCooldownRate;
@@ -198,7 +221,7 @@ namespace Player
             var hitCount = Physics.RaycastNonAlloc(
                 ray,
                 _raycastHits,
-                attackDistance,
+                attackRayDistance,
                 raycastLayerMask,
                 QueryTriggerInteraction.Ignore);
             
@@ -208,10 +231,22 @@ namespace Player
 
             if (!IsInLayerMask(hit.collider.gameObject.layer, enemyLayerMask))
                 return;
+
+            if (!IsEnemyInAttackRange(hit.collider))
+                return;
             
             var damageable = hit.collider.GetComponentInParent<IDamageable>();
 
             damageable?.TakeDamage(damage);
+        }
+
+        private bool IsEnemyInAttackRange(Collider enemyCollider)
+        {
+            var playerPosition = transform.position;
+            var closestPoint = enemyCollider.ClosestPoint(playerPosition);
+            closestPoint.y = playerPosition.y;
+
+            return (closestPoint - playerPosition).sqrMagnitude <= attackDistance * attackDistance;
         }
 
         /// <summary>
@@ -242,24 +277,21 @@ namespace Player
         /// <summary>
         /// берёт позицию указателя если атака пришла от мыши или touch
         /// </summary>
-        private static bool TryGetPointerPosition(InputControl control, out Vector2 screenPosition, out int pointerId)
+        private static bool TryGetPointerPosition(InputControl control, out Vector2 screenPosition)
         {
             if (TryGetTouchControl(control, out var touch))
             {
                 screenPosition = touch.position.ReadValue();
-                pointerId = touch.touchId.ReadValue();
                 return true;
             }
 
             if (control.device is Pointer pointer)
             {
                 screenPosition = pointer.position.ReadValue();
-                pointerId = -1;
                 return true;
             }
 
             screenPosition = Vector2.zero;
-            pointerId = -1;
             return false;
         }
 
@@ -290,19 +322,25 @@ namespace Player
         }
 
         /// <summary>
-        /// проверяет ui для мыши
+        /// проверяет попал ли клик или тап в ui прямо сейчас
         /// </summary>
-        private static bool IsPointerOverUi()
+        private bool IsPointerOverUi(Vector2 screenPosition)
         {
-            return !ReferenceEquals(EventSystem.current, null) && EventSystem.current.IsPointerOverGameObject();
-        }
+            if (ReferenceEquals(EventSystem.current, null))
+                return false;
 
-        /// <summary>
-        /// проверяет ui для конкретного touch
-        /// </summary>
-        private static bool IsPointerOverUi(int pointerId)
-        {
-            return !ReferenceEquals(EventSystem.current, null) && EventSystem.current.IsPointerOverGameObject(pointerId);
+            if (ReferenceEquals(_uiPointerEventData, null) || !ReferenceEquals(_uiEventSystem, EventSystem.current))
+            {
+                _uiEventSystem = EventSystem.current;
+                _uiPointerEventData = new PointerEventData(_uiEventSystem);
+            }
+
+            _uiPointerEventData.Reset();
+            _uiPointerEventData.position = screenPosition;
+
+            _uiRaycastResults.Clear();
+            _uiEventSystem.RaycastAll(_uiPointerEventData, _uiRaycastResults);
+            return _uiRaycastResults.Count > 0;
         }
     }
 }

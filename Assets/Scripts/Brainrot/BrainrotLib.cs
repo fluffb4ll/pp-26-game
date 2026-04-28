@@ -56,9 +56,15 @@ namespace Brainrot
         /// <returns>Выбранный объект <see cref="RarityConfig"/></returns>
         public RarityConfig GetRandomizedRarity()
         {
+            if (rarityPool is null || rarityPool.Count == 0)
+                return default;
+
             var totalWeight = 0;
             foreach (var config in rarityPool)
                 totalWeight += config.dropWeight;
+
+            if (totalWeight <= 0)
+                return rarityPool[0];
         
             var random = UnityEngine.Random.Range(0, totalWeight);
             var currentSum = 0;
@@ -66,7 +72,7 @@ namespace Brainrot
             foreach (var config in rarityPool)
             {
                 currentSum += config.dropWeight;
-                if (random <= currentSum)
+                if (random < currentSum)
                     return config;
             }
         

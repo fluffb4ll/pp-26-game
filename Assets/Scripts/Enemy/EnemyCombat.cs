@@ -35,6 +35,7 @@ namespace Enemy
         private float _destroyTimer;
         private Quaternion _deathTargetRotation;
         private PlayerController _playerController;
+        private int _baseMaxHealth;
         private readonly RaycastHit[] _attackHits = new RaycastHit[MaxAttackHits];
 
         /// <summary>
@@ -42,11 +43,20 @@ namespace Enemy
         /// </summary>
         private void Awake()
         {
+            _baseMaxHealth = maxHealth;
             currentHealth = maxHealth;
             _gameManager = GameManager.Instance;
             _playerTransform = _gameManager.playerTransform;
             _playerController = _gameManager.playerController;
             _transform = transform;
+            _attackTimer = attackRate;
+        }
+
+        public void InitializeSpawn(SpawnManager owner, int healthBonus)
+        {
+            spawnManager = owner;
+            maxHealth = _baseMaxHealth + healthBonus;
+            currentHealth = maxHealth;
             _attackTimer = attackRate;
         }
 
@@ -97,6 +107,7 @@ namespace Enemy
             _deathTargetRotation = _transform.rotation * Quaternion.Euler(-90f, 0f, 0f);
 
             spawnManager?.UnregisterEnemy(gameObject);
+            _gameManager.RegisterEnemyKill();
 
             SpawnBrainrot();
         }
