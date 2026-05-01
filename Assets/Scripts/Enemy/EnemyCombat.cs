@@ -107,7 +107,7 @@ namespace Enemy
             
             spawnManager?.UnregisterEnemy(gameObject);
             _gameManager.ResetCombatSpawnHealthBonus();
-            //_gameManager.RegisterEnemyKill();
+            _gameManager.RegisterEnemyKill();
             
             SpawnBrainrot();
         }
@@ -145,7 +145,6 @@ namespace Enemy
             if (_destroyTimer > 0f)
             {
                 _destroyTimer -= Time.deltaTime;
-                Debug.Log(_destroyTimer);
                 return;
             }
 

@@ -184,7 +184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbb099d2352567e259901213984d66d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyCombat
-  spawnableBrainrot: {fileID: 1337268276677933175, guid: e0619c7d76a9ff64cbf5539fbbcac479, type: 3}
   timeBeforeDestroyingBody: 10
   deathAnimationSpeed: 400
   maxHealth: 150
@@ -196,7 +195,8 @@ MonoBehaviour:
   playerRayOffset: {x: 0, y: 0.9, z: 0}
   attackRaycastMask:
     serializedVersion: 2
-    m_Bits: -1
+    m_Bits: 4294967295
+  enemyMovement: {fileID: 6584427899930752052}
   spawnManager: {fileID: 0}
 --- !u!114 &6584427899930752052
 MonoBehaviour:
@@ -215,3 +215,4 @@ MonoBehaviour:
   rotationSpeed: 360
   gravity: -20
   groundedVerticalVelocity: -2
+  enemyCombat: {fileID: 0}

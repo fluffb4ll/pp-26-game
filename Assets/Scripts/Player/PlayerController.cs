@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.XR;
 
 namespace Player
 {
@@ -83,12 +84,16 @@ namespace Player
         
         private void Update()
         {
-            if (_isDying)
+            switch (_isDying)
             {
-                HandleRespawnAfterDeath();
-                return;
+                case true when transform.rotation.x > -0.5f:
+                    PlayDeathAnimation(deathAnimationSpeed);
+                    return;
+                case true:
+                    HandleRespawnAfterDeath();
+                    return;
             }
-
+            
             if (_attackCooldownTimer > 0f)
                 _attackCooldownTimer -= Time.deltaTime;
         }
@@ -148,7 +153,6 @@ namespace Player
             _respawnTimer = respawnDelay;
             _gameManager.ChangeGameState(GameState.GameOver);
             charController.enabled = playerMovement.enabled = playerInteraction.enabled = false;
-            _respawnAction.performed -= OnRespawn;
             _respawnAction.performed += OnRespawn;
         }
 
@@ -165,16 +169,12 @@ namespace Player
 
         private void HandleRespawnAfterDeath()
         {
-            if (transform.rotation.x > -0.5f)
-                PlayDeathAnimation(deathAnimationSpeed);
-
             _respawnTimer -= Time.deltaTime;
 
             if (_respawnTimer > 0f)
                 return;
 
-            _respawnAction.performed -= OnRespawn;
-            Respawn();
+            OnRespawn(new InputAction.CallbackContext());
         }
 
         /// <summary>
