@@ -43,6 +43,8 @@ ExportedObj/
 *.csproj
 *.unityproj
 *.sln
+*.slnx
+.vsconfig
 *.suo
 *.tmp
 *.user
@@ -99,3 +101,5 @@ InitTestScene*.unity*
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 .vscode
 .idea
+/[Aa]ssets/_[Rr]ecovery/
+/[Aa]ssets/_[Rr]ecovery.meta

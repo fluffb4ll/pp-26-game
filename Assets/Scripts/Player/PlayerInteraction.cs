@@ -12,7 +12,6 @@ namespace Player
     public class PlayerInteraction : MonoBehaviour
     {
         [SerializeField] private float interactionDistance = 3f;
-        [SerializeField] private Transform cameraTransform; 
         [SerializeField] private InputActionReference interact;
     
         public Transform brainrotCarryPoint;
@@ -23,8 +22,7 @@ namespace Player
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            if (_interactAction is null)
-                _interactAction = interact.action;
+            _interactAction ??= interact.action;
         }
 
         /// <summary>
@@ -46,12 +44,6 @@ namespace Player
             _interactAction.Disable();
             _interactAction.performed -= OnInteract;
         }
-    
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
 
         /// <summary>
         /// Действие, которое необходимо выполнять при нажатии кнопки взаимодействия
@@ -61,7 +53,7 @@ namespace Player
         {
             PerformRaycast((hit) =>
             {
-                IInteractable interactable = hit.collider.GetComponentInParent<IInteractable>();
+                var interactable = hit.collider.GetComponentInParent<IInteractable>();
                 interactable?.Interact(this);
             }, interactionDistance);
         }
@@ -71,10 +63,10 @@ namespace Player
         /// </summary>
         /// <param name="callback">Метод, выполняемый при попадании луча в цель</param>
         /// <param name="raycastDistance">Дальность броска луча</param>
-        public void PerformRaycast(Action<RaycastHit> callback, float raycastDistance)
+        private void PerformRaycast(Action<RaycastHit> callback, float raycastDistance)
         {
-            Ray ray = new Ray(transform.position, transform.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance))
+            var ray = new Ray(transform.position, transform.forward);
+            if (Physics.Raycast(ray, out var hit, raycastDistance))
                 callback.Invoke(hit);
         }
     }

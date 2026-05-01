@@ -66,8 +66,6 @@ namespace Brainrot
             foreach (var config in rarityPool)
             {
                 currentSum += config.dropWeight;
-                if (random <= currentSum)
-                    return config;
             }
         
             // не возвращаю null на случай, если проебались и не хотим, чтобы всё пошло по пизде :)

@@ -60,7 +60,7 @@ namespace Workbench
         /// <param name="player">Компонент <see cref="PlayerInteraction"/> игрока, вызвавшего взаимодействие</param>
         public void Interact(PlayerInteraction player)
         {
-            if (player.heldBrainrot is not null)
+            if (player.heldBrainrot is not null && insertedBrainrot is null)
                 InsertBrainrot(player);
             else
             {

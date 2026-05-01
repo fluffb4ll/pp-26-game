@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// держит камеру рядом с игроком и крутит ее только от ввода
+/// держит камеру рядом с игроком и крутит её только от ввода
 /// </summary>
 [DisallowMultipleComponent]
 public sealed class SimpleFollowCamera : MonoBehaviour
@@ -14,9 +14,8 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     [SerializeField] private float distance = 6f;
     [SerializeField] private float minPitch = -10f;
     [SerializeField] private float maxPitch = 70f;
-    [SerializeField] private float mouseSensitivity = 0.18f;
-    [SerializeField] private float gamepadLookSpeed = 220f;
     [SerializeField] private bool lockCursorWhileRotating = true;
+    [SerializeField] [Range(0, 100)] private int lookSensitivity = 100;
 
     private InputAction _lookCamMovementAction;
     private InputAction _lookLockPtrAction;
@@ -26,7 +25,7 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     private float _pitch;
 
     /// <summary>
-    /// забираем ссылки и стартовые углы камеры
+    /// кешируем actions и стартовые углы камеры
     /// </summary>
     private void Awake()
     {
@@ -34,27 +33,32 @@ public sealed class SimpleFollowCamera : MonoBehaviour
         _lookLockPtrAction = lookLockPtrActionReference.action;
         _transform = transform;
 
-        Vector3 eulerAngles = _transform.eulerAngles;
+        var eulerAngles = _transform.eulerAngles;
         _yaw = NormalizeAngle(eulerAngles.y);
         _pitch = Mathf.Clamp(NormalizeAngle(eulerAngles.x), minPitch, maxPitch);
     }
 
     /// <summary>
-    /// включаем look пока камера активна
+    /// включаем look actions пока камера активна
     /// </summary>
-    private void OnEnable() => _lookCamMovementAction.Enable();
+    private void OnEnable()
+    {
+        _lookCamMovementAction.Enable();
+        _lookLockPtrAction.Enable();
+    }
 
     /// <summary>
-    /// отпускаем ввод который забрала камера
+    /// выключаем look actions и возвращаем курсор
     /// </summary>
     private void OnDisable()
     {
+        _lookLockPtrAction.Disable();
         _lookCamMovementAction.Disable();
         ReleaseCursor();
     }
 
     /// <summary>
-    /// отпускаем курсор если камеру удалили во время поворота
+    /// возвращаем курсор если камеру удалили во время вращения
     /// </summary>
     private void OnDestroy()
     {
@@ -62,7 +66,7 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// не даем курсору залипнуть после потери фокуса
+    /// не даём курсору залипнуть после потери фокуса
     /// </summary>
     private void OnApplicationFocus(bool hasFocus)
     {
@@ -75,45 +79,34 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     /// </summary>
     private void LateUpdate()
     {
-        Vector2 lookInput = ReadLookInput();
-        _yaw += lookInput.x;
-        _pitch = Mathf.Clamp(_pitch - lookInput.y, minPitch, maxPitch);
+        var lookInput = ReadLookInput();
+        _yaw += lookInput.x * Time.deltaTime * lookSensitivity;
+        _pitch -= lookInput.y * Time.deltaTime * lookSensitivity;
+        _pitch = Mathf.Clamp(_pitch, minPitch, maxPitch);
 
-        Quaternion orbitRotation = Quaternion.Euler(_pitch, _yaw, 0f);
-        Vector3 pivotPosition = target.position + Vector3.up * pivotHeight;
+        var orbitRotation = Quaternion.Euler(_pitch, _yaw, 0f);
+        var pivotPosition = target.position + Vector3.up * pivotHeight;
 
         _transform.position = pivotPosition + orbitRotation * (Vector3.back * distance);
         _transform.rotation = orbitRotation;
     }
 
     /// <summary>
-    /// переводим look в поворот камеры
+    /// переводит input в поворот камеры
     /// </summary>
     private Vector2 ReadLookInput()
     {
         UpdateCursorState();
-
-        Vector2 rawInput = _lookCamMovementAction.ReadValue<Vector2>();
-        if (rawInput.sqrMagnitude <= 0.0001f)
-            return Vector2.zero;
-
-        InputDevice activeDevice = _lookCamMovementAction.activeControl.device;
-
-        if (activeDevice is Gamepad)
-            return rawInput * (gamepadLookSpeed * Time.deltaTime);
-
-        if (activeDevice is Mouse && Mouse.current is not null && _lookLockPtrAction.IsPressed())
-            return rawInput * mouseSensitivity;
-
-        return Vector2.zero;
+        var rawInput = _lookCamMovementAction.ReadValue<Vector2>();
+        return rawInput.sqrMagnitude <= 0.0001f ? Vector2.zero : rawInput;
     }
 
     /// <summary>
-    /// прячем курсор только пока игрок крутит камеру
+    /// прячет курсор только пока игрок крутит камеру мышью
     /// </summary>
     private void UpdateCursorState()
     {
-        if (!lockCursorWhileRotating || Mouse.current is null)
+        if (!lockCursorWhileRotating || ReferenceEquals(Mouse.current, null))
         {
             ReleaseCursor();
             return;
@@ -131,7 +124,7 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// возвращаем курсор если его забрала эта камера
+    /// возвращает курсор если его забрала эта камера
     /// </summary>
     private void ReleaseCursor()
     {
@@ -144,7 +137,7 @@ public sealed class SimpleFollowCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// приводим угол к нормальному диапазону
+    /// приводит угол к нормальному диапазону
     /// </summary>
     private static float NormalizeAngle(float angle)
     {
