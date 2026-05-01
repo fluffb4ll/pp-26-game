@@ -15,7 +15,9 @@ namespace Enemy
         [SerializeField] private float rotationSpeed = 360f;
         [SerializeField] private float gravity = -20f;
         [SerializeField] private float groundedVerticalVelocity = -2f;
+        [SerializeField] private EnemyCombat enemyCombat;
 
+        private bool _isDying;
         private CharacterController _characterController;
         private GameManager _gameManager;
         private Transform _playerTransform;
@@ -38,7 +40,8 @@ namespace Enemy
         /// </summary>
         private void Update()
         {
-            HandleMovement();
+            if (!_isDying)
+                HandleMovement();
         }
 
         /// <summary>
@@ -86,5 +89,7 @@ namespace Enemy
 
             return direction * step;
         }
+        
+        public void setIsDying(bool isDying) => this._isDying = isDying;
     }
 }

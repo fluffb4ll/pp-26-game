@@ -12,7 +12,7 @@ namespace Enemy
     {
         private const int MaxAttackHits = 8;
 
-        [SerializeField] private GameObject spawnableBrainrot;
+        private GameObject _spawnableBrainrot;
         [SerializeField] private float timeBeforeDestroyingBody;
         [SerializeField] private float deathAnimationSpeed;
 
@@ -24,7 +24,8 @@ namespace Enemy
         [SerializeField] private Vector3 attackRayOffset = new (0f, 0.6f, 0f);
         [SerializeField] private Vector3 playerRayOffset = new (0f, 0.9f, 0f);
         [SerializeField] private LayerMask attackRaycastMask = ~0;
-
+        [SerializeField] private EnemyMovement enemyMovement;
+        
         public SpawnManager spawnManager;
 
         private GameManager _gameManager;
@@ -103,12 +104,13 @@ namespace Enemy
 
             currentHealth = 0;
             _isDying = true;
+            enemyMovement.setIsDying(true);
             _destroyTimer = timeBeforeDestroyingBody;
             _deathTargetRotation = _transform.rotation * Quaternion.Euler(-90f, 0f, 0f);
-
+            
             spawnManager?.UnregisterEnemy(gameObject);
-            _gameManager.RegisterEnemyKill();
-
+            //_gameManager.RegisterEnemyKill();
+            
             SpawnBrainrot();
         }
 
@@ -130,8 +132,8 @@ namespace Enemy
         /// </summary>
         private void SpawnBrainrot()
         {
-            if (spawnableBrainrot is not null)
-                Instantiate(spawnableBrainrot, _transform.position, Quaternion.identity);
+            if (_spawnableBrainrot is not null)
+                Instantiate(_spawnableBrainrot, _transform.position, Quaternion.identity);
         }
 
         /// <summary>
@@ -145,6 +147,7 @@ namespace Enemy
             if (_destroyTimer > 0f)
             {
                 _destroyTimer -= Time.deltaTime;
+                Debug.Log(_destroyTimer);
                 return;
             }
 
