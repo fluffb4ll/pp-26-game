@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbb099d2352567e259901213984d66d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyCombat
-  timeBeforeDestroyingBody: 10
+  timeBeforeDestroyingBody: 3
   deathAnimationSpeed: 400
   maxHealth: 150
   currentHealth: 150

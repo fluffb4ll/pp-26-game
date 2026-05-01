@@ -15,6 +15,7 @@ namespace Managers
         
         private GameManager _gameManager;
         private HashSet<GameObject> _spawnedEnemies;
+        private List<GameObject> _spawnableBrainrots;
         private float _spawnTimer;
         private bool _isSpawning;
 
@@ -22,6 +23,7 @@ namespace Managers
         {
             _spawnTimer = spawnRate;
             _gameManager = GameManager.Instance;
+            _spawnableBrainrots = _gameManager.spawnableBrainrots;
             _spawnedEnemies = new HashSet<GameObject>();
         }
 
@@ -54,8 +56,14 @@ namespace Managers
                 return;
             
             var spawnedEnemy = Instantiate(spawnablePrefab, transform.position, transform.rotation);
+            var assignedBrainrot = _spawnableBrainrots[Random.Range(0, _spawnableBrainrots.Count)];
+            spawnedEnemy
+                .GetComponent<EnemyCombat>()
+                .InitializeSpawn(
+                    this, 
+                    _gameManager.GetNextEnemyHealthBonus(), 
+                    assignedBrainrot);
             
-            spawnedEnemy.GetComponent<EnemyCombat>().InitializeSpawn(this, _gameManager.GetNextEnemyHealthBonus());
             _spawnedEnemies.Add(spawnedEnemy);
             _spawnTimer = spawnRate;
         }

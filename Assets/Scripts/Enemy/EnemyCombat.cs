@@ -11,11 +11,9 @@ namespace Enemy
     public class EnemyCombat : MonoBehaviour, IDamageable
     {
         private const int MaxAttackHits = 8;
-
-        private GameObject _spawnableBrainrot;
+        
         [SerializeField] private float timeBeforeDestroyingBody;
         [SerializeField] private float deathAnimationSpeed;
-
         [SerializeField] private int maxHealth;
         [SerializeField] private int currentHealth;
         [SerializeField] private int damage;
@@ -27,8 +25,9 @@ namespace Enemy
         [SerializeField] private EnemyMovement enemyMovement;
         
         public SpawnManager spawnManager;
-
+        
         private GameManager _gameManager;
+        private GameObject _spawnableBrainrot;
         private Transform _playerTransform;
         private Transform _transform;
         private bool _isDying;
@@ -36,7 +35,6 @@ namespace Enemy
         private float _destroyTimer;
         private Quaternion _deathTargetRotation;
         private PlayerController _playerController;
-        private int _baseMaxHealth;
         private readonly RaycastHit[] _attackHits = new RaycastHit[MaxAttackHits];
 
         /// <summary>
@@ -50,9 +48,10 @@ namespace Enemy
             _transform = transform;
         }
 
-        public void InitializeSpawn(SpawnManager owner, int healthBonus)
+        public void InitializeSpawn(SpawnManager owner, int healthBonus, GameObject spawnableBrainrot)
         {
             spawnManager = owner;
+            _spawnableBrainrot = spawnableBrainrot;
             maxHealth += healthBonus;
             currentHealth = maxHealth;
             _attackTimer = attackRate;
@@ -131,7 +130,11 @@ namespace Enemy
         private void SpawnBrainrot()
         {
             if (_spawnableBrainrot is not null)
-                Instantiate(_spawnableBrainrot, _transform.position, Quaternion.identity);
+                Instantiate(_spawnableBrainrot, 
+                    new Vector3(_transform.position.x,
+                        _transform.position.y - 0.64f,
+                        _transform.position.z),
+                    Quaternion.identity);
         }
 
         /// <summary>
