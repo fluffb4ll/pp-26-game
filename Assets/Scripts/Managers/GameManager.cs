@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Player;
+using UnityEditor.Overlays;
 using UnityEngine;
+using YG;
 
 namespace Managers
 {
@@ -19,22 +21,29 @@ namespace Managers
     {
         [SerializeField] private int spawnHealthBonusStep = 5;
         [SerializeField] private int killHealthBonusStep = 10;
-
+        [SerializeField] private float savingRate;
         public static GameManager Instance { get; private set; }
         
         public GameState currentState;
         public Transform playerTransform;
         public PlayerController playerController;
         public List<GameObject> spawnableBrainrots;
+        
+        private float _savingTimer;
         private Action<GameState> _onGameStateStart;
         private Action<GameState> _onGameStateEnd;
-        private readonly HashSet<SpawnManager> _spawnManagers = new();
         private int _combatSpawnHealthBonus;
         private int _killHealthBonus;
 
         void Awake()
         {
             Instance = this;
+            _savingTimer = savingRate;
+        }
+
+        void Update()
+        {
+            HandleSavingData();
         }
         
         /// <summary>
@@ -66,6 +75,20 @@ namespace Managers
             _onGameStateStart?.Invoke(newState);
         }
 
+        private void HandleSavingData()
+        {
+            if (_savingTimer > 0)
+                _savingTimer -= Time.deltaTime;
+            else
+                SaveData();
+        }
+
+        public void SaveData()
+        {
+            YG2.SaveProgress();
+            _savingTimer = savingRate;
+        }
+
         public int GetNextEnemyHealthBonus()
         {
             _combatSpawnHealthBonus += spawnHealthBonusStep;
@@ -80,22 +103,6 @@ namespace Managers
         public void ResetCombatSpawnHealthBonus()
         {
             _combatSpawnHealthBonus = 0;
-        }
-
-        public void RegisterSpawnManager(SpawnManager spawnManager)
-        {
-            _spawnManagers.Add(spawnManager);
-        }
-
-        public void UnregisterSpawnManager(SpawnManager spawnManager)
-        {
-            _spawnManagers.Remove(spawnManager);
-        }
-
-        public void ClearEnemiesOnMap()
-        {
-            foreach (var spawnManager in _spawnManagers)
-                spawnManager.ClearSpawnedEnemies();
         }
     }
 }

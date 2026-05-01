@@ -147,7 +147,6 @@ namespace Player
             _isDying = true;
             _respawnTimer = respawnDelay;
             _gameManager.ChangeGameState(GameState.GameOver);
-            _gameManager.ClearEnemiesOnMap();
             charController.enabled = playerMovement.enabled = playerInteraction.enabled = false;
             _respawnAction.performed -= OnRespawn;
             _respawnAction.performed += OnRespawn;

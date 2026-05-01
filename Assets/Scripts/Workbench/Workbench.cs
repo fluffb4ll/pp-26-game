@@ -66,7 +66,6 @@ namespace Workbench
             {
                 YG2.saves.coins += Mathf.RoundToInt(storedProduce);
                 storedProduce = 0;
-                YG2.SaveProgress();
                 
                 #if UNITY_EDITOR || DEVELOPMENT_BUILD
                     Debug.Log($"New balance: {YG2.saves.coins}");

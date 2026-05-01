@@ -1097,10 +1097,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 155497298}
     - target: {fileID: 8366548381474130199, guid: 0014352602f851c4cb1c31280b5ff84c, type: 3}
-      propertyPath: attackCooldownRate
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8366548381474130199, guid: 0014352602f851c4cb1c31280b5ff84c, type: 3}
       propertyPath: mainCameraReference
       value: 
       objectReference: {fileID: 155497302}
@@ -1749,6 +1745,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Managers.GameManager
   spawnHealthBonusStep: 5
   killHealthBonusStep: 10
+  savingRate: 120
   currentState: 0
   playerTransform: {fileID: 1544940369}
   playerController: {fileID: 1544940372}
