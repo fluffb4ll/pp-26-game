@@ -856,6 +856,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2138974059694088383, guid: 923210b3946029de6a59bf0acf05ffdb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -8693172909504858975, guid: b8af8969f5e82814ca7e75d25b6fd44d, type: 3}
     - target: {fileID: 3937003269084393930, guid: 923210b3946029de6a59bf0acf05ffdb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.41
@@ -895,6 +899,10 @@ PrefabInstance:
     - target: {fileID: 3937003269084393930, guid: 923210b3946029de6a59bf0acf05ffdb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4793854680817075477, guid: 923210b3946029de6a59bf0acf05ffdb, type: 3}
+      propertyPath: m_Name
+      value: Collider
       objectReference: {fileID: 0}
     - target: {fileID: 5145043209413951014, guid: 923210b3946029de6a59bf0acf05ffdb, type: 3}
       propertyPath: m_Name

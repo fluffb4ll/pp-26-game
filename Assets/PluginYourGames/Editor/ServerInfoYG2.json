@@ -11,7 +11,7 @@
     "modules": [
         {
             "name": "PluginYG2",
-            "version": "2.009",
+            "version": "2.0091",
             "download": "https://max-games.ru/public/pluginYG2/other/PluginYG2.unitypackage",
             "doc": "https://max-games.ru/plugin-yg/doc/"
         },
@@ -161,7 +161,7 @@
         },
         {
             "name": "YandexGames",
-            "version": "1.009",
+            "version": "1.0091",
             "download": "https://max-games.ru/public/pluginYG2/platforms/YandexGames.unitypackage",
             "doc": "https://max-games.ru/plugin-yg/yandexgames/",
             "platform": true
@@ -227,6 +227,13 @@
             "version": "1.0",
             "download": "https://max-games.ru/public/pluginYG2/platforms/WelwiseGames.unitypackage",
             "doc": "https://max-games.ru/plugin-yg/welwise/",
+            "platform": true
+        },
+        {
+            "name": "EmptyWebGL",
+            "version": "1.0",
+            "download": "https://max-games.ru/public/pluginYG2/platforms/EmptyWebGL.unitypackage",
+            "doc": "https://max-games.ru/plugin-yg/doc/",
             "platform": true
         },
         {
