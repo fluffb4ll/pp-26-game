@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Interfaces;
 using Managers;
@@ -37,6 +38,7 @@ namespace Player
         public int damage;
 
         private bool _isDying;
+        private bool _wasTurnedBack;
         private InputAction _respawnAction;
         private InputAction _attackAction;
         private GameManager _gameManager;
@@ -60,6 +62,7 @@ namespace Player
         {
             currentHealth = maxHealth;
             _attackCooldownTimer = 0f;
+            _wasTurnedBack = false;
         }
 
         
@@ -86,8 +89,9 @@ namespace Player
         {
             switch (_isDying)
             {
-                case true when transform.rotation.x > -0.5f:
-                    PlayDeathAnimation(deathAnimationSpeed);
+                case true when transform.rotation.x is > -0.5f and > -0.7f:
+                    Debug.Log(transform.rotation);
+                    //PlayDeathAnimation(deathAnimationSpeed);
                     return;
                 case true:
                     HandleRespawnAfterDeath();
@@ -147,9 +151,17 @@ namespace Player
         {
             if (_isDying)
                 return;
+
+            if (playerInteraction.heldBrainrot is not null)
+            {
+                Destroy(playerInteraction.heldBrainrot.gameObject);
+                playerInteraction.heldBrainrot = null;
+            }
             
             currentHealth = 0;
             _isDying = true;
+            if (Math.Abs(transform.rotation.y) <= 1f && Math.Abs(transform.rotation.y) >= 0.5f)
+                _wasTurnedBack = true;
             _respawnTimer = respawnDelay;
             _gameManager.ChangeGameState(GameState.GameOver);
             charController.enabled = playerMovement.enabled = playerInteraction.enabled = false;
@@ -163,7 +175,7 @@ namespace Player
         private void PlayDeathAnimation(float rotationSpeed)
         {
             var currentRot = transform.rotation;
-            var targetRot = currentRot * Quaternion.AngleAxis(90f, new Vector3(-90f, currentRot.y, 0f));
+            var targetRot = currentRot * Quaternion.AngleAxis(90f, new Vector3(-90f, 0f, 0f));
             transform.rotation = Quaternion.RotateTowards(currentRot, targetRot, Time.deltaTime * rotationSpeed);
         }
 
@@ -183,6 +195,7 @@ namespace Player
         private void Respawn()
         {
             _isDying = false;
+            _wasTurnedBack = false;
             _respawnTimer = 0f;
             currentHealth = maxHealth;
             transform.position = spawnPoint.position;
