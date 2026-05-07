@@ -20,6 +20,9 @@ namespace Player
         [SerializeField] private float gravity = -20f;
         [SerializeField] private float groundedVerticalVelocity = -2f;
 
+        public bool isMoving;
+        public float walkingSpeed;
+        
         private CharacterController _characterController;
         private InputAction _moveAction;
         private InputAction _jumpAction;
@@ -97,6 +100,8 @@ namespace Player
                     _transform.rotation,
                     targetRotation,
                     turnSpeed * Time.deltaTime);
+                
+                walkingSpeed = movement.sqrMagnitude * 2;
             }
 
             if (isGrounded && _jumpAction.WasPressedThisFrame())
@@ -108,6 +113,7 @@ namespace Player
             frameMotion.y = _verticalVelocity;
 
             _characterController.Move(frameMotion * Time.deltaTime);
+            isMoving = movement.sqrMagnitude > 0.01f || !isGrounded;
         }
     }
 }

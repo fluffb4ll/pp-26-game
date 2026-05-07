@@ -25,7 +25,8 @@ namespace Player
         [SerializeField] private float respawnDelay = 1.25f;
         [SerializeField] private float attackCooldownRate;
         [SerializeField] private InputActionReference respawnBindings;
-
+        [SerializeField] private Animator playerModelAnimator;
+        
         [SerializeField] private Camera mainCameraReference;
         [SerializeField] private InputActionReference attackActionReference;
         [SerializeField] private float attackDistance = 3f;
@@ -38,7 +39,6 @@ namespace Player
         public int damage;
 
         private bool _isDying;
-        private bool _wasTurnedBack;
         private InputAction _respawnAction;
         private InputAction _attackAction;
         private GameManager _gameManager;
@@ -48,7 +48,11 @@ namespace Player
         private readonly List<RaycastResult> _uiRaycastResults = new(8);
         private EventSystem _uiEventSystem;
         private PointerEventData _uiPointerEventData;
-
+        
+        // параметры в PlayerAnimationController
+        private const string DeathTransitionFlag = "hasDied";
+        private const string WalkingTransitionFlag = "isMoving";
+        private const string WalkingSpeedParameter = "walkingSpeed";
         
         private void Awake()
         {
@@ -62,7 +66,6 @@ namespace Player
         {
             currentHealth = maxHealth;
             _attackCooldownTimer = 0f;
-            _wasTurnedBack = false;
         }
 
         
@@ -87,16 +90,10 @@ namespace Player
         
         private void Update()
         {
-            switch (_isDying)
-            {
-                case true when transform.rotation.x is > -0.5f and > -0.7f:
-                    Debug.Log(transform.rotation);
-                    //PlayDeathAnimation(deathAnimationSpeed);
-                    return;
-                case true:
-                    HandleRespawnAfterDeath();
-                    return;
-            }
+            UpdateAnimFlags();
+            
+            if (_isDying)
+                HandleRespawnAfterDeath();
             
             if (_attackCooldownTimer > 0f)
                 _attackCooldownTimer -= Time.deltaTime;
@@ -160,29 +157,28 @@ namespace Player
             
             currentHealth = 0;
             _isDying = true;
-            if (Math.Abs(transform.rotation.y) <= 1f && Math.Abs(transform.rotation.y) >= 0.5f)
-                _wasTurnedBack = true;
             _respawnTimer = respawnDelay;
             _gameManager.ChangeGameState(GameState.GameOver);
             charController.enabled = playerMovement.enabled = playerInteraction.enabled = false;
             _respawnAction.performed += OnRespawn;
+            
+            UpdateAnimFlags();
         }
 
         /// <summary>
-        /// Проигрывает анимацию смерти - переворачивает игрока на "спину"
+        /// Обновляет флаги аниматора в зависимости от значений <c>_isDying</c> и параметров ходьбы
         /// </summary>
-        /// <param name="rotationSpeed">Скорость вращения</param>
-        private void PlayDeathAnimation(float rotationSpeed)
+        private void UpdateAnimFlags()
         {
-            var currentRot = transform.rotation;
-            var targetRot = currentRot * Quaternion.AngleAxis(90f, new Vector3(-90f, 0f, 0f));
-            transform.rotation = Quaternion.RotateTowards(currentRot, targetRot, Time.deltaTime * rotationSpeed);
+            playerModelAnimator.SetBool(DeathTransitionFlag, _isDying);
+            playerModelAnimator.SetBool(WalkingTransitionFlag, !_isDying && playerMovement.isMoving);
+            playerModelAnimator.SetFloat(WalkingSpeedParameter, playerMovement.walkingSpeed);
         }
 
         private void HandleRespawnAfterDeath()
         {
             _respawnTimer -= Time.deltaTime;
-
+        
             if (_respawnTimer > 0f)
                 return;
 
@@ -195,7 +191,6 @@ namespace Player
         private void Respawn()
         {
             _isDying = false;
-            _wasTurnedBack = false;
             _respawnTimer = 0f;
             currentHealth = maxHealth;
             transform.position = spawnPoint.position;
@@ -203,6 +198,8 @@ namespace Player
 
             charController.enabled = playerMovement.enabled = playerInteraction.enabled = true;
             _gameManager.ChangeGameState(GameState.Home);
+            
+            UpdateAnimFlags();
         }
 
         /// <summary>

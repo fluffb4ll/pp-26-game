@@ -113,6 +113,7 @@ MonoBehaviour:
   respawnDelay: 1.25
   attackCooldownRate: 0
   respawnBindings: {fileID: 3601099568889547787, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  playerModelAnimator: {fileID: 7445502612974562929}
   mainCameraReference: {fileID: 0}
   attackActionReference: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   attackDistance: 3

@@ -65,7 +65,7 @@ ModelImporter:
       takeName: Armature.002|Armature.002|Armature.002|Armature.002|Armature.002|Armature.002|Armature.002Action
       internalID: -6789753168871360613
       firstFrame: 0
-      lastFrame: 39
+      lastFrame: 0.10000001
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -93,7 +93,7 @@ ModelImporter:
       name: Death
       takeName: Armature.002|Armature.002|Armature.002|Armature.002|Armature.002|Armature.002|Armature.002Action.002
       internalID: 1939125539233924870
-      firstFrame: 0
+      firstFrame: 1.6000001
       lastFrame: 15
       wrapMode: 0
       orientationOffsetY: 0
