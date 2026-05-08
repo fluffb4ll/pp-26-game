@@ -1472,7 +1472,7 @@ MonoBehaviour:
   m_Behaviour: 0
   m_UseIsolatedInputActions: 1
   m_PointerDownAction:
-    m_Name: 
+    m_Name: Pointer Down
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: bd0819eb-916e-4f56-b269-44b01809467f
@@ -1481,7 +1481,7 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
   m_PointerMoveAction:
-    m_Name: 
+    m_Name: Pointer Move
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: f395d259-d965-4a4d-b9b2-f60d77ddeb24
@@ -2061,8 +2061,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 156, y: 156}
-  m_SizeDelta: {x: 240, y: 240}
+  m_AnchoredPosition: {x: 146, y: 146}
+  m_SizeDelta: {x: 220, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1955663951
 MonoBehaviour:
