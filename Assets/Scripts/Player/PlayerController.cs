@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Interfaces;
 using Managers;
@@ -24,7 +25,8 @@ namespace Player
         [SerializeField] private float respawnDelay = 1.25f;
         [SerializeField] private float attackCooldownRate;
         [SerializeField] private InputActionReference respawnBindings;
-
+        [SerializeField] private Animator playerModelAnimator;
+        
         [SerializeField] private Camera mainCameraReference;
         [SerializeField] private InputActionReference attackActionReference;
         [SerializeField] private float attackDistance = 3f;
@@ -46,7 +48,11 @@ namespace Player
         private readonly List<RaycastResult> _uiRaycastResults = new(8);
         private EventSystem _uiEventSystem;
         private PointerEventData _uiPointerEventData;
-
+        
+        // параметры в PlayerAnimationController
+        private const string DeathTransitionFlag = "hasDied";
+        private const string WalkingTransitionFlag = "isMoving";
+        private const string WalkingSpeedParameter = "walkingSpeed";
         
         private void Awake()
         {
@@ -84,15 +90,10 @@ namespace Player
         
         private void Update()
         {
-            switch (_isDying)
-            {
-                case true when transform.rotation.x > -0.5f:
-                    PlayDeathAnimation(deathAnimationSpeed);
-                    return;
-                case true:
-                    HandleRespawnAfterDeath();
-                    return;
-            }
+            UpdateAnimFlags();
+            
+            if (_isDying)
+                HandleRespawnAfterDeath();
             
             if (_attackCooldownTimer > 0f)
                 _attackCooldownTimer -= Time.deltaTime;
@@ -147,6 +148,12 @@ namespace Player
         {
             if (_isDying)
                 return;
+
+            if (playerInteraction.heldBrainrot is not null)
+            {
+                Destroy(playerInteraction.heldBrainrot.gameObject);
+                playerInteraction.heldBrainrot = null;
+            }
             
             currentHealth = 0;
             _isDying = true;
@@ -154,23 +161,24 @@ namespace Player
             _gameManager.ChangeGameState(GameState.GameOver);
             charController.enabled = playerMovement.enabled = playerInteraction.enabled = false;
             _respawnAction.performed += OnRespawn;
+            
+            UpdateAnimFlags();
         }
 
         /// <summary>
-        /// Проигрывает анимацию смерти - переворачивает игрока на "спину"
+        /// Обновляет флаги аниматора в зависимости от значений <c>_isDying</c> и параметров ходьбы
         /// </summary>
-        /// <param name="rotationSpeed">Скорость вращения</param>
-        private void PlayDeathAnimation(float rotationSpeed)
+        private void UpdateAnimFlags()
         {
-            var currentRot = transform.rotation;
-            var targetRot = currentRot * Quaternion.AngleAxis(90f, new Vector3(-90f, currentRot.y, 0f));
-            transform.rotation = Quaternion.RotateTowards(currentRot, targetRot, Time.deltaTime * rotationSpeed);
+            playerModelAnimator.SetBool(DeathTransitionFlag, _isDying);
+            playerModelAnimator.SetBool(WalkingTransitionFlag, !_isDying && playerMovement.isMoving);
+            playerModelAnimator.SetFloat(WalkingSpeedParameter, playerMovement.walkingSpeed);
         }
 
         private void HandleRespawnAfterDeath()
         {
             _respawnTimer -= Time.deltaTime;
-
+        
             if (_respawnTimer > 0f)
                 return;
 
@@ -190,6 +198,8 @@ namespace Player
 
             charController.enabled = playerMovement.enabled = playerInteraction.enabled = true;
             _gameManager.ChangeGameState(GameState.Home);
+            
+            UpdateAnimFlags();
         }
 
         /// <summary>
