@@ -65,7 +65,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8922483641047395482}
-  - {fileID: 3889161403532724831}
+  - {fileID: 1369618648608299004}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &3063270635475357675
@@ -113,7 +113,7 @@ MonoBehaviour:
   respawnDelay: 1.25
   attackCooldownRate: 0
   respawnBindings: {fileID: 3601099568889547787, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  playerModelAnimator: {fileID: 7445502612974562929}
+  playerModelAnimator: {fileID: 1646958559135088359}
   mainCameraReference: {fileID: 0}
   attackActionReference: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   attackDistance: 3
@@ -147,6 +147,8 @@ MonoBehaviour:
   jumpStrength: 6
   gravity: -20
   groundedVerticalVelocity: -2
+  isMoving: 0
+  walkingSpeed: 0
 --- !u!114 &7180878658789122826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,7 +165,7 @@ MonoBehaviour:
   interact: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   brainrotCarryPoint: {fileID: 8922483641047395482}
   heldBrainrot: {fileID: 0}
---- !u!1001 &3635437124431850932
+--- !u!1001 &1480388618826625047
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -171,14 +173,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3730987622223008641}
     m_Modifications:
-    - target: {fileID: -9165797768001435688, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_AABB.m_Center.z
-      value: -0.009519956
-      objectReference: {fileID: 0}
-    - target: {fileID: -9165797768001435688, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_AABB.m_Extent.z
-      value: 0.014808628
-      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -219,81 +213,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -7640558969779515294, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_Name
-      value: Cube.004
-      objectReference: {fileID: 0}
-    - target: {fileID: -7146521406498821007, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_Name
-      value: Cube.003
-      objectReference: {fileID: 0}
-    - target: {fileID: -1599826595754709761, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_Name
-      value: Cube.005
-      objectReference: {fileID: 0}
-    - target: {fileID: -1526964690268444965, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_RootBone
-      value: 
-      objectReference: {fileID: 8914572377566678013}
-    - target: {fileID: -1526964690268444965, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_AABB.m_Center.y
-      value: -0.00019296585
-      objectReference: {fileID: 0}
-    - target: {fileID: -1526964690268444965, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_AABB.m_Center.z
-      value: -0.0013654847
-      objectReference: {fileID: 0}
-    - target: {fileID: -1526964690268444965, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_AABB.m_Extent.y
-      value: 0.010635259
-      objectReference: {fileID: 0}
-    - target: {fileID: -1018664272722485354, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_Name
-      value: Sphere
-      objectReference: {fileID: 0}
-    - target: {fileID: -516098083770646512, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_Name
-      value: Cube.001
-      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
       propertyPath: m_Name
       value: Model
-      objectReference: {fileID: 0}
-    - target: {fileID: 1876639006252622788, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_Name
-      value: RightUpperArm
-      objectReference: {fileID: 0}
-    - target: {fileID: 3489497601361014436, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_Name
-      value: Armature.002
-      objectReference: {fileID: 0}
-    - target: {fileID: 5518028445700186302, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_Name
-      value: LeftUpperArm
-      objectReference: {fileID: 0}
-    - target: {fileID: 7603786706384944740, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_RootBone
-      value: 
-      objectReference: {fileID: 8914572377566678013}
-    - target: {fileID: 7603786706384944740, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_AABB.m_Center.y
-      value: 0.010544802
-      objectReference: {fileID: 0}
-    - target: {fileID: 7603786706384944740, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_AABB.m_Center.z
-      value: 0.00032356684
-      objectReference: {fileID: 0}
-    - target: {fileID: 7603786706384944740, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_AABB.m_Extent.y
-      value: 0.009827261
-      objectReference: {fileID: 0}
-    - target: {fileID: 7603786706384944740, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_AABB.m_Extent.z
-      value: 0.004094227
-      objectReference: {fileID: 0}
-    - target: {fileID: 8416272007918961125, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-      propertyPath: m_Name
-      value: Cube.002
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -301,28 +223,28 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7315494001118698926}
+      addedObject: {fileID: 9009628765670337504}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7445502612974562929}
+      addedObject: {fileID: 1646958559135088359}
   m_SourcePrefab: {fileID: 100100000, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
---- !u!4 &3889161403532724831 stripped
+--- !u!4 &1369618648608299004 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-  m_PrefabInstance: {fileID: 3635437124431850932}
+  m_PrefabInstance: {fileID: 1480388618826625047}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &4517887902323708133 stripped
+--- !u!1 &1750224921964580166 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-  m_PrefabInstance: {fileID: 3635437124431850932}
+  m_PrefabInstance: {fileID: 1480388618826625047}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &7315494001118698926
+--- !u!65 &9009628765670337504
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4517887902323708133}
+  m_GameObject: {fileID: 1750224921964580166}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -337,16 +259,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.72, y: 2.5, z: 1.69}
   m_Center: {x: 0, y: 1.27, z: -0.06}
---- !u!95 &7445502612974562929
+--- !u!95 &1646958559135088359
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4517887902323708133}
+  m_GameObject: {fileID: 1750224921964580166}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
+  m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: ac7af844de860074081f76df5375a545, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -359,8 +281,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!4 &8914572377566678013 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -3907639495031773623, guid: 9a76522b5de7a4548996a3eec8e83844, type: 3}
-  m_PrefabInstance: {fileID: 3635437124431850932}
-  m_PrefabAsset: {fileID: 0}
