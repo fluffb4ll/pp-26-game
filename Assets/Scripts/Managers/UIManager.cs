@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Managers
 {
     /// <summary>
-    /// следит за ui сцены и держит touch элементы в safe area
+    /// Управление UI
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class UIManager : MonoBehaviour
@@ -14,6 +15,7 @@ namespace Managers
         [SerializeField] private RectTransform safeAreaRoot;
         [SerializeField] private GameObject touchControlsRoot;
         [SerializeField] private bool showTouchControlsInEditor = true;
+        [SerializeField] private List<GameObject> panels;
 
         private Rect _lastSafeArea;
         private Vector2Int _lastScreenSize;
@@ -31,6 +33,11 @@ namespace Managers
 
             Instance = this;
             RefreshLayout(true);
+        }
+
+        private void Start()
+        {
+            SetPanelsDefaultState();
         }
 
         /// <summary>
@@ -88,6 +95,15 @@ namespace Managers
         private bool ShouldShowTouchControls()
         {
             return Application.isMobilePlatform || !ReferenceEquals(Touchscreen.current, null) || (showTouchControlsInEditor && Application.isEditor);
+        }
+        
+        /// <summary>
+        /// Отключает видимость всех подменю
+        /// </summary>
+        private void SetPanelsDefaultState()
+        {
+            foreach (var panel in panels)
+                panel.SetActive(false);
         }
 
         /// <summary>
