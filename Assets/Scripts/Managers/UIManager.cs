@@ -89,5 +89,14 @@ namespace Managers
         {
             return Application.isMobilePlatform || !ReferenceEquals(Touchscreen.current, null) || (showTouchControlsInEditor && Application.isEditor);
         }
+
+        /// <summary>
+        /// Открывает/закрывает панель в зависимости от её текущего состояния
+        /// </summary>
+        /// <param name="panel">Требуемая панель</param>
+        public void TogglePanel(GameObject panel)
+        {
+            panel.SetActive(!panel.activeInHierarchy);
+        }
     }
 }
