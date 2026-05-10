@@ -140,16 +140,24 @@ namespace Managers
         /// <param name="panel">Требуемая панель</param>
         public void TogglePanel(GameObject panel)
         {
-            panel.SetActive(!panel.activeInHierarchy);
+            panel.SetActive(!panel.activeSelf);
         }
-
-        public void ToggleHpBar(GameState gameState)
+        
+        /// <summary>
+        /// Показывает или скрывает хп при входе или выходе из боя соответственно
+        /// </summary>
+        /// <param name="gameState">Следующий/предыдущий <see cref="GameState"/></param>
+        private void ToggleHpBar(GameState gameState)
         {
             if (gameState == GameState.Combat)
-                hpBar.SetActive(!hpBar.activeInHierarchy);
+                hpBar.SetActive(!hpBar.activeSelf);
         }
-
-        public void UpdateHpBarFill(float hpPercent)
+        
+        /// <summary>
+        /// Обновляет отображаемое хп в зависимости от нового значения здоровья игрока
+        /// </summary>
+        /// <param name="hpPercent">Новый процент здоровья игрока</param>
+        private void UpdateHpBarFill(float hpPercent)
         {
             hpBarFill.offsetMax -= new Vector2(_hpBarFillMaxWidth * (1.0f - hpPercent) + hpBarFill.sizeDelta.x, 0);
         }

@@ -29,7 +29,7 @@ namespace Player
         [SerializeField] private InputActionReference respawnBindings;
         [SerializeField] private Animator playerModelAnimator;
         
-        [SerializeField] private Camera mainCameraReference;
+        [SerializeField] private UnityEngine.Camera mainCameraReference;
         [SerializeField] private InputActionReference attackActionReference;
         [SerializeField] private float attackDistance = 3f;
         [SerializeField] private float attackRayDistance = 30f;
@@ -53,6 +53,7 @@ namespace Player
 
         private Action<float> _onTakeDamage;
         private Action<float> _onHeal;
+        private Action _onDeath;
         
         // параметры в PlayerAnimationController
         private const string DeathTransitionFlag = "hasDied";
@@ -124,10 +125,18 @@ namespace Player
             remove => _onTakeDamage -= value;
         }
         
+        /// <inheritdoc/>
         public event Action<float> OnHeal
         {
             add => _onHeal += value;
             remove => _onHeal -= value;
+        }
+        
+        /// <inheritdoc/>
+        public event Action OnDeath
+        {
+            add => _onDeath += value;
+            remove => _onDeath -= value;
         }
         
         /// <summary>
@@ -161,7 +170,7 @@ namespace Player
             if (currentHealth <= 0)
                 Die();
             
-            _onTakeDamage.Invoke(currentHealth / (float) maxHealth);
+            _onTakeDamage?.Invoke(currentHealth / (float) maxHealth);
         }
 
         /// <inheritdoc/>
@@ -172,7 +181,7 @@ namespace Player
             if (currentHealth > maxHealth)
                 currentHealth = maxHealth;
             
-            _onHeal.Invoke(currentHealth / (float) maxHealth);
+            _onHeal?.Invoke(currentHealth / (float) maxHealth);
         }
 
         /// <inheritdoc/>
@@ -195,6 +204,7 @@ namespace Player
             _respawnAction.performed += OnRespawn;
             
             UpdateAnimFlags();
+            _onDeath?.Invoke();
         }
 
         /// <summary>
