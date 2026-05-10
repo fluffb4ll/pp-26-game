@@ -38,14 +38,16 @@ namespace Managers
             }
 
             Instance = this;
-            RefreshLayout(true);
-        }
-
-        private void Start()
-        {
+            
             _gameManager = GameManager.Instance;
             _playerController = PlayerController.Instance;
             
+            RefreshLayout(true);
+        }
+        
+
+        private void Start()
+        {
             _hpBarFillMaxWidth = hpBarFill.rect.width;
             SetSubmenusDefaultState();
         }
@@ -149,7 +151,7 @@ namespace Managers
 
         public void UpdateHpBarFill(float hpPercent)
         {
-            hpBarFill.offsetMax -= new Vector2(hpPercent < 1.0f ? _hpBarFillMaxWidth * (1.0f - hpPercent) + hpBarFill.sizeDelta.x : -_hpBarFillMaxWidth, 0);
+            hpBarFill.offsetMax -= new Vector2(_hpBarFillMaxWidth * (1.0f - hpPercent) + hpBarFill.sizeDelta.x, 0);
         }
     }
 }
