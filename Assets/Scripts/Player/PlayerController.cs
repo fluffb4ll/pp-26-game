@@ -15,6 +15,8 @@ namespace Player
     /// </summary>
     public class PlayerController : MonoBehaviour, IDamageable
     {
+        public static PlayerController Instance { get;  private set; }
+        
         private const int MaxRaycastHits = 16;
 
         [SerializeField] private PlayerInteraction playerInteraction;
@@ -48,6 +50,9 @@ namespace Player
         private readonly List<RaycastResult> _uiRaycastResults = new(8);
         private EventSystem _uiEventSystem;
         private PointerEventData _uiPointerEventData;
+
+        private Action<float> _onTakeDamage;
+        private Action<float> _onHeal;
         
         // параметры в PlayerAnimationController
         private const string DeathTransitionFlag = "hasDied";
@@ -56,6 +61,13 @@ namespace Player
         
         private void Awake()
         {
+            if (!ReferenceEquals(Instance, null) && !ReferenceEquals(Instance, this))
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
             _gameManager = GameManager.Instance;
             _respawnAction = respawnBindings.action;
             _attackAction = attackActionReference.action;
@@ -104,7 +116,20 @@ namespace Player
             other.TryGetComponent(out ITriggerable triggerable);
             triggerable?.Execute(this);
         }
-
+        
+        /// <inheritdoc/>
+        public event Action<float> OnTakeDamage
+        {
+            add => _onTakeDamage += value;
+            remove => _onTakeDamage -= value;
+        }
+        
+        public event Action<float> OnHeal
+        {
+            add => _onHeal += value;
+            remove => _onHeal -= value;
+        }
+        
         /// <summary>
         /// Вызывается при нажатии бинда возрождения
         /// </summary>
@@ -128,10 +153,15 @@ namespace Player
         /// <inheritdoc/>
         public void TakeDamage(int damageAmount)
         {
+            if (_isDying)
+                return;
+            
             currentHealth -= damageAmount;
 
             if (currentHealth <= 0)
                 Die();
+            
+            _onTakeDamage.Invoke(currentHealth / (float) maxHealth);
         }
 
         /// <inheritdoc/>
@@ -141,6 +171,8 @@ namespace Player
 
             if (currentHealth > maxHealth)
                 currentHealth = maxHealth;
+            
+            _onHeal.Invoke(currentHealth / (float) maxHealth);
         }
 
         /// <inheritdoc/>
@@ -192,7 +224,7 @@ namespace Player
         {
             _isDying = false;
             _respawnTimer = 0f;
-            currentHealth = maxHealth;
+            Heal(maxHealth);
             transform.position = spawnPoint.position;
             transform.rotation = Quaternion.identity;
 

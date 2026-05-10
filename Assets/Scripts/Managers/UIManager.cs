@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,10 +16,15 @@ namespace Managers
         [SerializeField] private RectTransform safeAreaRoot;
         [SerializeField] private GameObject touchControlsRoot;
         [SerializeField] private bool showTouchControlsInEditor = true;
-        [SerializeField] private List<GameObject> panels;
+        [SerializeField] private List<GameObject> submenus;
+        [SerializeField] private GameObject hpBar;
+        [SerializeField] private RectTransform hpBarFill;
 
+        private GameManager _gameManager;
+        private PlayerController _playerController;
         private Rect _lastSafeArea;
         private Vector2Int _lastScreenSize;
+        private float _hpBarFillMaxWidth;
 
         /// <summary>
         /// регистрируем менеджер и сразу раскладываем ui
@@ -37,7 +43,27 @@ namespace Managers
 
         private void Start()
         {
-            SetPanelsDefaultState();
+            _gameManager = GameManager.Instance;
+            _playerController = PlayerController.Instance;
+            
+            _hpBarFillMaxWidth = hpBarFill.rect.width;
+            SetSubmenusDefaultState();
+        }
+
+        private void OnEnable()
+        {
+            _gameManager.OnGameStateStart += ToggleHpBar;
+            _gameManager.OnGameStateEnd += ToggleHpBar;
+            _playerController.OnTakeDamage += UpdateHpBarFill;
+            _playerController.OnHeal += UpdateHpBarFill;
+        }
+
+        private void OnDisable()
+        {
+            _gameManager.OnGameStateStart -= ToggleHpBar;
+            _gameManager.OnGameStateEnd -= ToggleHpBar;
+            _playerController.OnTakeDamage -= UpdateHpBarFill;
+            _playerController.OnHeal -= UpdateHpBarFill;
         }
 
         /// <summary>
@@ -100,10 +126,10 @@ namespace Managers
         /// <summary>
         /// Отключает видимость всех подменю
         /// </summary>
-        private void SetPanelsDefaultState()
+        private void SetSubmenusDefaultState()
         {
-            foreach (var panel in panels)
-                panel.SetActive(false);
+            foreach (var submenu in submenus)
+                submenu.SetActive(false);
         }
 
         /// <summary>
@@ -113,6 +139,17 @@ namespace Managers
         public void TogglePanel(GameObject panel)
         {
             panel.SetActive(!panel.activeInHierarchy);
+        }
+
+        public void ToggleHpBar(GameState gameState)
+        {
+            if (gameState == GameState.Combat)
+                hpBar.SetActive(!hpBar.activeInHierarchy);
+        }
+
+        public void UpdateHpBarFill(float hpPercent)
+        {
+            hpBarFill.offsetMax -= new Vector2(hpPercent < 1.0f ? _hpBarFillMaxWidth * (1.0f - hpPercent) + hpBarFill.sizeDelta.x : -_hpBarFillMaxWidth, 0);
         }
     }
 }

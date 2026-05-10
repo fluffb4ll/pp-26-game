@@ -1,7 +1,16 @@
+using System;
+
 namespace Interfaces
 {
     public interface IDamageable
     {
+        /// <summary>
+        /// Событие получения урона
+        /// </summary>
+        event Action<float> OnTakeDamage;
+
+        event Action<float> OnHeal;
+        
         /// <summary>
         /// Вычитает указанное количество здоровья у персонажа
         /// </summary>
