@@ -1,8 +1,8 @@
 using Brainrot;
 using Interfaces;
+using Managers;
 using Player;
 using UnityEngine;
-using YG;
 
 namespace Workbench
 {
@@ -18,16 +18,15 @@ namespace Workbench
         [SerializeField] private Transform brainrotInsertionPos;
         [SerializeField] private BrainrotObject insertedBrainrot;
 
-        private float _diff = 0.0001f;
-    
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
+        private const float FloatDiff = 0.0001f;
+        private GameManager _gameManager;
         
+        private void Awake()
+        {
+            _gameManager = GameManager.Instance;    
         }
-
-        // Update is called once per frame
-        void Update()
+        
+        private void Update()
         {
             CalculateProduce();
         }
@@ -37,7 +36,7 @@ namespace Workbench
         /// </summary>
         private void CalculateProduce()
         {
-            if (insertedBrainrot is null || produceStoreCap - storedProduce < _diff)
+            if (insertedBrainrot is null || produceStoreCap - storedProduce < FloatDiff)
                 return;
         
             storedProduce += (baseProduce + insertedBrainrot.produce) * Time.deltaTime;
@@ -64,12 +63,8 @@ namespace Workbench
                 InsertBrainrot(player);
             else
             {
-                YG2.saves.coins += Mathf.RoundToInt(storedProduce);
+                _gameManager.ChangeCoinsAmount(Mathf.RoundToInt(storedProduce));
                 storedProduce = 0;
-                
-                #if UNITY_EDITOR || DEVELOPMENT_BUILD
-                    Debug.Log($"New balance: {YG2.saves.coins}");
-                #endif
             }
         }
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Player;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,6 +20,7 @@ namespace Managers
         [SerializeField] private List<GameObject> submenus;
         [SerializeField] private GameObject hpBar;
         [SerializeField] private RectTransform hpBarFill;
+        [SerializeField] private TextMeshProUGUI coinCount;
 
         private GameManager _gameManager;
         private PlayerController _playerController;
@@ -56,6 +58,7 @@ namespace Managers
         {
             _gameManager.OnGameStateStart += ToggleHpBar;
             _gameManager.OnGameStateEnd += ToggleHpBar;
+            _gameManager.OnCoinsChanged += UpdateCoinCount;
             _playerController.OnTakeDamage += UpdateHpBarFill;
             _playerController.OnHeal += UpdateHpBarFill;
         }
@@ -64,6 +67,7 @@ namespace Managers
         {
             _gameManager.OnGameStateStart -= ToggleHpBar;
             _gameManager.OnGameStateEnd -= ToggleHpBar;
+            _gameManager.OnCoinsChanged -= UpdateCoinCount;
             _playerController.OnTakeDamage -= UpdateHpBarFill;
             _playerController.OnHeal -= UpdateHpBarFill;
         }
@@ -160,6 +164,23 @@ namespace Managers
         private void UpdateHpBarFill(float hpPercent)
         {
             hpBarFill.offsetMax -= new Vector2(_hpBarFillMaxWidth * (1.0f - hpPercent) + hpBarFill.sizeDelta.x, 0);
+        }
+        
+        /// <summary>
+        /// Обновляет отображаемое число монет, имеющихся у игрока
+        /// </summary>
+        /// <param name="amount">Количество монет</param>
+        private void UpdateCoinCount(long amount)
+        {
+            var newValue = amount switch
+            {
+                > 1000000000 => (amount / 1000000000.0).ToString("F1") + "B",
+                > 1000000 => (amount / 1000000.0).ToString("F1") + "M",
+                > 10000 => (amount / 10000.0).ToString("F1") + "K",
+                _ => amount.ToString()
+            };
+
+            coinCount.text = newValue;
         }
     }
 }
