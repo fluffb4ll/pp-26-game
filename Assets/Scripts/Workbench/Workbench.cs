@@ -1,3 +1,4 @@
+using System;
 using Brainrot;
 using Interfaces;
 using Managers;
@@ -20,6 +21,8 @@ namespace Workbench
 
         private const float FloatDiff = 0.0001f;
         private GameManager _gameManager;
+
+        private Action _onProduceUpdate;
         
         private void Awake()
         {
@@ -29,6 +32,12 @@ namespace Workbench
         private void Update()
         {
             CalculateProduce();
+        }
+        
+        public event Action OnProduceUpdate
+        {
+            add => _onProduceUpdate += value;
+            remove => _onProduceUpdate -= value;
         }
     
         /// <summary>
@@ -40,12 +49,13 @@ namespace Workbench
                 return;
         
             storedProduce += (baseProduce + insertedBrainrot.produce) * Time.deltaTime;
-        
+            
             if (storedProduce > produceStoreCap)
                 storedProduce = produceStoreCap;
-        
+            _onProduceUpdate?.Invoke();
+            
             insertedBrainrot.lifetime -= Time.deltaTime;
-
+            
             if (!(insertedBrainrot.lifetime <= 0))
                 return;
         
