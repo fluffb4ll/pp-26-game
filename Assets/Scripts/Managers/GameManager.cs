@@ -34,7 +34,7 @@ namespace Managers
         private int _combatSpawnHealthBonus;
         private int _killHealthBonus;
 
-        private Action<long> _onCoinsChanged;
+        private Action _onCoinsChanged;
         
         void Awake()
         {
@@ -65,7 +65,7 @@ namespace Managers
             remove => _onGameStateEnd -= value;
         }
         
-        public event Action<long> OnCoinsChanged
+        public event Action OnCoinsChanged
         {
             add => _onCoinsChanged += value;
             remove => _onCoinsChanged -= value;
@@ -90,7 +90,7 @@ namespace Managers
         public void ChangeCoinsAmount(long delta)
         {
             YG2.saves.coins += delta;
-            _onCoinsChanged?.Invoke(YG2.saves.coins);
+            _onCoinsChanged?.Invoke();
         }
         
         private void HandleSavingData()

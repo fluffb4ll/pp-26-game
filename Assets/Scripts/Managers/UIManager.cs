@@ -3,6 +3,7 @@ using Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using YG;
 
 namespace Managers
 {
@@ -52,6 +53,7 @@ namespace Managers
         {
             _hpBarFillMaxWidth = hpBarFill.rect.width;
             SetSubmenusDefaultState();
+            UpdateCoinCount();
         }
 
         private void OnEnable()
@@ -169,9 +171,10 @@ namespace Managers
         /// <summary>
         /// Обновляет отображаемое число монет, имеющихся у игрока
         /// </summary>
-        /// <param name="amount">Количество монет</param>
-        private void UpdateCoinCount(long amount)
+        private void UpdateCoinCount()
         {
+            var amount = YG2.saves.coins;
+            
             var newValue = amount switch
             {
                 > 1000000000 => (amount / 1000000000.0).ToString("F1") + "B",
