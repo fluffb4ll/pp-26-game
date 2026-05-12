@@ -116,6 +116,12 @@ namespace Player
             other.TryGetComponent(out ITriggerable triggerable);
             triggerable?.Execute(this);
         }
+
+        private void OnTriggerExit(Collider other)
+        {
+            other.TryGetComponent(out ITriggerable triggerable);
+            triggerable?.Exit(this);
+        }
         
         /// <inheritdoc/>
         public event Action<float> OnTakeDamage

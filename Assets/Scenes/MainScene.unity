@@ -2339,6 +2339,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5960869068695641370, guid: efbfa3e86bd89c246940bb21f905697e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779689874970186501, guid: efbfa3e86bd89c246940bb21f905697e, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7132622796141252649, guid: efbfa3e86bd89c246940bb21f905697e, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7160017842877831840, guid: efbfa3e86bd89c246940bb21f905697e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.082
@@ -2382,6 +2394,14 @@ PrefabInstance:
     - target: {fileID: 7500374534252478490, guid: efbfa3e86bd89c246940bb21f905697e, type: 3}
       propertyPath: m_Name
       value: Workbench
+      objectReference: {fileID: 0}
+    - target: {fileID: 8358074783971788910, guid: efbfa3e86bd89c246940bb21f905697e, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9162778328175659491, guid: efbfa3e86bd89c246940bb21f905697e, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
