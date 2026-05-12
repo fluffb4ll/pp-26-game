@@ -86,9 +86,11 @@ namespace Workbench
         {
             insertedBrainrot = player.heldBrainrot;
             player.heldBrainrot = null;
-        
+            
             insertedBrainrot.transform.SetParent(brainrotInsertionPos);
             insertedBrainrot.transform.position = brainrotInsertionPos.position;
+            insertedBrainrot.TryGetComponent(out BrainrotUI ui);
+            ui.DisableComponentsOnInsertion();
         }
     }
 }
