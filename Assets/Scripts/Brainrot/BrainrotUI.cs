@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Brainrot
 {
-    public class BrainrotUI : MonoBehaviour, ITriggerable
+    public class BrainrotUI : MonoBehaviour, IUIPrompts
     {
         [SerializeField] private GameObject infoCanvas;
         [SerializeField] private GameObject inputPromptCanvas;
@@ -36,16 +36,14 @@ namespace Brainrot
         {
             _camera.OnCamRotation -= RotateCanvas;
         }
-    
-        /// <inheritdoc/>
-        public void Execute(PlayerController playerController)
+
+        public void ShowPrompts()
         {
             _playerMovement.OnMovement += MoveInputPrompt;
             inputPromptCanvas.SetActive(true);
         }
-        
-        /// <inheritdoc/>
-        public void Exit(PlayerController playerController)
+
+        public void HidePrompts()
         {
             _playerMovement.OnMovement -= MoveInputPrompt;
             inputPromptCanvas.SetActive(false);

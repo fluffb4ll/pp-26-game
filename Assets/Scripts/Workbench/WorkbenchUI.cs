@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Workbench
 {
-    public class WorkbenchUI : MonoBehaviour, ITriggerable
+    public class WorkbenchUI : MonoBehaviour, IUIPrompts
     {
         [SerializeField] private Workbench workbenchController;
         [SerializeField] private GameObject infoCanvas;
@@ -41,20 +41,6 @@ namespace Workbench
             workbenchController.OnProduceUpdate -= UpdateProduceCounter;
             _camera.OnCamRotation -= RotateCanvas;
         }
-        
-        /// <inheritdoc/>
-        public void Execute(PlayerController playerController)
-        {
-            _playerMovement.OnMovement += MoveInputPrompt;
-            inputPromptCanvas.SetActive(true);
-        }
-        
-        /// <inheritdoc/>
-        public void Exit(PlayerController playerController)
-        {
-            _playerMovement.OnMovement -= MoveInputPrompt;
-            inputPromptCanvas.SetActive(false);
-        }
 
         private void UpdateProduceCounter()
         {
@@ -87,6 +73,18 @@ namespace Workbench
             targetPos.y = inputPromptCanvasPos.y;
             targetPos.z = Mathf.Clamp(targetPos.z, -inputPromptMovementRadius, inputPromptMovementRadius);
             inputPromptCanvas.transform.localPosition = Vector3.Lerp(inputPromptCanvasPos, targetPos, Time.deltaTime * inputPromptMovementSpeed);
+        }
+        
+        public void ShowPrompts()
+        {
+            _playerMovement.OnMovement += MoveInputPrompt;
+            inputPromptCanvas.SetActive(true);
+        }
+
+        public void HidePrompts()
+        {
+            _playerMovement.OnMovement -= MoveInputPrompt;
+            inputPromptCanvas.SetActive(false);
         }
     }
 }

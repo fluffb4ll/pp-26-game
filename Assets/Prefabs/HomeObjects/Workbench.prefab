@@ -554,6 +554,7 @@ MonoBehaviour:
   storedProduce: 0
   brainrotInsertionPos: {fileID: 6789452820099553642}
   insertedBrainrot: {fileID: 0}
+  uiComponent: {fileID: 8995847679850945987}
 --- !u!114 &8995847679850945987
 MonoBehaviour:
   m_ObjectHideFlags: 0

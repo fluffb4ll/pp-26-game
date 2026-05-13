@@ -7,13 +7,14 @@ namespace Brainrot
     /// <summary>
     /// Представляет объект-брейнрот, используемый для добычи ресурсов
     /// </summary>
-    public class BrainrotObject : MonoBehaviour, IInteractable
+    public class BrainrotObject : MonoBehaviour, IInteractable, ITriggerable
     {
         public float produce;
         public float lifetime;
         [SerializeField] private BrainrotLib data;
-
         public Rarity rarity;
+        
+        [SerializeField] private BrainrotUI uiComponent;
     
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -49,6 +50,24 @@ namespace Brainrot
         
             transform.SetParent(player.brainrotCarryPoint);
             transform.localPosition = Vector3.zero;
+            
+            uiComponent.HidePrompts();
         }
+        
+        /// <inheritdoc/>
+        public void Execute(PlayerController playerController)
+        {
+            playerController.GetPlayerInteraction().RegisterInteractable(this);
+        }
+        
+        /// <inheritdoc/>
+        public void Exit(PlayerController playerController)
+        {
+            playerController.GetPlayerInteraction().UnregisterInteractable(this);
+        }
+
+        public IUIPrompts GetUIComponent() => uiComponent;
+
+        public Vector3 GetPosition() => transform.position;
     }
 }

@@ -190,6 +190,7 @@ MonoBehaviour:
   lifetime: 1
   data: {fileID: 11400000, guid: 87f63d150f3b6da4494f976b8d4db0ef, type: 2}
   rarity: 0
+  uiComponent: {fileID: 4864340705536598367}
 --- !u!114 &4864340705536598367
 MonoBehaviour:
   m_ObjectHideFlags: 0

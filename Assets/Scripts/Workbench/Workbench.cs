@@ -10,7 +10,7 @@ namespace Workbench
     /// <summary>
     /// Представляет станок, добывающий монетки 
     /// </summary>
-    public class Workbench : MonoBehaviour, IInteractable
+    public class Workbench : MonoBehaviour, IInteractable, ITriggerable
     {
         public float baseProduce;
         public float produceStoreCap;
@@ -23,6 +23,8 @@ namespace Workbench
         private GameManager _gameManager;
 
         private Action _onProduceUpdate;
+        
+        [SerializeField] private WorkbenchUI uiComponent;
         
         private void Awake()
         {
@@ -92,5 +94,21 @@ namespace Workbench
             insertedBrainrot.TryGetComponent(out BrainrotUI ui);
             ui.DisableComponentsOnInsertion();
         }
+        
+        /// <inheritdoc/>
+        public void Execute(PlayerController playerController)
+        {
+            playerController.GetPlayerInteraction().RegisterInteractable(this);
+        }
+        
+        /// <inheritdoc/>
+        public void Exit(PlayerController playerController)
+        {
+            playerController.GetPlayerInteraction().UnregisterInteractable(this);
+        }
+        
+        public IUIPrompts GetUIComponent() => uiComponent;
+
+        public Vector3 GetPosition() => transform.position;
     }
 }

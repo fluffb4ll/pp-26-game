@@ -18,7 +18,7 @@ namespace Player
         
         private const int MaxRaycastHits = 16;
 
-        [SerializeField] private PlayerInteraction playerInteraction;
+        [SerializeField] public PlayerInteraction playerInteraction;
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private CharacterController charController;
         [SerializeField] private Transform spawnPoint;
@@ -398,5 +398,7 @@ namespace Player
             _uiEventSystem.RaycastAll(_uiPointerEventData, _uiRaycastResults);
             return _uiRaycastResults.Count > 0;
         }
+        
+        public PlayerInteraction GetPlayerInteraction() => playerInteraction;
     }
 }

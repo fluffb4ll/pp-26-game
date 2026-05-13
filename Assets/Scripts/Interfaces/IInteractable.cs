@@ -1,4 +1,5 @@
 using Player;
+using UnityEngine;
 
 namespace Interfaces
 {
@@ -8,5 +9,9 @@ namespace Interfaces
     public interface IInteractable
     {
         void Interact(PlayerInteraction player);
+        
+        IUIPrompts GetUIComponent();
+
+        Vector3 GetPosition();
     }
 }
