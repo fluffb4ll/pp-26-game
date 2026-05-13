@@ -12,7 +12,6 @@ namespace Player
     /// </summary>
     public class PlayerInteraction : MonoBehaviour
     {
-        [SerializeField] private float interactionDistance = 3f;
         [SerializeField] private InputActionReference interact;
     
         public Transform brainrotCarryPoint;
@@ -81,12 +80,13 @@ namespace Player
         {
             interactable.GetUIComponent().HidePrompts();
             _activeInteractables.Remove(interactable);
+            if (_currentInteractable == interactable)
+                _currentInteractable = null;
             _hasUpdatedInteractables = true;
         }
         
-        
         /// <summary>
-        /// Считает "счёт" предмета, с которым можно взаимодействовать, чтобы определить,
+        /// Считает "счёт" элементов, с которыми можно взаимодействовать, чтобы определить,
         /// какой элемент стоит выбрать активным и отобразить его промпты взаимодействия.
         /// </summary>
         private void CalculateInteractableScore()

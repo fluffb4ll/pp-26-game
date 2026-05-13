@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Brainrot
 {
+    /// <summary>
+    /// Управляет элементами интерфейса, связанными с брейнротом
+    /// </summary>
     public class BrainrotUI : MonoBehaviour, IUIPrompts
     {
         [SerializeField] private GameObject infoCanvas;
@@ -36,25 +39,35 @@ namespace Brainrot
         {
             _camera.OnCamRotation -= RotateCanvas;
         }
-
+        
+        /// <inheritdoc/>
         public void ShowPrompts()
         {
             _playerMovement.OnMovement += MoveInputPrompt;
             inputPromptCanvas.SetActive(true);
         }
 
+        /// <inheritdoc/>
         public void HidePrompts()
         {
             _playerMovement.OnMovement -= MoveInputPrompt;
             inputPromptCanvas.SetActive(false);
         }
     
+        /// <summary>
+        /// Вращает <c>Canvas</c> относительно поворота камеры
+        /// </summary>
+        /// <param name="rotation">Вращение камеры</param>
         private void RotateCanvas(Quaternion rotation)
         {
             infoCanvas.transform.rotation = rotation;
             inputPromptCanvas.transform.rotation = rotation;
         }
-
+        
+        /// <summary>
+        /// Двигает промпт взаимодействия в определённом радиусе вокруг объекта относительно позиции игрока
+        /// </summary>
+        /// <param name="pos">Позиция игрока в мире</param>
         private void MoveInputPrompt(Vector3 pos)
         {
             var playerLocalPos = transform.InverseTransformPoint(pos);
@@ -64,10 +77,16 @@ namespace Brainrot
             targetPos.x = Mathf.Clamp(targetPos.x, -inputPromptMovementRadius, inputPromptMovementRadius);
             targetPos.y = inputPromptCanvasPos.y;
             targetPos.z = Mathf.Clamp(targetPos.z, -inputPromptMovementRadius, inputPromptMovementRadius);
-            inputPromptCanvas.transform.localPosition = Vector3.Lerp(inputPromptCanvasPos, targetPos, Time.deltaTime * inputPromptMovementSpeed);
+            inputPromptCanvas.transform.localPosition = Vector3.Lerp(
+                inputPromptCanvasPos, 
+                targetPos, 
+                Time.deltaTime * inputPromptMovementSpeed);
         }
-
-        public void DisableComponentsOnInsertion()
+        
+        /// <summary>
+        /// Отключает элементы интерфейса и коллайдер
+        /// </summary>
+        public void DisableUiComponents()
         {
             infoCanvas.SetActive(false);
             inputPromptCanvas.SetActive(false);

@@ -11,7 +11,7 @@
     "modules": [
         {
             "name": "PluginYG2",
-            "version": "2.0091",
+            "version": "2.0092",
             "download": "https://max-games.ru/public/pluginYG2/other/PluginYG2.unitypackage",
             "doc": "https://max-games.ru/plugin-yg/doc/"
         },

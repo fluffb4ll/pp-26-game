@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Workbench
 {
+    /// <summary>
+    /// Управляет элементами интерфейса, связанными со станком
+    /// </summary>
     public class WorkbenchUI : MonoBehaviour, IUIPrompts
     {
         [SerializeField] private Workbench workbenchController;
@@ -42,6 +45,9 @@ namespace Workbench
             _camera.OnCamRotation -= RotateCanvas;
         }
 
+        /// <summary>
+        /// Обновляет счётчик хранимого в станке ресурса 
+        /// </summary>
         private void UpdateProduceCounter()
         {
             var amount = Mathf.RoundToInt(workbenchController.storedProduce);
@@ -57,12 +63,20 @@ namespace Workbench
             produceCounter.text = newValue;
         }
         
+        /// <summary>
+        /// Вращает <c>Canvas</c> относительно поворота камеры
+        /// </summary>
+        /// <param name="rotation">Вращение камеры</param>
         private void RotateCanvas(Quaternion rotation)
         {
             infoCanvas.transform.rotation = rotation;
             inputPromptCanvas.transform.rotation = rotation;
         }
 
+        /// <summary>
+        /// Двигает промпт взаимодействия в определённом радиусе вокруг объекта относительно позиции игрока
+        /// </summary>
+        /// <param name="pos">Позиция игрока в мире</param>
         private void MoveInputPrompt(Vector3 pos)
         {
             var playerLocalPos = transform.InverseTransformPoint(pos);
@@ -75,12 +89,14 @@ namespace Workbench
             inputPromptCanvas.transform.localPosition = Vector3.Lerp(inputPromptCanvasPos, targetPos, Time.deltaTime * inputPromptMovementSpeed);
         }
         
+        /// <inheritdoc/>
         public void ShowPrompts()
         {
             _playerMovement.OnMovement += MoveInputPrompt;
             inputPromptCanvas.SetActive(true);
         }
 
+        /// <inheritdoc/>
         public void HidePrompts()
         {
             _playerMovement.OnMovement -= MoveInputPrompt;

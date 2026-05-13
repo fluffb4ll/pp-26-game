@@ -51,7 +51,8 @@ namespace Brainrot
             transform.SetParent(player.brainrotCarryPoint);
             transform.localPosition = Vector3.zero;
             
-            uiComponent.HidePrompts();
+            player.UnregisterInteractable(this);
+            uiComponent.DisableUiComponents();
         }
         
         /// <inheritdoc/>
@@ -65,9 +66,11 @@ namespace Brainrot
         {
             playerController.GetPlayerInteraction().UnregisterInteractable(this);
         }
-
+        
+        /// <inheritdoc/>
         public IUIPrompts GetUIComponent() => uiComponent;
-
+        
+        /// <inheritdoc/>
         public Vector3 GetPosition() => transform.position;
     }
 }

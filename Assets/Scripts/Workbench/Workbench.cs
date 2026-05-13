@@ -91,8 +91,6 @@ namespace Workbench
             
             insertedBrainrot.transform.SetParent(brainrotInsertionPos);
             insertedBrainrot.transform.position = brainrotInsertionPos.position;
-            insertedBrainrot.TryGetComponent(out BrainrotUI ui);
-            ui.DisableComponentsOnInsertion();
         }
         
         /// <inheritdoc/>
@@ -107,8 +105,10 @@ namespace Workbench
             playerController.GetPlayerInteraction().UnregisterInteractable(this);
         }
         
+        /// <inheritdoc/>
         public IUIPrompts GetUIComponent() => uiComponent;
-
+        
+        /// <inheritdoc/>
         public Vector3 GetPosition() => transform.position;
     }
 }
