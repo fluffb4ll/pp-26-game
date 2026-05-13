@@ -28,6 +28,7 @@ namespace Managers
         private Rect _lastSafeArea;
         private Vector2Int _lastScreenSize;
         private float _hpBarFillMaxWidth;
+        private GameObject _activeSubmenu;
 
         /// <summary>
         /// регистрируем менеджер и сразу раскладываем ui
@@ -147,6 +148,9 @@ namespace Managers
         public void TogglePanel(GameObject panel)
         {
             panel.SetActive(!panel.activeSelf);
+            if (!panel.activeSelf) return;
+            _activeSubmenu?.SetActive(false);
+            _activeSubmenu = panel;
         }
         
         /// <summary>
