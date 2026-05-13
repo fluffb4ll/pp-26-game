@@ -1,13 +1,14 @@
 using UnityEngine;
-using UnityEngine.UI;     
+using UnityEngine.UI;
 using System.Collections;
+using YG;
 
 public class NotificationUI : MonoBehaviour
 {
-    public UnityEngine.UI.Text messageText;   
-    public float displayDuration = 2f;
+    [SerializeField] private UnityEngine.UI.Text messageText;
+    [SerializeField] private float displayDuration = 2f;
 
-    void Start()
+    private void Start()
     {
         if (messageText == null)
             messageText = GetComponent<UnityEngine.UI.Text>();
@@ -22,7 +23,7 @@ public class NotificationUI : MonoBehaviour
         StartCoroutine(HideAfterTime());
     }
 
-    IEnumerator HideAfterTime()
+    private IEnumerator HideAfterTime()
     {
         yield return new WaitForSeconds(displayDuration);
         gameObject.SetActive(false);
