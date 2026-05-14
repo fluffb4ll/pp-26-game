@@ -1541,6 +1541,32 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &535413022 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9095446985226352843, guid: 05e05e6a885d8b54e94c4b26157f8f22, type: 3}
+  m_PrefabInstance: {fileID: 703628501785879942}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &535413026
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535413022}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.02, y: 0.020000005, z: 0.42948285}
+  m_Center: {x: 0, y: 0, z: 0.20474143}
 --- !u!1 &558980650
 GameObject:
   m_ObjectHideFlags: 0
@@ -1608,7 +1634,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6152163496187422300, guid: e0619c7d76a9ff64cbf5539fbbcac479, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.6
+      value: 5.5
       objectReference: {fileID: 0}
     - target: {fileID: 6152163496187422300, guid: e0619c7d76a9ff64cbf5539fbbcac479, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1874,7 +1900,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5403884914782700836, guid: 03143b03b288b3d418f69389b579b2f9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.6
+      value: 5.5
       objectReference: {fileID: 0}
     - target: {fileID: 5403884914782700836, guid: 03143b03b288b3d418f69389b579b2f9, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1931,7 +1957,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3937003269084393930, guid: 923210b3946029de6a59bf0acf05ffdb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.6
+      value: 5.5
       objectReference: {fileID: 0}
     - target: {fileID: 3937003269084393930, guid: 923210b3946029de6a59bf0acf05ffdb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2141,7 +2167,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7160017842877831840, guid: efbfa3e86bd89c246940bb21f905697e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.454
+      value: 5.354
       objectReference: {fileID: 0}
     - target: {fileID: 7160017842877831840, guid: efbfa3e86bd89c246940bb21f905697e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2676,7 +2702,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2789391281624787860, guid: 2c2cb5ac08b866d4d83e917dad110c65, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.6
+      value: 5.5
       objectReference: {fileID: 0}
     - target: {fileID: 2789391281624787860, guid: 2c2cb5ac08b866d4d83e917dad110c65, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5059,10 +5085,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7293993733740026142, guid: 05e05e6a885d8b54e94c4b26157f8f22, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 135052d54f77d2e45b359b45db530b82, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9095446985226352843, guid: 05e05e6a885d8b54e94c4b26157f8f22, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 535413026}
   m_SourcePrefab: {fileID: 100100000, guid: 05e05e6a885d8b54e94c4b26157f8f22, type: 3}
 --- !u!4 &1197920724565565311 stripped
 Transform:
@@ -5083,7 +5116,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3730987622223008641, guid: 3454ef56a7eb7404094e0e8cd123b7e9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.6
+      value: 5.5
       objectReference: {fileID: 0}
     - target: {fileID: 3730987622223008641, guid: 3454ef56a7eb7404094e0e8cd123b7e9, type: 3}
       propertyPath: m_LocalPosition.z
