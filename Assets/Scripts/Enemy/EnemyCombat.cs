@@ -1,3 +1,4 @@
+using System;
 using Interfaces;
 using Managers;
 using Player;
@@ -36,6 +37,10 @@ namespace Enemy
         private Quaternion _deathTargetRotation;
         private PlayerController _playerController;
         private readonly RaycastHit[] _attackHits = new RaycastHit[MaxAttackHits];
+        
+        private Action<float> _onTakeDamage;
+        private Action<float> _onHeal;
+        private Action _onDeath;
 
         /// <summary>
         /// кешируем нужные ссылки один раз
@@ -70,7 +75,26 @@ namespace Enemy
 
             HandleDamageByProximity();
         }
-
+        
+        /// <inheritdoc/>
+        public event Action<float> OnTakeDamage
+        {
+            add => _onTakeDamage += value;
+            remove => _onTakeDamage -= value;
+        }
+        
+        public event Action<float> OnHeal
+        {
+            add => _onHeal += value;
+            remove => _onHeal -= value;
+        }
+        
+        public event Action OnDeath
+        {
+            add => _onDeath += value;
+            remove => _onDeath -= value;
+        }
+        
         /// <inheritdoc/>
         public void TakeDamage(int damageAmount)
         {
@@ -78,9 +102,11 @@ namespace Enemy
                 return;
 
             currentHealth -= damageAmount;
-
+            
             if (currentHealth <= 0)
                 Die();
+            
+            _onTakeDamage?.Invoke(currentHealth / (float) maxHealth);
         }
 
         /// <inheritdoc/>
@@ -90,6 +116,8 @@ namespace Enemy
 
             if (currentHealth > maxHealth)
                 currentHealth = maxHealth;
+
+            _onHeal?.Invoke(currentHealth / (float) maxHealth);
         }
 
         /// <inheritdoc/>
@@ -109,6 +137,7 @@ namespace Enemy
             _gameManager.RegisterEnemyKill();
             
             SpawnBrainrot();
+            _onDeath?.Invoke();
         }
 
         /// <summary>

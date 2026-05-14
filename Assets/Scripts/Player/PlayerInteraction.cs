@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Interfaces;
 using Brainrot;
 using UnityEngine;
@@ -11,24 +12,31 @@ namespace Player
     /// </summary>
     public class PlayerInteraction : MonoBehaviour
     {
-        [SerializeField] private float interactionDistance = 3f;
         [SerializeField] private InputActionReference interact;
     
         public Transform brainrotCarryPoint;
         public BrainrotObject heldBrainrot;
 
         private InputAction _interactAction;
-    
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        private List<IInteractable> _activeInteractables = new();
+        private IInteractable _currentInteractable;
+        private bool _hasUpdatedInteractables;
+        private PlayerMovement _playerMovement;
+        
+        private void Start()
         {
             _interactAction ??= interact.action;
         }
 
+        private void Update()
+        {
+            CalculateInteractableScore();
+        }
+        
         /// <summary>
         /// Метод, вызываемый при включении объекта
         /// </summary>
-        void OnEnable()
+        private void OnEnable()
         {
             if (_interactAction is null)
                 _interactAction = interact.action;
@@ -39,7 +47,7 @@ namespace Player
         /// <summary>
         /// Метод, вызываемый при отключении объекта
         /// </summary>
-        void OnDisable()
+        private void OnDisable()
         {
             _interactAction.Disable();
             _interactAction.performed -= OnInteract;
@@ -51,23 +59,62 @@ namespace Player
         /// <param name="context">Информация о том, что вызвало <c>InputAction</c></param>
         private void OnInteract(InputAction.CallbackContext context)
         {
-            PerformRaycast((hit) =>
-            {
-                var interactable = hit.collider.GetComponentInParent<IInteractable>();
-                interactable?.Interact(this);
-            }, interactionDistance);
+            _currentInteractable?.Interact(this);
         }
-    
+        
         /// <summary>
-        /// Бросает луч и выполняет метод, указанный в <c>callback</c>
+        /// Начинает отслеживать объект, с которым можно взаимодействовать
         /// </summary>
-        /// <param name="callback">Метод, выполняемый при попадании луча в цель</param>
-        /// <param name="raycastDistance">Дальность броска луча</param>
-        private void PerformRaycast(Action<RaycastHit> callback, float raycastDistance)
+        /// <param name="interactable">Объект, реализующий интерфейс <see cref="IInteractable"/></param>
+        public void RegisterInteractable(IInteractable interactable)
         {
-            var ray = new Ray(transform.position, transform.forward);
-            if (Physics.Raycast(ray, out var hit, raycastDistance))
-                callback.Invoke(hit);
+            _activeInteractables.Add(interactable);
+            _hasUpdatedInteractables = true;
+        }
+        
+        /// <summary>
+        /// Прекращает отслеживать объект, с которым можно взаимодействовать, из списка активных
+        /// </summary>
+        /// <param name="interactable">Объект, реализующий интерфейс <see cref="IInteractable"/></param>
+        public void UnregisterInteractable(IInteractable interactable)
+        {
+            interactable.GetUIComponent().HidePrompts();
+            _activeInteractables.Remove(interactable);
+            if (_currentInteractable == interactable)
+                _currentInteractable = null;
+            _hasUpdatedInteractables = true;
+        }
+        
+        /// <summary>
+        /// Считает "счёт" элементов, с которыми можно взаимодействовать, чтобы определить,
+        /// какой элемент стоит выбрать активным и отобразить его промпты взаимодействия.
+        /// </summary>
+        private void CalculateInteractableScore()
+        {
+            if (_activeInteractables.Count <= 0 || !_hasUpdatedInteractables) return;
+            
+            IInteractable closestTarget = null;
+            var maxPriority = -1f;
+            
+            foreach (var interactable in _activeInteractables)
+            {
+                var directionToItem = (interactable.GetPosition() - transform.position).normalized;
+                var lookAlignment = Vector3.Dot(transform.forward, directionToItem);
+
+                if (!(lookAlignment > maxPriority)) continue;
+                
+                maxPriority = lookAlignment;
+                closestTarget = interactable;
+            }
+
+            if (_currentInteractable != closestTarget)
+            {
+                _currentInteractable?.GetUIComponent().HidePrompts();
+                _currentInteractable = closestTarget;
+                _currentInteractable?.GetUIComponent().ShowPrompts();
+            }
+
+            _hasUpdatedInteractables = false;
         }
     }
 }

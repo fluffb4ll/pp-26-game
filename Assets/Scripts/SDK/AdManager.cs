@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine;
 using YG;
 
@@ -30,11 +31,10 @@ namespace SDK
                 switch (rewardId)
                 {
                     case AdRewards.Coins:
-                        YG2.saves.coins += 100;
+                        GameManager.Instance.ChangeCoinsAmount(100);
                         break;
                     // ВАЖНО: изменили AdRewards - меняем кейсы
                 }
-                YG2.SaveProgress();
                 #if UNITY_EDITOR || DEVELOPMENT_BUILD
                     Debug.Log($"Выдана награда: {rewardId}");
                 #endif

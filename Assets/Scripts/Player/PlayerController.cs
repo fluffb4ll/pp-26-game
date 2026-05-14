@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
-using UnityEngine.XR;
 
 namespace Player
 {
@@ -15,9 +14,11 @@ namespace Player
     /// </summary>
     public class PlayerController : MonoBehaviour, IDamageable
     {
+        public static PlayerController Instance { get;  private set; }
+        
         private const int MaxRaycastHits = 16;
 
-        [SerializeField] private PlayerInteraction playerInteraction;
+        [SerializeField] public PlayerInteraction playerInteraction;
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private CharacterController charController;
         [SerializeField] private Transform spawnPoint;
@@ -27,7 +28,7 @@ namespace Player
         [SerializeField] private InputActionReference respawnBindings;
         [SerializeField] private Animator playerModelAnimator;
         
-        [SerializeField] private Camera mainCameraReference;
+        [SerializeField] private UnityEngine.Camera mainCameraReference;
         [SerializeField] private InputActionReference attackActionReference;
         [SerializeField] private float attackDistance = 3f;
         [SerializeField] private float attackRayDistance = 30f;
@@ -48,6 +49,10 @@ namespace Player
         private readonly List<RaycastResult> _uiRaycastResults = new(8);
         private EventSystem _uiEventSystem;
         private PointerEventData _uiPointerEventData;
+
+        private Action<float> _onTakeDamage;
+        private Action<float> _onHeal;
+        private Action _onDeath;
         
         // параметры в PlayerAnimationController
         private const string DeathTransitionFlag = "hasDied";
@@ -56,6 +61,13 @@ namespace Player
         
         private void Awake()
         {
+            if (!ReferenceEquals(Instance, null) && !ReferenceEquals(Instance, this))
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
             _gameManager = GameManager.Instance;
             _respawnAction = respawnBindings.action;
             _attackAction = attackActionReference.action;
@@ -105,6 +117,33 @@ namespace Player
             triggerable?.Execute(this);
         }
 
+        private void OnTriggerExit(Collider other)
+        {
+            other.TryGetComponent(out ITriggerable triggerable);
+            triggerable?.Exit(this);
+        }
+        
+        /// <inheritdoc/>
+        public event Action<float> OnTakeDamage
+        {
+            add => _onTakeDamage += value;
+            remove => _onTakeDamage -= value;
+        }
+        
+        /// <inheritdoc/>
+        public event Action<float> OnHeal
+        {
+            add => _onHeal += value;
+            remove => _onHeal -= value;
+        }
+        
+        /// <inheritdoc/>
+        public event Action OnDeath
+        {
+            add => _onDeath += value;
+            remove => _onDeath -= value;
+        }
+        
         /// <summary>
         /// Вызывается при нажатии бинда возрождения
         /// </summary>
@@ -128,10 +167,15 @@ namespace Player
         /// <inheritdoc/>
         public void TakeDamage(int damageAmount)
         {
+            if (_isDying)
+                return;
+            
             currentHealth -= damageAmount;
 
             if (currentHealth <= 0)
                 Die();
+            
+            _onTakeDamage?.Invoke(currentHealth / (float) maxHealth);
         }
 
         /// <inheritdoc/>
@@ -141,6 +185,8 @@ namespace Player
 
             if (currentHealth > maxHealth)
                 currentHealth = maxHealth;
+            
+            _onHeal?.Invoke(currentHealth / (float) maxHealth);
         }
 
         /// <inheritdoc/>
@@ -163,6 +209,7 @@ namespace Player
             _respawnAction.performed += OnRespawn;
             
             UpdateAnimFlags();
+            _onDeath?.Invoke();
         }
 
         /// <summary>
@@ -192,7 +239,7 @@ namespace Player
         {
             _isDying = false;
             _respawnTimer = 0f;
-            currentHealth = maxHealth;
+            Heal(maxHealth);
             transform.position = spawnPoint.position;
             transform.rotation = Quaternion.identity;
 
@@ -351,5 +398,7 @@ namespace Player
             _uiEventSystem.RaycastAll(_uiPointerEventData, _uiRaycastResults);
             return _uiRaycastResults.Count > 0;
         }
+        
+        public PlayerInteraction GetPlayerInteraction() => playerInteraction;
     }
 }

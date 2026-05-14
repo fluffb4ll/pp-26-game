@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Enemy;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Managers
 {
@@ -18,7 +19,8 @@ namespace Managers
         private List<GameObject> _spawnableBrainrots;
         private float _spawnTimer;
         private bool _isSpawning;
-
+        
+        
         void Awake()
         {
             _spawnTimer = spawnRate;
