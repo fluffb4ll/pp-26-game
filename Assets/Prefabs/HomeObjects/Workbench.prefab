@@ -459,8 +459,8 @@ MonoBehaviour:
   infoCanvas: {fileID: 4761144322728007185}
   inputPromptCanvas: {fileID: 6653435520821900828}
   produceCounter: {fileID: 7098507183196154100}
-  inputPromptMovementRadius: 1
-  inputPromptMovementSpeed: 10
+  uiMovementRadius: 1.5
+  uiMovementSpeed: 10
 --- !u!65 &3355497506506779236
 BoxCollider:
   m_ObjectHideFlags: 0
