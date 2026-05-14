@@ -16,5 +16,8 @@ namespace Triggers
         {
             playerController.TakeDamage(damage);
         }
+        
+        /// <inheritdoc/>
+        public void Exit(PlayerController playerController) {}
     }
 }

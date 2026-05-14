@@ -1,15 +1,16 @@
+using System;
 using Brainrot;
 using Interfaces;
+using Managers;
 using Player;
 using UnityEngine;
-using YG;
 
 namespace Workbench
 {
     /// <summary>
     /// Представляет станок, добывающий монетки 
     /// </summary>
-    public class Workbench : MonoBehaviour, IInteractable
+    public class Workbench : MonoBehaviour, IInteractable, ITriggerable
     {
         public float baseProduce;
         public float produceStoreCap;
@@ -18,18 +19,27 @@ namespace Workbench
         [SerializeField] private Transform brainrotInsertionPos;
         [SerializeField] private BrainrotObject insertedBrainrot;
 
-        private float _diff = 0.0001f;
-    
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-        
-        }
+        private const float FloatDiff = 0.0001f;
+        private GameManager _gameManager;
 
-        // Update is called once per frame
-        void Update()
+        private Action _onProduceUpdate;
+        
+        [SerializeField] private WorkbenchUI uiComponent;
+        
+        private void Awake()
+        {
+            _gameManager = GameManager.Instance;    
+        }
+        
+        private void Update()
         {
             CalculateProduce();
+        }
+        
+        public event Action OnProduceUpdate
+        {
+            add => _onProduceUpdate += value;
+            remove => _onProduceUpdate -= value;
         }
     
         /// <summary>
@@ -37,16 +47,17 @@ namespace Workbench
         /// </summary>
         private void CalculateProduce()
         {
-            if (insertedBrainrot is null || produceStoreCap - storedProduce < _diff)
+            if (insertedBrainrot is null || produceStoreCap - storedProduce < FloatDiff)
                 return;
         
             storedProduce += (baseProduce + insertedBrainrot.produce) * Time.deltaTime;
-        
+            
             if (storedProduce > produceStoreCap)
                 storedProduce = produceStoreCap;
-        
+            _onProduceUpdate?.Invoke();
+            
             insertedBrainrot.lifetime -= Time.deltaTime;
-
+            
             if (!(insertedBrainrot.lifetime <= 0))
                 return;
         
@@ -64,12 +75,8 @@ namespace Workbench
                 InsertBrainrot(player);
             else
             {
-                YG2.saves.coins += Mathf.RoundToInt(storedProduce);
+                _gameManager.ChangeCoinsAmount(Mathf.RoundToInt(storedProduce));
                 storedProduce = 0;
-                
-                #if UNITY_EDITOR || DEVELOPMENT_BUILD
-                    Debug.Log($"New balance: {YG2.saves.coins}");
-                #endif
             }
         }
 
@@ -81,9 +88,27 @@ namespace Workbench
         {
             insertedBrainrot = player.heldBrainrot;
             player.heldBrainrot = null;
-        
+            
             insertedBrainrot.transform.SetParent(brainrotInsertionPos);
             insertedBrainrot.transform.position = brainrotInsertionPos.position;
         }
+        
+        /// <inheritdoc/>
+        public void Execute(PlayerController playerController)
+        {
+            playerController.GetPlayerInteraction().RegisterInteractable(this);
+        }
+        
+        /// <inheritdoc/>
+        public void Exit(PlayerController playerController)
+        {
+            playerController.GetPlayerInteraction().UnregisterInteractable(this);
+        }
+        
+        /// <inheritdoc/>
+        public IUIPrompts GetUIComponent() => uiComponent;
+        
+        /// <inheritdoc/>
+        public Vector3 GetPosition() => transform.position;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,8 @@ namespace Player
     [RequireComponent(typeof(CharacterController))]
     public sealed class PlayerMovement : MonoBehaviour
     {
+        public static PlayerMovement Instance { get; private set; }
+        
         [SerializeField] private InputActionReference moveActionReference;
         [SerializeField] private InputActionReference jumpActionReference;
         [SerializeField] private Transform cameraTransform;
@@ -29,11 +32,21 @@ namespace Player
         private float _verticalVelocity;
         private Transform _transform;
 
+        private Action<Vector3> _onMovement;
+        
         /// <summary>
         /// забираем ссылки один раз на старте
         /// </summary>
         private void Awake()
         {
+            if (!ReferenceEquals(Instance, null) && !ReferenceEquals(Instance, this))
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            
             _characterController = GetComponent<CharacterController>();
             _moveAction = moveActionReference.action;
             _jumpAction = jumpActionReference.action;
@@ -64,6 +77,12 @@ namespace Player
         private void Update()
         {
             HandleMovement();
+        }
+        
+        public event Action<Vector3> OnMovement
+        {
+            add => _onMovement += value;
+            remove => _onMovement -= value;
         }
 
         /// <summary>
@@ -114,6 +133,8 @@ namespace Player
 
             _characterController.Move(frameMotion * Time.deltaTime);
             isMoving = movement.sqrMagnitude > 0.01f || !isGrounded;
+            
+            _onMovement?.Invoke(transform.position);
         }
     }
 }

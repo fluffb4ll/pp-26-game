@@ -43,6 +43,9 @@ namespace Triggers
             _gameManager.ChangeGameState(tempState);
         }
         
+        /// <inheritdoc/>
+        public void Exit(PlayerController playerController) {}
+        
         /// <summary>
         /// Восстанавливает целевой геймстейт при респавне или ином действии
         /// </summary>

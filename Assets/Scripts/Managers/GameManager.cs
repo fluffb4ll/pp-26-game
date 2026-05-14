@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Player;
-using UnityEditor.Overlays;
 using UnityEngine;
 using YG;
 
@@ -35,6 +34,8 @@ namespace Managers
         private int _combatSpawnHealthBonus;
         private int _killHealthBonus;
 
+        private Action _onCoinsChanged;
+        
         void Awake()
         {
             Instance = this;
@@ -63,7 +64,13 @@ namespace Managers
             add => _onGameStateEnd += value;
             remove => _onGameStateEnd -= value;
         }
-
+        
+        public event Action OnCoinsChanged
+        {
+            add => _onCoinsChanged += value;
+            remove => _onCoinsChanged -= value;
+        }
+        
         /// <summary>
         /// Изменяет текущий геймстейт на указанный
         /// </summary>
@@ -74,7 +81,18 @@ namespace Managers
             currentState = newState;
             _onGameStateStart?.Invoke(newState);
         }
-
+        
+        /// <summary>
+        /// Изменяет число монет у игрока.
+        /// Обновлять число монет стоит ТОЛЬКО через этот метод.
+        /// </summary>
+        /// <param name="delta">Изменение количества монет</param>
+        public void ChangeCoinsAmount(long delta)
+        {
+            YG2.saves.coins += delta;
+            _onCoinsChanged?.Invoke();
+        }
+        
         private void HandleSavingData()
         {
             if (_savingTimer > 0)
