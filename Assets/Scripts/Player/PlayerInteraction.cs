@@ -22,6 +22,11 @@ namespace Player
         private IInteractable _currentInteractable;
         private bool _hasUpdatedInteractables;
         private PlayerMovement _playerMovement;
+
+        private void Awake()
+        {
+            _playerMovement = PlayerMovement.Instance;
+        }
         
         private void Start()
         {
@@ -116,5 +121,11 @@ namespace Player
 
             _hasUpdatedInteractables = false;
         }
+        
+        /// <summary>
+        /// Телепортирует игрока в указанную точку
+        /// </summary>
+        /// <param name="target">Точку, в которую нужно телепортировать игрока</param>
+        public void TeleportPlayer(Transform target) => _playerMovement.TeleportPlayer(target);
     }
 }

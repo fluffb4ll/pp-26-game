@@ -3,7 +3,6 @@ using Interfaces;
 using Player;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Workbench
 {

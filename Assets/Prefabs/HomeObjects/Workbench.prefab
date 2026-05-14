@@ -246,7 +246,7 @@ GameObject:
   - component: {fileID: 5002733798275098822}
   - component: {fileID: 2638321752030604554}
   - component: {fileID: 2235332017568162974}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,7 +322,7 @@ GameObject:
   - component: {fileID: 2966877826158926195}
   - component: {fileID: 7747642545472829849}
   - component: {fileID: 7189928897230089014}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -493,7 +493,7 @@ GameObject:
   - component: {fileID: 5475613931954730704}
   - component: {fileID: 3526964751938514697}
   - component: {fileID: 8614400578492790392}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -631,7 +631,7 @@ GameObject:
   - component: {fileID: 2321927820814800060}
   - component: {fileID: 3712001631244168083}
   - component: {fileID: 7098507183196154100}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ProduceCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3880703021445635468}
   - component: {fileID: 7628304855293370065}
   m_Layer: 0
-  m_Name: EnemySpawnPoint
+  m_Name: EnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5964040784003176232}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &7628304855293370065
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -98,7 +98,6 @@ namespace Player
             _attackAction.performed -= OnAttack;
             _attackAction.Disable();
         }
-
         
         private void Update()
         {
