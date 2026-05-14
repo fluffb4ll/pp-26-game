@@ -12,8 +12,8 @@ namespace Brainrot
     {
         [SerializeField] private GameObject infoCanvas;
         [SerializeField] private GameObject inputPromptCanvas;
-        [SerializeField] private float inputPromptMovementRadius;
-        [SerializeField] private float inputPromptMovementSpeed;
+        [SerializeField] private float uiMovementRadius = 0.2f;
+        [SerializeField] private float uiMovementSpeed = 10f;
         [SerializeField] private new Collider collider;
     
         private SimpleFollowCamera _camera;
@@ -73,14 +73,14 @@ namespace Brainrot
             var playerLocalPos = transform.InverseTransformPoint(pos);
             var inputPromptCanvasPos = inputPromptCanvas.transform.localPosition;
             var direction = playerLocalPos.normalized;
-            var targetPos = direction * inputPromptMovementRadius;
-            targetPos.x = Mathf.Clamp(targetPos.x, -inputPromptMovementRadius, inputPromptMovementRadius);
+            var targetPos = direction * uiMovementRadius;
+            targetPos.x = Mathf.Clamp(targetPos.x, -uiMovementRadius, uiMovementRadius);
             targetPos.y = inputPromptCanvasPos.y;
-            targetPos.z = Mathf.Clamp(targetPos.z, -inputPromptMovementRadius, inputPromptMovementRadius);
+            targetPos.z = Mathf.Clamp(targetPos.z, -uiMovementRadius, uiMovementRadius);
             inputPromptCanvas.transform.localPosition = Vector3.Lerp(
                 inputPromptCanvasPos, 
                 targetPos, 
-                Time.deltaTime * inputPromptMovementSpeed);
+                Time.deltaTime * uiMovementSpeed);
         }
         
         /// <summary>

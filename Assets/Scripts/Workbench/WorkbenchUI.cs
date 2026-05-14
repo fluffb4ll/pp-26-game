@@ -15,8 +15,8 @@ namespace Workbench
         [SerializeField] private GameObject infoCanvas;
         [SerializeField] private GameObject inputPromptCanvas;
         [SerializeField] private TextMeshProUGUI produceCounter;
-        [SerializeField] private float uiMovementRadius;
-        [SerializeField] private float uiMovementSpeed;
+        [SerializeField] private float uiMovementRadius = 1.5f;
+        [SerializeField] private float uiMovementSpeed = 10f;
         
         private Vector3 _infoCanvasDefaultPosition;
         private bool _isInfoCanvasInDefaultPos = true;

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Interfaces;
+using Managers;
 using Player;
 using UnityEngine;
 
@@ -12,32 +13,36 @@ namespace Boat
         [SerializeField] private bool isAtHome = true;
         
         [SerializeField] private BoatUI uiComponent;
-    
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
         
+        private GameManager _gameManager;
+
+        private void Awake()
+        {
+            _gameManager = GameManager.Instance;
         }
 
-        // Update is called once per frame
-        void Update()
+        /// <summary>
+        /// Перемещает лодку и игрока на другой остров
+        /// </summary>
+        /// <param name="player">Компонент <see cref="PlayerInteraction"/> игрока, вызвавшего взаимодействие</param>
+        private void Travel(PlayerInteraction player)
         {
-        
-        }
-
-        private void MoveBoat(PlayerInteraction player)
-        {
-            var targetTransform = boatPositions[isAtHome ? 1 : 0];
+            var transformIndex = isAtHome ? 1 : 0; 
+            var targetTransform = boatPositions[transformIndex];
             transform.position = targetTransform.position;
             transform.rotation = targetTransform.rotation;
             
-            player.TeleportPlayer(playerPositions[isAtHome ? 1 : 0]);
+            player.TeleportPlayer(playerPositions[transformIndex]);
+            _gameManager.ChangeGameState(isAtHome ? GameState.Combat : GameState.Home);
+            
+            player.UnregisterInteractable(this);
             isAtHome = !isAtHome;
         }
-    
+        
+        /// <inheritdoc/>
         public void Interact(PlayerInteraction player)
         {
-            MoveBoat(player);
+            Travel(player);
         }
         
         /// <inheritdoc/>

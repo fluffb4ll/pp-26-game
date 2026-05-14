@@ -73,6 +73,7 @@ namespace Player
         /// <param name="interactable">Объект, реализующий интерфейс <see cref="IInteractable"/></param>
         public void RegisterInteractable(IInteractable interactable)
         {
+            Debug.Log("Registering...");
             _activeInteractables.Add(interactable);
             _hasUpdatedInteractables = true;
         }
