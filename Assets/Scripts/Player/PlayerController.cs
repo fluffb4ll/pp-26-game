@@ -53,6 +53,7 @@ namespace Player
         private Action<float> _onTakeDamage;
         private Action<float> _onHeal;
         private Action _onDeath;
+        private Action _onRespawn;
         
         // параметры в PlayerAnimationController
         private const string DeathTransitionFlag = "hasDied";
@@ -94,7 +95,7 @@ namespace Player
         {
             _gameManager.OnGameStateStart -= OnHomeEnter;
             _respawnAction.Disable();
-            _respawnAction.performed -= OnRespawn;
+            _respawnAction.performed -= OnRespawnButtonPressed;
             _attackAction.performed -= OnAttack;
             _attackAction.Disable();
         }
@@ -143,14 +144,21 @@ namespace Player
             remove => _onDeath -= value;
         }
         
+        public event Action OnRespawn
+        {
+            add => _onRespawn += value;
+            remove => _onRespawn -= value;
+        }
+        
         /// <summary>
         /// Вызывается при нажатии бинда возрождения
         /// </summary>
         /// <param name="context">Информация о том, что вызвало <c>InputAction</c></param>
-        private void OnRespawn(InputAction.CallbackContext context)
+        private void OnRespawnButtonPressed(InputAction.CallbackContext context)
         {
-            _respawnAction.performed -= OnRespawn;
+            _respawnAction.performed -= OnRespawnButtonPressed;
             Respawn();
+            _onRespawn?.Invoke();
         }
 
         /// <summary>
@@ -205,7 +213,7 @@ namespace Player
             _respawnTimer = respawnDelay;
             _gameManager.ChangeGameState(GameState.GameOver);
             charController.enabled = playerMovement.enabled = playerInteraction.enabled = false;
-            _respawnAction.performed += OnRespawn;
+            _respawnAction.performed += OnRespawnButtonPressed;
             
             UpdateAnimFlags();
             _onDeath?.Invoke();
@@ -228,7 +236,7 @@ namespace Player
             if (_respawnTimer > 0f)
                 return;
 
-            OnRespawn(new InputAction.CallbackContext());
+            OnRespawnButtonPressed(new InputAction.CallbackContext());
         }
 
         /// <summary>

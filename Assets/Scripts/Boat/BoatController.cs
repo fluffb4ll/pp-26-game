@@ -15,12 +15,32 @@ namespace Boat
         [SerializeField] private BoatUI uiComponent;
         
         private GameManager _gameManager;
-
+        private PlayerController _playerController;
         private void Awake()
         {
             _gameManager = GameManager.Instance;
+            _playerController = _gameManager.playerController;
         }
 
+        private void OnEnable()
+        {
+            _playerController.OnRespawn += ResetBoat;
+        }
+
+        private void OnDisable()
+        {
+            _playerController.OnRespawn -= ResetBoat;
+        }
+        
+        /// <summary>
+        /// Возвращает лодку в домашнюю зону
+        /// </summary>
+        private void ResetBoat()
+        {
+            isAtHome = true;
+            MoveBoat(0);
+        }
+        
         /// <summary>
         /// Перемещает лодку и игрока на другой остров
         /// </summary>
@@ -28,15 +48,24 @@ namespace Boat
         private void Travel(PlayerInteraction player)
         {
             var transformIndex = isAtHome ? 1 : 0; 
-            var targetTransform = boatPositions[transformIndex];
-            transform.position = targetTransform.position;
-            transform.rotation = targetTransform.rotation;
+            MoveBoat(transformIndex);
             
             player.TeleportPlayer(playerPositions[transformIndex]);
             _gameManager.ChangeGameState(isAtHome ? GameState.Combat : GameState.Home);
             
             player.UnregisterInteractable(this);
             isAtHome = !isAtHome;
+        }
+        
+        /// <summary>
+        /// Перемещает лодку на указанную позицию из списка <c>boatPositions</c>
+        /// </summary>
+        /// <param name="transformIndex">Индекс конечной позиции в списке <c>boatPositions</c></param>
+        private void MoveBoat(int transformIndex)
+        {
+            var targetTransform = boatPositions[transformIndex];
+            transform.position = targetTransform.position;
+            transform.rotation = targetTransform.rotation;
         }
         
         /// <inheritdoc/>
