@@ -399,6 +399,7 @@ GameObject:
   - component: {fileID: 8080194416658569817}
   - component: {fileID: 8995847679850945987}
   - component: {fileID: 3355497506506779236}
+  - component: {fileID: 8722800395911548911}
   m_Layer: 0
   m_Name: Workbench
   m_TagString: Untagged
@@ -442,7 +443,7 @@ MonoBehaviour:
   storedProduce: 0
   brainrotInsertionPos: {fileID: 6789452820099553642}
   insertedBrainrot: {fileID: 0}
-  uiComponent: {fileID: 8995847679850945987}
+  uiComponent: {fileID: 8722800395911548911}
 --- !u!114 &8995847679850945987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,12 +456,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed0522e177a77584e81bfb6d1f368205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorkbenchUI
-  workbenchController: {fileID: 8080194416658569817}
   infoCanvas: {fileID: 4761144322728007185}
-  inputPromptCanvas: {fileID: 6653435520821900828}
-  produceCounter: {fileID: 7098507183196154100}
   uiMovementRadius: 1.5
   uiMovementSpeed: 10
+  workbenchController: {fileID: 8080194416658569817}
+  produceCounter: {fileID: 7098507183196154100}
 --- !u!65 &3355497506506779236
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -482,6 +482,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.4, y: 1, z: 5}
   m_Center: {x: -0.3, y: 0.7501771, z: 0}
+--- !u!114 &8722800395911548911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7500374534252478490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62b53bbafe746deb587d75dee0dc611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.InteractableUI
+  inputPromptCanvas: {fileID: 6653435520821900828}
+  uiMovementRadius: 1.5
+  uiMovementSpeed: 10
+  uiInfoComponent: {fileID: 8995847679850945987}
 --- !u!1 &8358074783971788910
 GameObject:
   m_ObjectHideFlags: 0
