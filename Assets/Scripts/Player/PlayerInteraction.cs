@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Interfaces;
 using Brainrot;
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,7 +22,17 @@ namespace Player
         private List<IInteractable> _activeInteractables = new();
         private IInteractable _currentInteractable;
         private bool _hasUpdatedInteractables;
+        
         private PlayerMovement _playerMovement;
+        private PlayerController _playerController;
+        private GameManager _gameManager;
+
+        private void Awake()
+        {
+            _playerMovement = PlayerMovement.Instance;
+            _gameManager = GameManager.Instance;
+            _playerController = _gameManager.playerController;
+        }
         
         private void Start()
         {
@@ -42,6 +53,8 @@ namespace Player
                 _interactAction = interact.action;
             _interactAction.Enable();
             _interactAction.performed += OnInteract;
+            
+            _playerController.OnRespawn += ClearInteractables;
         }
 
         /// <summary>
@@ -51,6 +64,8 @@ namespace Player
         {
             _interactAction.Disable();
             _interactAction.performed -= OnInteract;
+            
+            _playerController.OnRespawn -= ClearInteractables;
         }
 
         /// <summary>
@@ -91,7 +106,10 @@ namespace Player
         /// </summary>
         private void CalculateInteractableScore()
         {
-            if (_activeInteractables.Count <= 0 || !_hasUpdatedInteractables) return;
+            if (_activeInteractables.Count <= 0 
+                || !_hasUpdatedInteractables 
+                || _gameManager.currentState == GameState.GameOver) 
+                return;
             
             IInteractable closestTarget = null;
             var maxPriority = -1f;
@@ -115,6 +133,22 @@ namespace Player
             }
 
             _hasUpdatedInteractables = false;
+        }
+        
+        /// <summary>
+        /// Телепортирует игрока в указанную точку
+        /// </summary>
+        /// <param name="target">Точку, в которую нужно телепортировать игрока</param>
+        public void TeleportPlayer(Transform target) => _playerMovement.TeleportPlayer(target);
+        
+        /// <summary>
+        /// Очищает список объектов, с которыми можно взаимодействовать
+        /// </summary>
+        private void ClearInteractables()
+        {
+            var tInteractables = _activeInteractables;
+            foreach (var interactable in tInteractables)
+                UnregisterInteractable(interactable);
         }
     }
 }

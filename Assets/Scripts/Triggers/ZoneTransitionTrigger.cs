@@ -50,7 +50,7 @@ namespace Triggers
         /// Восстанавливает целевой геймстейт при респавне или ином действии
         /// </summary>
         /// <param name="context">Информация о том, что вызвало <c>InputAction</c></param>
-        public void ResetTargetGameState(InputAction.CallbackContext context)
+        private void ResetTargetGameState(InputAction.CallbackContext context)
         {
             targetState = _initialGameState;
         }

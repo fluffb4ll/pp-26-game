@@ -8,6 +8,10 @@ namespace Interfaces
     /// </summary>
     public interface IInteractable
     {
+        /// <summary>
+        /// Метод, вызываемый при взаимодействии игрока с объектом, реализующим интерфейс <see cref="IInteractable"/>
+        /// </summary>
+        /// <param name="player">Компонент <see cref="PlayerInteraction"/> игрока, вызвавшего взаимодействие</param>
         void Interact(PlayerInteraction player);
         
         /// <summary>

@@ -136,5 +136,17 @@ namespace Player
             
             _onMovement?.Invoke(transform.position);
         }
+        
+        /// <summary>
+        /// Телепортирует игрока в указанную точку
+        /// </summary>
+        /// <param name="target">Точку, в которую нужно телепортировать игрока</param>
+        public void TeleportPlayer(Transform target)
+        {
+            _characterController.gameObject.SetActive(false);
+            transform.position = target.position;
+            transform.rotation = target.rotation;
+            _characterController.gameObject.SetActive(true);
+        }
     }
 }

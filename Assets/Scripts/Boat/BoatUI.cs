@@ -3,33 +3,28 @@ using Interfaces;
 using Player;
 using UnityEngine;
 
-namespace Brainrot
+namespace Boat
 {
-    /// <summary>
-    /// Управляет элементами интерфейса, связанными с брейнротом
-    /// </summary>
-    public class BrainrotUI : MonoBehaviour, IUIPrompts
+    public class BoatUI : MonoBehaviour, IUIPrompts
     {
-        [SerializeField] private GameObject infoCanvas;
         [SerializeField] private GameObject inputPromptCanvas;
-        [SerializeField] private float uiMovementRadius = 0.2f;
-        [SerializeField] private float uiMovementSpeed = 10f;
-        [SerializeField] private new Collider collider;
+        [SerializeField] private float uiMovementRadius;
+        [SerializeField] private float uiMovementSpeed;
     
         private SimpleFollowCamera _camera;
         private PlayerMovement _playerMovement;
-        
+
         private void Awake()
         {
             _camera = SimpleFollowCamera.Instance;
             _playerMovement = PlayerMovement.Instance;
         }
-
+        
         private void Start()
         {
             inputPromptCanvas.SetActive(false);
         }
-    
+        
         private void OnEnable()
         {
             _camera.OnCamRotation += RotateCanvas;
@@ -39,7 +34,7 @@ namespace Brainrot
         {
             _camera.OnCamRotation -= RotateCanvas;
         }
-        
+
         /// <inheritdoc/>
         public void ShowPrompts()
         {
@@ -53,14 +48,13 @@ namespace Brainrot
             _playerMovement.OnMovement -= MoveInputPrompt;
             inputPromptCanvas.SetActive(false);
         }
-    
+        
         /// <summary>
         /// Вращает <c>Canvas</c> относительно поворота камеры
         /// </summary>
         /// <param name="rotation">Вращение камеры</param>
         private void RotateCanvas(Quaternion rotation)
         {
-            infoCanvas.transform.rotation = rotation;
             inputPromptCanvas.transform.rotation = rotation;
         }
         
@@ -81,16 +75,6 @@ namespace Brainrot
                 inputPromptCanvasPos, 
                 targetPos, 
                 Time.deltaTime * uiMovementSpeed);
-        }
-        
-        /// <summary>
-        /// Отключает элементы интерфейса и коллайдер
-        /// </summary>
-        public void DisableUiComponents()
-        {
-            infoCanvas.SetActive(false);
-            inputPromptCanvas.SetActive(false);
-            collider.enabled = false;
         }
     }
 }
