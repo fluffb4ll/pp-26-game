@@ -3,6 +3,7 @@ using Brainrot;
 using Interfaces;
 using Managers;
 using Player;
+using UI;
 using UnityEngine;
 
 namespace Workbench
@@ -24,7 +25,7 @@ namespace Workbench
 
         private Action _onProduceUpdate;
         
-        [SerializeField] private WorkbenchUI uiComponent;
+        [SerializeField] private InteractableUI uiComponent;
         
         private void Awake()
         {

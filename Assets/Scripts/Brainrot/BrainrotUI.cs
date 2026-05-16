@@ -41,14 +41,14 @@ namespace Brainrot
         }
         
         /// <inheritdoc/>
-        public void ShowPrompts()
+        public void ShowInteractionPrompts()
         {
             _playerMovement.OnMovement += MoveInputPrompt;
             inputPromptCanvas.SetActive(true);
         }
 
         /// <inheritdoc/>
-        public void HidePrompts()
+        public void HideInteractionPrompts()
         {
             _playerMovement.OnMovement -= MoveInputPrompt;
             inputPromptCanvas.SetActive(false);

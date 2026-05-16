@@ -3,28 +3,32 @@ using Interfaces;
 using Player;
 using UnityEngine;
 
-namespace Boat
+namespace UI
 {
-    public class BoatUI : MonoBehaviour, IUIPrompts
+    public class InteractableUI : MonoBehaviour, IUIPrompts
     {
         [SerializeField] private GameObject inputPromptCanvas;
         [SerializeField] private float uiMovementRadius;
-        [SerializeField] private float uiMovementSpeed;
-    
+        [SerializeField] private float uiMovementSpeed = 10f;
+
+        [SerializeField] private InfoUI uiInfoComponent; 
+            
         private SimpleFollowCamera _camera;
         private PlayerMovement _playerMovement;
-
+        private bool hasInfoComponent;
+        
         private void Awake()
         {
             _camera = SimpleFollowCamera.Instance;
             _playerMovement = PlayerMovement.Instance;
         }
-        
+
         private void Start()
         {
             inputPromptCanvas.SetActive(false);
+            hasInfoComponent = uiInfoComponent is not null;
         }
-        
+    
         private void OnEnable()
         {
             _camera.OnCamRotation += RotateCanvas;
@@ -34,23 +38,27 @@ namespace Boat
         {
             _camera.OnCamRotation -= RotateCanvas;
         }
-
+        
         /// <inheritdoc/>
         public void ShowInteractionPrompts()
         {
+            if (hasInfoComponent)
+                _playerMovement.OnMovement += uiInfoComponent.MoveCanvas;
             _playerMovement.OnMovement += MoveInputPrompt;
             inputPromptCanvas.SetActive(true);
         }
-
+        
         /// <inheritdoc/>
         public void HideInteractionPrompts()
         {
             _playerMovement.OnMovement -= MoveInputPrompt;
             inputPromptCanvas.SetActive(false);
+            if (hasInfoComponent)
+                _playerMovement.OnMovement -= uiInfoComponent.MoveCanvas;
         }
         
         /// <summary>
-        /// Вращает <c>Canvas</c> относительно поворота камеры
+        /// Вращает <c>inputPromptCanvas</c> относительно поворота камеры
         /// </summary>
         /// <param name="rotation">Вращение камеры</param>
         private void RotateCanvas(Quaternion rotation)

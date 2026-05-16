@@ -5,11 +5,11 @@
         /// <summary>
         /// Включает промпты взаимодействия, связанные с объектом
         /// </summary>
-        void ShowPrompts();
+        void ShowInteractionPrompts();
         
         /// <summary>
         /// Отключает промпты взаимодействия, связанные с объектом
         /// </summary>
-        void HidePrompts();
+        void HideInteractionPrompts();
     }
 }
