@@ -110,7 +110,7 @@ MonoBehaviour:
   charController: {fileID: 3063270635475357675}
   spawnPoint: {fileID: 0}
   deathAnimationSpeed: 400
-  respawnDelay: 1.25
+  respawnDelay: 3
   attackCooldownRate: 0
   respawnBindings: {fileID: 3601099568889547787, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   playerModelAnimator: {fileID: 1646958559135088359}
@@ -161,7 +161,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e851dc7b19b2f74ba6b05cf4eff5244, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
-  interactionDistance: 0.6
   interact: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   brainrotCarryPoint: {fileID: 8922483641047395482}
   heldBrainrot: {fileID: 0}
