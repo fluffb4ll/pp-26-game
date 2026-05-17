@@ -22,7 +22,8 @@ namespace Managers
         [SerializeField] private GameObject hpBar;
         [SerializeField] private RectTransform hpBarFill;
         [SerializeField] private TextMeshProUGUI coinCount;
-
+        [SerializeField] private bool blockTouchControls;
+        
         private GameManager _gameManager;
         private PlayerController _playerController;
         private Rect _lastSafeArea;
@@ -129,7 +130,7 @@ namespace Managers
         /// </summary>
         private bool ShouldShowTouchControls()
         {
-            return Application.isMobilePlatform || !ReferenceEquals(Touchscreen.current, null) || (showTouchControlsInEditor && Application.isEditor);
+            return !blockTouchControls && (Application.isMobilePlatform || !ReferenceEquals(Touchscreen.current, null) || (showTouchControlsInEditor && Application.isEditor));
         }
         
         /// <summary>

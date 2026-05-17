@@ -2004,7 +2004,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1040468507
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2065,6 +2065,7 @@ MonoBehaviour:
   hpBar: {fileID: 1560756036}
   hpBarFill: {fileID: 512824892}
   coinCount: {fileID: 605430600}
+  blockTouchControls: 1
 --- !u!4 &1050129549
 Transform:
   m_ObjectHideFlags: 0
