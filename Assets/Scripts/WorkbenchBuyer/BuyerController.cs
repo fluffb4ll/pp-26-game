@@ -57,7 +57,6 @@ namespace WorkbenchBuyer
             
             var prefabYAngle = workbenchPrefab.transform.eulerAngles.y;
             var targetYAngle = _rowCount % 2 == 0 ? prefabYAngle + 180f : prefabYAngle;
-            Debug.Log(targetYAngle);
             
             var pos = transform.position;
             var targetXPos = pos.x + spawnXOffset * 

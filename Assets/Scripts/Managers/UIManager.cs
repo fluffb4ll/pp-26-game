@@ -4,7 +4,6 @@ using Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using YG;
 
 namespace Managers
 {
