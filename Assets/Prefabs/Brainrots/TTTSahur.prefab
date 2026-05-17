@@ -327,6 +327,7 @@ GameObject:
   - component: {fileID: 3937003269084393930}
   - component: {fileID: 4911369354049106058}
   - component: {fileID: 189488160072507813}
+  - component: {fileID: 3978997384424304699}
   - component: {fileID: 2838292028076350621}
   m_Layer: 0
   m_Name: TTTSahur
@@ -369,7 +370,7 @@ MonoBehaviour:
   lifetime: 1
   data: {fileID: 11400000, guid: fcd213ebdecd0f39d822050ae388bae3, type: 2}
   rarity: 0
-  uiComponent: {fileID: 189488160072507813}
+  uiComponent: {fileID: 3978997384424304699}
 --- !u!114 &189488160072507813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -383,10 +384,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Brainrot.BrainrotUI
   infoCanvas: {fileID: 3213854350348663135}
+  uiMovementRadius: 0.2
+  uiMovementSpeed: 10
+--- !u!114 &3978997384424304699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5145043209413951014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62b53bbafe746deb587d75dee0dc611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.InteractableUI
   inputPromptCanvas: {fileID: 3548080816139718237}
-  inputPromptMovementRadius: 0.2
-  inputPromptMovementSpeed: 10
+  uiMovementRadius: 0.2
+  uiMovementSpeed: 10
   collider: {fileID: 2838292028076350621}
+  uiInfoComponent: {fileID: 189488160072507813}
 --- !u!65 &2838292028076350621
 BoxCollider:
   m_ObjectHideFlags: 0

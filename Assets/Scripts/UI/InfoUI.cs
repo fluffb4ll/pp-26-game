@@ -74,5 +74,14 @@ namespace UI
             if (infoCanvas.transform.localPosition == _infoCanvasDefaultPosition)
                 _isInfoCanvasInDefaultPos = true;
         }
+        
+        /// <summary>
+        /// Отключает или включает <c>infoCanvas</c>
+        /// </summary>
+        /// <param name="newState">Новый статус активации: true - включить <c>infoCanvas</c>, false - отключить</param>
+        public void SetInfoCanvasActiveState(bool newState)
+        {
+            infoCanvas.SetActive(newState);
+        }
     }
 }

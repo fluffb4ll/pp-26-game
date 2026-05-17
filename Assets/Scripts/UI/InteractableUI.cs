@@ -10,7 +10,8 @@ namespace UI
         [SerializeField] private GameObject inputPromptCanvas;
         [SerializeField] private float uiMovementRadius;
         [SerializeField] private float uiMovementSpeed = 10f;
-
+        [SerializeField] private new Collider collider;
+        
         [SerializeField] private InfoUI uiInfoComponent; 
             
         private SimpleFollowCamera _camera;
@@ -83,6 +84,24 @@ namespace UI
                 inputPromptCanvasPos, 
                 targetPos, 
                 Time.deltaTime * uiMovementSpeed);
+        }
+
+        public void DisableUIComponents()
+        {
+            inputPromptCanvas.SetActive(false);
+            if (!hasInfoComponent) return;
+            _playerMovement.OnMovement -= uiInfoComponent.MoveCanvas;
+            uiInfoComponent.SetInfoCanvasActiveState(false);
+            collider.enabled = false;
+        }
+
+        public void EnableUIComponents()
+        {
+            inputPromptCanvas.SetActive(true);
+            if (!hasInfoComponent) return;
+            _playerMovement.OnMovement += uiInfoComponent.MoveCanvas;
+            uiInfoComponent.SetInfoCanvasActiveState(false);
+            collider.enabled = true;
         }
     }
 }
