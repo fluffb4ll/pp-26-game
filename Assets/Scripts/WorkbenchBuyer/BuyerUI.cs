@@ -1,19 +1,31 @@
-using Interfaces;
+using Helpers;
+using TMPro;
 using UI;
 using UnityEngine;
 
 namespace WorkbenchBuyer
 {
-    public class BuyerUI : MonoBehaviour, IUIPrompts
+    // TODO: переделать под новую архитектуру
+    public class BuyerUI : InfoUI
     {
-        public void ShowInteractionPrompts()
+        [SerializeField] private BuyerController buyerController;
+        [SerializeField] private TextMeshProUGUI priceTag;
+
+        protected override void OnEnable()
         {
-            throw new System.NotImplementedException();
+            base.OnEnable();
+            buyerController.OnPriceChange += UpdatePriceTag;
         }
 
-        public void HideInteractionPrompts()
+        protected override void OnDisable()
         {
-            throw new System.NotImplementedException();
+            base.OnDisable();
+            buyerController.OnPriceChange -= UpdatePriceTag;
+        }
+
+        private void UpdatePriceTag(long price)
+        {
+            priceTag.text = $"Цена: {ResourceCountHelper.CountShortener(price)}";
         }
     }
 }

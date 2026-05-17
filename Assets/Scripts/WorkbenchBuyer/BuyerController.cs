@@ -1,5 +1,7 @@
+using System;
 using Interfaces;
 using Player;
+using UI;
 using UnityEngine;
 
 namespace WorkbenchBuyer
@@ -13,10 +15,23 @@ namespace WorkbenchBuyer
         
         [SerializeField] private GameObject workbenchPrefab;
 
-        [SerializeField] private BuyerUI uiComponent;
+        [SerializeField] private InteractableUI uiComponent;
+
+        private long _currentPrice;
         
+        private Action<long> _onPriceChange;
 
-
+        private void Start()
+        {
+            
+        }
+        
+        public event Action<long> OnPriceChange
+        {
+            add => _onPriceChange += value;
+            remove => _onPriceChange -= value;
+        }
+        
         public void Interact(PlayerInteraction player)
         {
             throw new System.NotImplementedException();
@@ -24,10 +39,7 @@ namespace WorkbenchBuyer
 
         public IUIPrompts GetUIComponent() => uiComponent;
 
-        public Vector3 GetPosition()
-        {
-            throw new System.NotImplementedException();
-        }
+        public Vector3 GetPosition() => transform.position;
 
         public void Execute(PlayerController playerController)
         {
