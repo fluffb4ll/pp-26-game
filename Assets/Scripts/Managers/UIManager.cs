@@ -148,7 +148,13 @@ namespace Managers
         public void TogglePanel(GameObject panel)
         {
             panel.SetActive(!panel.activeSelf);
-            if (!panel.activeSelf) return;
+            
+            if (!panel.activeSelf)
+            {
+                _activeSubmenu = null;
+                return;
+            }
+            
             _activeSubmenu?.SetActive(false);
             _activeSubmenu = panel;
         }

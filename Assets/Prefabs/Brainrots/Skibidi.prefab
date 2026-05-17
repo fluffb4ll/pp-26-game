@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 5403884914782700836}
   - component: {fileID: 3776383210840929640}
   - component: {fileID: 4864340705536598367}
+  - component: {fileID: -1300334827955011557}
   - component: {fileID: 2326547738872320214}
   m_Layer: 0
   m_Name: Skibidi
@@ -191,7 +192,7 @@ MonoBehaviour:
   lifetime: 1
   data: {fileID: 11400000, guid: 87f63d150f3b6da4494f976b8d4db0ef, type: 2}
   rarity: 0
-  uiComponent: {fileID: 0}
+  uiComponent: {fileID: -1300334827955011557}
 --- !u!114 &4864340705536598367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,8 +206,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Brainrot.BrainrotUI
   infoCanvas: {fileID: 7754198186180847243}
-  uiMovementRadius: 1.5
+  uiMovementRadius: 0.2
   uiMovementSpeed: 10
+--- !u!114 &-1300334827955011557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871746005220737714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62b53bbafe746deb587d75dee0dc611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.InteractableUI
+  inputPromptCanvas: {fileID: 1198316602096256412}
+  uiMovementRadius: 0.2
+  uiMovementSpeed: 10
+  collider: {fileID: 2326547738872320214}
+  uiInfoComponent: {fileID: 4864340705536598367}
 --- !u!65 &2326547738872320214
 BoxCollider:
   m_ObjectHideFlags: 0

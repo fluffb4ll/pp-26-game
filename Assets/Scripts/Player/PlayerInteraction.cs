@@ -88,7 +88,7 @@ namespace Player
         }
         
         /// <summary>
-        /// Прекращает отслеживать объект, с которым можно взаимодействовать, из списка активных
+        /// Прекращает отслеживать объект, с которым можно взаимодействовать
         /// </summary>
         /// <param name="interactable">Объект, реализующий интерфейс <see cref="IInteractable"/></param>
         public void UnregisterInteractable(IInteractable interactable)

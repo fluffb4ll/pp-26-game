@@ -161,6 +161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6152163496187422300}
   - component: {fileID: 5438140941097626503}
+  - component: {fileID: 786386878397489169}
   - component: {fileID: 3276370646756785779}
   - component: {fileID: 4972177228121848551}
   m_Layer: 0
@@ -204,7 +205,24 @@ MonoBehaviour:
   lifetime: 1
   data: {fileID: 11400000, guid: cca3fb91ab8dc1a44a21750b7d0fd17e, type: 2}
   rarity: 0
-  uiComponent: {fileID: 0}
+  uiComponent: {fileID: 786386878397489169}
+--- !u!114 &786386878397489169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337268276677933175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62b53bbafe746deb587d75dee0dc611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.InteractableUI
+  inputPromptCanvas: {fileID: 5671668031278779413}
+  uiMovementRadius: 0.2
+  uiMovementSpeed: 10
+  collider: {fileID: 4972177228121848551}
+  uiInfoComponent: {fileID: 3276370646756785779}
 --- !u!114 &3276370646756785779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Brainrot.BrainrotUI
   infoCanvas: {fileID: 2050507451297000426}
-  uiMovementRadius: 1.5
+  uiMovementRadius: 0.2
   uiMovementSpeed: 10
 --- !u!65 &4972177228121848551
 BoxCollider:
