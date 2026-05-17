@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Helpers;
 using Player;
 using TMPro;
 using UnityEngine;
@@ -177,17 +178,9 @@ namespace Managers
         /// </summary>
         private void UpdateCoinCount()
         {
-            var amount = YG2.saves.coins;
-            
-            var newValue = amount switch
-            {
-                > 1000000000 => (amount / 1000000000.0).ToString("F1") + "B",
-                > 1000000 => (amount / 1000000.0).ToString("F1") + "M",
-                > 10000 => (amount / 1000.0).ToString("F1") + "K",
-                _ => amount.ToString()
-            };
-
-            coinCount.text = newValue;
+            var amount = _gameManager.GetCoinsAmount();
+            var data = ResourceCountHelper.CountShortener(amount);
+            coinCount.SetText(data.formatTemplate, data.value);
         }
     }
 }

@@ -1,4 +1,5 @@
-using Camera;
+using System;
+using Helpers;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace Workbench
         protected override void Start()
         {
             base.Start();
-            UpdateProduceCounter();
+            UpdateProduceCounter(workbenchController.storedProduce);
         }
 
         protected override void OnEnable()
@@ -34,19 +35,10 @@ namespace Workbench
         /// <summary>
         /// Обновляет счётчик хранимого в станке ресурса 
         /// </summary>
-        private void UpdateProduceCounter()
+        private void UpdateProduceCounter(float amount)
         {
-            var amount = Mathf.RoundToInt(workbenchController.storedProduce);
-            
-            var newValue = amount switch
-            {
-                > 1000000000 => (amount / 1000000000.0).ToString("F1") + "B",
-                > 1000000 => (amount / 1000000.0).ToString("F1") + "M",
-                > 10000 => (amount / 1000.0).ToString("F1") + "K",
-                _ => amount.ToString()
-            };
-
-            produceCounter.text = newValue;
+            var data = ResourceCountHelper.CountShortener((long) Math.Round(amount));
+            produceCounter.SetText(data.formatTemplate, data.value);
         }
     }
 }

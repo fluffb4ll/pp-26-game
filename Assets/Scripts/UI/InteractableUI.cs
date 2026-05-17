@@ -86,6 +86,9 @@ namespace UI
                 Time.deltaTime * uiMovementSpeed);
         }
 
+        /// <summary>
+        /// Выключает компоненты, связанные с UI
+        /// </summary>
         public void DisableUIComponents()
         {
             inputPromptCanvas.SetActive(false);
@@ -95,6 +98,9 @@ namespace UI
             collider.enabled = false;
         }
 
+        /// <summary>
+        /// Включает компоненты, связанные с UI
+        /// </summary>
         public void EnableUIComponents()
         {
             inputPromptCanvas.SetActive(true);
