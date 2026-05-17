@@ -80,5 +80,10 @@ namespace UI
         {
             infoCanvas.SetActive(newState);
         }
+        
+        /// <summary>
+        /// Присваивает <c>_isInfoCanvasInDefaultPos</c> значение false
+        /// </summary>
+        public void SetIsInDefaultSpot() => _isInfoCanvasInDefaultPos = false;
     }
 }

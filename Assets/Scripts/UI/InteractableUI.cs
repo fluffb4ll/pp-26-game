@@ -54,8 +54,10 @@ namespace UI
         {
             _playerMovement.OnMovement -= MoveInputPrompt;
             inputPromptCanvas.SetActive(false);
-            if (hasInfoComponent)
-                _playerMovement.OnMovement -= uiInfoComponent.MoveCanvas;
+            if (!hasInfoComponent) return;
+            _playerMovement.OnMovement -= uiInfoComponent.MoveCanvas;
+            uiInfoComponent.SetIsInDefaultSpot();
+            uiInfoComponent.ReturnInfoCanvasToDefaultPos();
         }
         
         /// <summary>
