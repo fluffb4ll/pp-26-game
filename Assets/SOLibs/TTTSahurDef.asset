@@ -19,11 +19,11 @@ MonoBehaviour:
   - rarity: 4
     lifetimeMult: 5
     produceMult: 5
-    dropWeight: 10
+    dropWeight: 2
   - rarity: 3
     lifetimeMult: 2
     produceMult: 2
-    dropWeight: 30
+    dropWeight: 38
   - rarity: 2
     lifetimeMult: 1
     produceMult: 1
