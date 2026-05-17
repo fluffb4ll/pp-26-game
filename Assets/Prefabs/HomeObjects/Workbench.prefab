@@ -476,6 +476,7 @@ MonoBehaviour:
   inputPromptCanvas: {fileID: 6653435520821900828}
   uiMovementRadius: 1.5
   uiMovementSpeed: 10
+  collider: {fileID: 0}
   uiInfoComponent: {fileID: 8995847679850945987}
 --- !u!65 &3355497506506779236
 BoxCollider:
@@ -566,8 +567,8 @@ MonoBehaviour:
   m_text: "\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C 
     E"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0342e7ef920109a47b8c7d08f754f039, type: 2}
+  m_sharedMaterial: {fileID: 5703018553763994415, guid: 0342e7ef920109a47b8c7d08f754f039, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -703,8 +704,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 999,9k
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0342e7ef920109a47b8c7d08f754f039, type: 2}
+  m_sharedMaterial: {fileID: 5703018553763994415, guid: 0342e7ef920109a47b8c7d08f754f039, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

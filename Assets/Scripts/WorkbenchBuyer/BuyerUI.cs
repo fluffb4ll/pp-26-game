@@ -5,12 +5,17 @@ using UnityEngine;
 
 namespace WorkbenchBuyer
 {
-    // TODO: переделать под новую архитектуру
     public class BuyerUI : InfoUI
     {
         [SerializeField] private BuyerController buyerController;
         [SerializeField] private TextMeshProUGUI priceTag;
 
+        protected override void Start()
+        {
+            base.Start();
+            UpdatePriceTag(buyerController.GetCurrentPrice());
+        }
+        
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -25,7 +30,8 @@ namespace WorkbenchBuyer
 
         private void UpdatePriceTag(long price)
         {
-            priceTag.text = $"Цена: {ResourceCountHelper.CountShortener(price)}";
+            var data = ResourceCountHelper.CountShortener(price, "Цена: ");
+            priceTag.SetText(data.formatTemplate, data.value);
         }
     }
 }

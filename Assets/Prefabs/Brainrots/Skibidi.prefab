@@ -68,8 +68,8 @@ MonoBehaviour:
   m_text: "\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C 
     E"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0342e7ef920109a47b8c7d08f754f039, type: 2}
+  m_sharedMaterial: {fileID: 5703018553763994415, guid: 0342e7ef920109a47b8c7d08f754f039, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -191,7 +191,7 @@ MonoBehaviour:
   lifetime: 1
   data: {fileID: 11400000, guid: 87f63d150f3b6da4494f976b8d4db0ef, type: 2}
   rarity: 0
-  uiComponent: {fileID: 4864340705536598367}
+  uiComponent: {fileID: 0}
 --- !u!114 &4864340705536598367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,10 +205,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Brainrot.BrainrotUI
   infoCanvas: {fileID: 7754198186180847243}
-  inputPromptCanvas: {fileID: 1198316602096256412}
-  inputPromptMovementRadius: 0.2
-  inputPromptMovementSpeed: 10
-  collider: {fileID: 2326547738872320214}
+  uiMovementRadius: 1.5
+  uiMovementSpeed: 10
 --- !u!65 &2326547738872320214
 BoxCollider:
   m_ObjectHideFlags: 0

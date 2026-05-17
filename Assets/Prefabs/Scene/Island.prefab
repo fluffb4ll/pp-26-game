@@ -117,8 +117,8 @@ GameObject:
   m_Component:
   - component: {fileID: 401348067068622237}
   - component: {fileID: 9016604638013358573}
-  - component: {fileID: 178174752662496119}
   - component: {fileID: 3378291381097759812}
+  - component: {fileID: 8468163415335627954}
   m_Layer: 0
   m_Name: Boat
   m_TagString: Untagged
@@ -162,22 +162,7 @@ MonoBehaviour:
   - {fileID: 1988958061462223892}
   - {fileID: 1796181333138367538}
   isAtHome: 1
-  uiComponent: {fileID: 178174752662496119}
---- !u!114 &178174752662496119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4406047169024619442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81f83f3d8beea084f9f18d8fbec98f12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BoatUI
-  inputPromptCanvas: {fileID: 7113422224094239634}
-  uiMovementRadius: 2
-  uiMovementSpeed: 10
+  uiComponent: {fileID: 8468163415335627954}
 --- !u!65 &3378291381097759812
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -199,6 +184,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7, y: 2, z: 4}
   m_Center: {x: -0.2, y: 0.4179378, z: 0}
+--- !u!114 &8468163415335627954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4406047169024619442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62b53bbafe746deb587d75dee0dc611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.InteractableUI
+  inputPromptCanvas: {fileID: 7113422224094239634}
+  uiMovementRadius: 2
+  uiMovementSpeed: 10
+  collider: {fileID: 3378291381097759812}
+  uiInfoComponent: {fileID: 0}
 --- !u!1 &4569362722813796656
 GameObject:
   m_ObjectHideFlags: 0
