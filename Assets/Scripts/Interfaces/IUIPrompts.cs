@@ -11,5 +11,9 @@
         /// Отключает промпты взаимодействия, связанные с объектом
         /// </summary>
         void HideInteractionPrompts();
+        
+        void EnableUIComponents();
+        
+        void DisableUIComponents();
     }
 }

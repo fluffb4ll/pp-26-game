@@ -146,9 +146,10 @@ namespace Player
         /// </summary>
         private void ClearInteractables()
         {
-            var tInteractables = _activeInteractables;
-            foreach (var interactable in tInteractables)
-                UnregisterInteractable(interactable);
+            foreach (var interactable in _activeInteractables)
+                interactable.GetUIComponent().HideInteractionPrompts();
+            _activeInteractables.Clear();
+            _currentInteractable = null;
         }
     }
 }

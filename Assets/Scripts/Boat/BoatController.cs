@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using Player;
+using UI;
 using UnityEngine;
 
 namespace Boat
@@ -12,7 +13,7 @@ namespace Boat
         [SerializeField] private List<Transform> playerPositions;
         [SerializeField] private bool isAtHome = true;
         
-        [SerializeField] private BoatUI uiComponent;
+        [SerializeField] private InteractableUI uiComponent;
         
         private GameManager _gameManager;
         private PlayerController _playerController;

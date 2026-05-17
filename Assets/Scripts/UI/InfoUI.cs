@@ -75,10 +75,7 @@ namespace UI
                 _isInfoCanvasInDefaultPos = true;
         }
         
-        /// <summary>
-        /// Отключает или включает <c>infoCanvas</c>
-        /// </summary>
-        /// <param name="newState">Новый статус активации: true - включить <c>infoCanvas</c>, false - отключить</param>
+        /// <inheritdoc/>
         public void SetInfoCanvasActiveState(bool newState)
         {
             infoCanvas.SetActive(newState);

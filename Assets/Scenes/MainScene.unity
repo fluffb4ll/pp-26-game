@@ -1302,6 +1302,33 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 22}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &450055669 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4406047169024619442, guid: 05e05e6a885d8b54e94c4b26157f8f22, type: 3}
+  m_PrefabInstance: {fileID: 703628501785879942}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &450055671 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 3378291381097759812, guid: 05e05e6a885d8b54e94c4b26157f8f22, type: 3}
+  m_PrefabInstance: {fileID: 703628501785879942}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &450055674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450055669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62b53bbafe746deb587d75dee0dc611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.InteractableUI
+  inputPromptCanvas: {fileID: 1544517167}
+  uiMovementRadius: 2
+  uiMovementSpeed: 10
+  collider: {fileID: 450055671}
+  uiInfoComponent: {fileID: 0}
 --- !u!1 &457872375
 GameObject:
   m_ObjectHideFlags: 0
@@ -1807,6 +1834,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3213854350348663135, guid: 923210b3946029de6a59bf0acf05ffdb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3937003269084393930, guid: 923210b3946029de6a59bf0acf05ffdb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.32
@@ -3565,6 +3596,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1510882689}
   m_CullTransparentMesh: 1
+--- !u!1 &1544517167 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7113422224094239634, guid: 05e05e6a885d8b54e94c4b26157f8f22, type: 3}
+  m_PrefabInstance: {fileID: 703628501785879942}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1560756036
 GameObject:
   m_ObjectHideFlags: 0
@@ -4916,10 +4952,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 9016604638013358573, guid: 05e05e6a885d8b54e94c4b26157f8f22, type: 3}
+      propertyPath: uiComponent
+      value: 
+      objectReference: {fileID: 450055674}
+    m_RemovedComponents:
+    - {fileID: 178174752662496119, guid: 05e05e6a885d8b54e94c4b26157f8f22, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4406047169024619442, guid: 05e05e6a885d8b54e94c4b26157f8f22, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 450055674}
   m_SourcePrefab: {fileID: 100100000, guid: 05e05e6a885d8b54e94c4b26157f8f22, type: 3}
 --- !u!4 &1197920724565565311 stripped
 Transform:
