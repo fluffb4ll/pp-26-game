@@ -1,4 +1,5 @@
 using Player;
+using UI;
 using UnityEngine;
 
 namespace Interfaces

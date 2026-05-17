@@ -3,6 +3,7 @@ using Brainrot;
 using Interfaces;
 using Managers;
 using Player;
+using UI;
 using UnityEngine;
 
 namespace Workbench
@@ -22,9 +23,9 @@ namespace Workbench
         private const float FloatDiff = 0.0001f;
         private GameManager _gameManager;
 
-        private Action _onProduceUpdate;
+        private Action<float> _onProduceUpdate;
         
-        [SerializeField] private WorkbenchUI uiComponent;
+        [SerializeField] private InteractableUI uiComponent;
         
         private void Awake()
         {
@@ -36,7 +37,7 @@ namespace Workbench
             CalculateProduce();
         }
         
-        public event Action OnProduceUpdate
+        public event Action<float> OnProduceUpdate
         {
             add => _onProduceUpdate += value;
             remove => _onProduceUpdate -= value;
@@ -54,7 +55,7 @@ namespace Workbench
             
             if (storedProduce > produceStoreCap)
                 storedProduce = produceStoreCap;
-            _onProduceUpdate?.Invoke();
+            _onProduceUpdate?.Invoke(storedProduce);
             
             insertedBrainrot.lifetime -= Time.deltaTime;
             
@@ -75,7 +76,7 @@ namespace Workbench
                 InsertBrainrot(player);
             else
             {
-                _gameManager.ChangeCoinsAmount(Mathf.RoundToInt(storedProduce));
+                _gameManager.ChangeCoinsAmount((long) Math.Round(storedProduce));
                 storedProduce = 0;
             }
         }

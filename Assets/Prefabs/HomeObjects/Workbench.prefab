@@ -398,6 +398,7 @@ GameObject:
   - component: {fileID: 7160017842877831840}
   - component: {fileID: 8080194416658569817}
   - component: {fileID: 8995847679850945987}
+  - component: {fileID: 8722800395911548911}
   - component: {fileID: 3355497506506779236}
   m_Layer: 0
   m_Name: Workbench
@@ -442,7 +443,7 @@ MonoBehaviour:
   storedProduce: 0
   brainrotInsertionPos: {fileID: 6789452820099553642}
   insertedBrainrot: {fileID: 0}
-  uiComponent: {fileID: 8995847679850945987}
+  uiComponent: {fileID: 8722800395911548911}
 --- !u!114 &8995847679850945987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,12 +456,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed0522e177a77584e81bfb6d1f368205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorkbenchUI
-  workbenchController: {fileID: 8080194416658569817}
   infoCanvas: {fileID: 4761144322728007185}
-  inputPromptCanvas: {fileID: 6653435520821900828}
-  produceCounter: {fileID: 7098507183196154100}
   uiMovementRadius: 1.5
   uiMovementSpeed: 10
+  workbenchController: {fileID: 8080194416658569817}
+  produceCounter: {fileID: 7098507183196154100}
+--- !u!114 &8722800395911548911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7500374534252478490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62b53bbafe746deb587d75dee0dc611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.InteractableUI
+  inputPromptCanvas: {fileID: 6653435520821900828}
+  uiMovementRadius: 1.5
+  uiMovementSpeed: 10
+  collider: {fileID: 0}
+  uiInfoComponent: {fileID: 8995847679850945987}
 --- !u!65 &3355497506506779236
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -550,8 +567,8 @@ MonoBehaviour:
   m_text: "\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C 
     E"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0342e7ef920109a47b8c7d08f754f039, type: 2}
+  m_sharedMaterial: {fileID: 5703018553763994415, guid: 0342e7ef920109a47b8c7d08f754f039, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -687,8 +704,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 999,9k
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0342e7ef920109a47b8c7d08f754f039, type: 2}
+  m_sharedMaterial: {fileID: 5703018553763994415, guid: 0342e7ef920109a47b8c7d08f754f039, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -1,5 +1,6 @@
 using Interfaces;
 using Player;
+using UI;
 using UnityEngine;
 
 namespace Brainrot
@@ -14,7 +15,7 @@ namespace Brainrot
         [SerializeField] private BrainrotLib data;
         public Rarity rarity;
         
-        [SerializeField] private BrainrotUI uiComponent;
+        [SerializeField] private InteractableUI uiComponent;
     
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -52,7 +53,7 @@ namespace Brainrot
             transform.localPosition = Vector3.zero;
             
             player.UnregisterInteractable(this);
-            uiComponent.DisableUiComponents();
+            uiComponent.DisableUIComponents();
         }
         
         /// <inheritdoc/>

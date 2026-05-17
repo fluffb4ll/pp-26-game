@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: SigmaDef
   m_EditorClassIdentifier: Assembly-CSharp::Brainrot.BrainrotLib
   type: 1
-  baseProduce: 1
-  baseLifetime: 10
+  baseProduce: 10
+  baseLifetime: 20
   rarityPool:
   - rarity: 0
     lifetimeMult: 0.75

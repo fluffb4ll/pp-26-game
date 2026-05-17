@@ -88,12 +88,12 @@ namespace Player
         }
         
         /// <summary>
-        /// Прекращает отслеживать объект, с которым можно взаимодействовать, из списка активных
+        /// Прекращает отслеживать объект, с которым можно взаимодействовать
         /// </summary>
         /// <param name="interactable">Объект, реализующий интерфейс <see cref="IInteractable"/></param>
         public void UnregisterInteractable(IInteractable interactable)
         {
-            interactable.GetUIComponent().HidePrompts();
+            interactable.GetUIComponent().HideInteractionPrompts();
             _activeInteractables.Remove(interactable);
             if (_currentInteractable == interactable)
                 _currentInteractable = null;
@@ -127,9 +127,9 @@ namespace Player
 
             if (_currentInteractable != closestTarget)
             {
-                _currentInteractable?.GetUIComponent().HidePrompts();
+                _currentInteractable?.GetUIComponent().HideInteractionPrompts();
                 _currentInteractable = closestTarget;
-                _currentInteractable?.GetUIComponent().ShowPrompts();
+                _currentInteractable?.GetUIComponent().ShowInteractionPrompts();
             }
 
             _hasUpdatedInteractables = false;
@@ -146,9 +146,10 @@ namespace Player
         /// </summary>
         private void ClearInteractables()
         {
-            var tInteractables = _activeInteractables;
-            foreach (var interactable in tInteractables)
-                UnregisterInteractable(interactable);
+            foreach (var interactable in _activeInteractables)
+                interactable.GetUIComponent().HideInteractionPrompts();
+            _activeInteractables.Clear();
+            _currentInteractable = null;
         }
     }
 }
