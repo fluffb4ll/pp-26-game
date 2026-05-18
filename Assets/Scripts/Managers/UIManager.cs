@@ -1,9 +1,9 @@
 using System.Collections.Generic;
+using Helpers;
 using Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using YG;
 
 namespace Managers
 {
@@ -22,7 +22,8 @@ namespace Managers
         [SerializeField] private GameObject hpBar;
         [SerializeField] private RectTransform hpBarFill;
         [SerializeField] private TextMeshProUGUI coinCount;
-
+        [SerializeField] private bool blockTouchControls;
+        
         private GameManager _gameManager;
         private PlayerController _playerController;
         private Rect _lastSafeArea;
@@ -129,7 +130,7 @@ namespace Managers
         /// </summary>
         private bool ShouldShowTouchControls()
         {
-            return Application.isMobilePlatform || !ReferenceEquals(Touchscreen.current, null) || (showTouchControlsInEditor && Application.isEditor);
+            return !blockTouchControls && (Application.isMobilePlatform || !ReferenceEquals(Touchscreen.current, null) || (showTouchControlsInEditor && Application.isEditor));
         }
         
         /// <summary>
@@ -148,7 +149,13 @@ namespace Managers
         public void TogglePanel(GameObject panel)
         {
             panel.SetActive(!panel.activeSelf);
-            if (!panel.activeSelf) return;
+            
+            if (!panel.activeSelf)
+            {
+                _activeSubmenu = null;
+                return;
+            }
+            
             _activeSubmenu?.SetActive(false);
             _activeSubmenu = panel;
         }
@@ -177,17 +184,9 @@ namespace Managers
         /// </summary>
         private void UpdateCoinCount()
         {
-            var amount = YG2.saves.coins;
-            
-            var newValue = amount switch
-            {
-                > 1000000000 => (amount / 1000000000.0).ToString("F1") + "B",
-                > 1000000 => (amount / 1000000.0).ToString("F1") + "M",
-                > 10000 => (amount / 1000.0).ToString("F1") + "K",
-                _ => amount.ToString()
-            };
-
-            coinCount.text = newValue;
+            var amount = _gameManager.GetCoinsAmount();
+            var data = ResourceCountHelper.CountShortener(amount);
+            coinCount.SetText(data.formatTemplate, data.value);
         }
     }
 }

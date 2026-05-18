@@ -103,4 +103,5 @@ InitTestScene*.unity*
 .idea
 /[Aa]ssets/_[Rr]ecovery/
 /[Aa]ssets/_[Rr]ecovery.meta
-/[Aa]ssets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset
+/[Aa]ssets/TextMesh Pro/Resources/Fonts & Materials/*Fallback.asset
+/[Aa]ssets/TextMesh Pro/Resources/Fonts & Materials/*Fallback.asset.meta

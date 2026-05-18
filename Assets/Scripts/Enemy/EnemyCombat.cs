@@ -150,6 +150,11 @@ namespace Enemy
                 _deathTargetRotation,
                 Time.deltaTime * deathAnimationSpeed);
 
+            _transform.position = Vector3.Lerp(
+                _transform.position,
+                new Vector3(_transform.position.x, -10f, _transform.position.z),
+                Time.deltaTime * deathAnimationSpeed);
+
             return Quaternion.Angle(_transform.rotation, _deathTargetRotation) <= 0.1f;
         }
 

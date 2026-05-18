@@ -83,6 +83,14 @@ namespace Managers
         }
         
         /// <summary>
+        /// Возвращает количество монет у игрока
+        /// </summary>
+        public long GetCoinsAmount()
+        {
+            return YG2.saves.coins;
+        }
+        
+        /// <summary>
         /// Изменяет число монет у игрока.
         /// Обновлять число монет стоит ТОЛЬКО через этот метод.
         /// </summary>
