@@ -73,12 +73,14 @@ namespace Workbench
         public void Interact(PlayerInteraction player)
         {
             if (player.heldBrainrot is not null && insertedBrainrot is null)
-                InsertBrainrot(player);
-            else
             {
-                _gameManager.ChangeCoinsAmount((long) Math.Round(storedProduce));
-                storedProduce = 0;
+                InsertBrainrot(player);
+                return;
             }
+            
+            _gameManager.ChangeCoinsAmount((long) Math.Round(storedProduce));
+            storedProduce = 0;
+            _onProduceUpdate?.Invoke(storedProduce);
         }
 
         /// <summary>
