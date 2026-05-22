@@ -4,11 +4,12 @@ using Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Managers
 {
     /// <summary>
-    /// Управление UI
+    /// Управляет UI
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class UIManager : MonoBehaviour
@@ -23,6 +24,7 @@ namespace Managers
         [SerializeField] private RectTransform hpBarFill;
         [SerializeField] private TextMeshProUGUI coinCount;
         [SerializeField] private bool blockTouchControls;
+        [SerializeField] private GameObject interactButton;
         
         private GameManager _gameManager;
         private PlayerController _playerController;
@@ -56,6 +58,7 @@ namespace Managers
             _hpBarFillMaxWidth = hpBarFill.rect.width;
             SetSubmenusDefaultState();
             UpdateCoinCount();
+            ToggleInteractButton(false);
         }
 
         private void OnEnable()
@@ -187,6 +190,15 @@ namespace Managers
             var amount = _gameManager.GetCoinsAmount();
             var data = ResourceCountHelper.CountShortener(amount);
             coinCount.SetText(data.formatTemplate, data.value);
+        }
+
+        /// <summary>
+        /// Изменяет 
+        /// </summary>
+        /// <param name="state"></param>
+        public void ToggleInteractButton(bool state)
+        {
+            interactButton.SetActive(state);
         }
     }
 }

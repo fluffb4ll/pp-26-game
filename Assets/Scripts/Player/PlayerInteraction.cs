@@ -26,11 +26,13 @@ namespace Player
         private PlayerMovement _playerMovement;
         private PlayerController _playerController;
         private GameManager _gameManager;
+        private UIManager _uiManager;
 
         private void Awake()
         {
             _playerMovement = PlayerMovement.Instance;
             _gameManager = GameManager.Instance;
+            _uiManager = UIManager.Instance;
             _playerController = _gameManager.playerController;
         }
         
@@ -106,10 +108,15 @@ namespace Player
         /// </summary>
         private void CalculateInteractableScore()
         {
-            if (_activeInteractables.Count <= 0 
-                || !_hasUpdatedInteractables 
+            if (!_hasUpdatedInteractables 
                 || _gameManager.currentState == GameState.GameOver) 
                 return;
+
+            if (_activeInteractables.Count == 0)
+            {
+                _uiManager.ToggleInteractButton(false);
+                return;
+            }
             
             IInteractable closestTarget = null;
             var maxPriority = -1f;
@@ -131,8 +138,10 @@ namespace Player
                 _currentInteractable = closestTarget;
                 _currentInteractable?.GetUIComponent().ShowInteractionPrompts();
             }
-
+            
             _hasUpdatedInteractables = false;
+            
+            _uiManager.ToggleInteractButton(_currentInteractable is not null);
         }
         
         /// <summary>
@@ -150,6 +159,7 @@ namespace Player
                 interactable.GetUIComponent().HideInteractionPrompts();
             _activeInteractables.Clear();
             _currentInteractable = null;
+            _uiManager.ToggleInteractButton(false);
         }
     }
 }
