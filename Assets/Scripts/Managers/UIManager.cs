@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using Helpers;
 using Player;
 using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace Managers
 {
@@ -30,15 +30,15 @@ namespace Managers
         [SerializeField] private GameObject notificationContent;
         [SerializeField] private int notificationLimit;
         [SerializeField] private int notificationLifetime;
-        
+
         private GameManager _gameManager;
         private PlayerController _playerController;
         private Rect _lastSafeArea;
         private Vector2Int _lastScreenSize;
         private float _hpBarFillMaxWidth;
         private GameObject _activeSubmenu;
-        
-        private List<GameObject> _spawnedNotifications;
+
+        private Queue<ActiveNotification> _spawnedNotifications = new();
 
         /// <summary>
         /// регистрируем менеджер и сразу раскладываем ui
@@ -52,13 +52,13 @@ namespace Managers
             }
 
             Instance = this;
-            
+
             _gameManager = GameManager.Instance;
             _playerController = PlayerController.Instance;
-            
+
             RefreshLayout(true);
         }
-        
+
 
         private void Start()
         {
@@ -101,6 +101,7 @@ namespace Managers
         private void Update()
         {
             RefreshLayout(false);
+            HandleNotificationLifeTime();
         }
 
         /// <summary>
@@ -140,9 +141,11 @@ namespace Managers
         /// </summary>
         private bool ShouldShowTouchControls()
         {
-            return !blockTouchControls && (Application.isMobilePlatform || !ReferenceEquals(Touchscreen.current, null) || (showTouchControlsInEditor && Application.isEditor));
+            return !blockTouchControls && (Application.isMobilePlatform ||
+                                           !ReferenceEquals(Touchscreen.current, null) ||
+                                           (showTouchControlsInEditor && Application.isEditor));
         }
-        
+
         /// <summary>
         /// Отключает видимость всех подменю
         /// </summary>
@@ -159,17 +162,17 @@ namespace Managers
         public void TogglePanel(GameObject panel)
         {
             panel.SetActive(!panel.activeSelf);
-            
+
             if (!panel.activeSelf)
             {
                 _activeSubmenu = null;
                 return;
             }
-            
+
             _activeSubmenu?.SetActive(false);
             _activeSubmenu = panel;
         }
-        
+
         /// <summary>
         /// Показывает или скрывает хп при входе или выходе из боя соответственно
         /// </summary>
@@ -179,7 +182,7 @@ namespace Managers
             if (gameState == GameState.Combat)
                 hpBar.SetActive(!hpBar.activeSelf);
         }
-        
+
         /// <summary>
         /// Обновляет отображаемое хп в зависимости от нового значения здоровья игрока
         /// </summary>
@@ -188,7 +191,7 @@ namespace Managers
         {
             hpBarFill.offsetMax -= new Vector2(_hpBarFillMaxWidth * (1.0f - hpPercent) + hpBarFill.sizeDelta.x, 0);
         }
-        
+
         /// <summary>
         /// Обновляет отображаемое число монет, имеющихся у игрока
         /// </summary>
@@ -200,12 +203,54 @@ namespace Managers
         }
 
         /// <summary>
-        /// Изменяет 
+        /// Изменяет статус активности кнопки взаимодействия 
         /// </summary>
-        /// <param name="state"></param>
+        /// <param name="state">Новый статус активности</param>
         public void ToggleInteractButton(bool state)
         {
             interactButton.SetActive(state);
+        }
+
+        /// <summary>
+        /// Создаёт новые уведомления с заданными текстом и спрайтом иконки 
+        /// </summary>
+        /// <param name="message">Текст уведомления</param>
+        /// <param name="icon">Спрайт иконки уведомления</param>
+        public void CreateNotification(string message, Sprite icon = null)
+        {
+            var notification = Instantiate(notificationPrefab, notificationContent.transform);
+            var activeNotification = notification.GetComponent<ActiveNotification>();
+            
+            activeNotification.SetMessage(message);
+            activeNotification.SetLifeTime(notificationLifetime);
+            if (icon is not null)
+                activeNotification.SetIcon(icon);
+
+            if (_spawnedNotifications.Count > notificationLimit)
+                Destroy(_spawnedNotifications.Dequeue().GetNotification());
+            
+            _spawnedNotifications.Enqueue(activeNotification);
+        }
+
+        /// <summary>
+        /// Обрабатывает уменьшение времени жизни уведомлений
+        /// </summary>
+        private void HandleNotificationLifeTime()
+        {
+            if (_spawnedNotifications.Count == 0)
+                return;
+            
+            var deletionCount = 0;
+            foreach (var notification in _spawnedNotifications)
+            {
+                var remainingLifeTime = notification.DecreaseLifetime(Time.deltaTime);
+                
+                if (remainingLifeTime <= 0)
+                    deletionCount++;
+            }
+
+            for (; deletionCount > 0; deletionCount--)
+                Destroy(_spawnedNotifications.Dequeue().GetNotification());
         }
     }
 }

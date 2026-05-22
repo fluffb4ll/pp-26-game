@@ -223,6 +223,7 @@ GameObject:
   - component: {fileID: 750229500070637625}
   - component: {fileID: 2165914164850601859}
   - component: {fileID: 6417587889147908686}
+  - component: {fileID: 7140056465046062432}
   m_Layer: 5
   m_Name: Notification
   m_TagString: Untagged
@@ -289,3 +290,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7140056465046062432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3483993981286886069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac8b552af4d9f3d4897a05acf807ee4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.ActiveNotification
+  notification: {fileID: 3483993981286886069}
+  icon: {fileID: 1198579996697315420}
+  message: {fileID: 3087465349886567712}
+  lifeTimeLeft: 5

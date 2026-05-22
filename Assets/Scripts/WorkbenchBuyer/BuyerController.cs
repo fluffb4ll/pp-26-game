@@ -25,11 +25,13 @@ namespace WorkbenchBuyer
         private int _rowCount = 1;
         
         private GameManager _gameManager;
+        private UIManager _uiManager;
         
         private Action<long> _onPriceChange;
 
         private void Start()
         {
+            _uiManager = UIManager.Instance;
             _gameManager = GameManager.Instance;
             _currentPrice = initialPrice;
         }
@@ -42,15 +44,19 @@ namespace WorkbenchBuyer
 
         private void HandleWorkbenchBuying()
         {
-            // TODO: добавить уведомления
             if (_currentWorkbenchCount == workbenchLimit)
-                throw new Exception("Workbench limit reached");
+            {
+                _uiManager.CreateNotification("Достигнут лимит станков!");
+                return;
+            }
             
             var coins = _gameManager.GetCoinsAmount();
 
-            // TODO: добавить уведомления
             if (coins < _currentPrice)
-                throw new Exception("Not enough coins");
+            {
+                _uiManager.CreateNotification("Недостаточно слоп-коинов!");
+                return;
+            }
             
             if (_currentWorkbenchCount != 0 && _currentWorkbenchCount % (workbenchLimit / 2) == 0)
                 _rowCount++;

@@ -97,6 +97,9 @@ namespace Managers
         /// <param name="delta">Изменение количества монет</param>
         public void ChangeCoinsAmount(long delta)
         {
+            if (YG2.saves.coins + delta < 0)
+                return;
+            
             YG2.saves.coins += delta;
             _onCoinsChanged?.Invoke();
         }
