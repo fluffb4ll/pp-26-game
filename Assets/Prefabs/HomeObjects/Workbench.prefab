@@ -439,7 +439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Workbench
   baseProduce: 1
-  produceStoreCap: 200
+  produceStoreCap: 5000
   storedProduce: 0
   brainrotInsertionPos: {fileID: 6789452820099553642}
   insertedBrainrot: {fileID: 0}
