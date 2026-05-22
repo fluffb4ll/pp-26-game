@@ -25,6 +25,11 @@ namespace Managers
         [SerializeField] private TextMeshProUGUI coinCount;
         [SerializeField] private bool blockTouchControls;
         [SerializeField] private GameObject interactButton;
+
+        [SerializeField] private GameObject notificationPrefab;
+        [SerializeField] private GameObject notificationContent;
+        [SerializeField] private int notificationLimit;
+        [SerializeField] private int notificationLifetime;
         
         private GameManager _gameManager;
         private PlayerController _playerController;
@@ -32,6 +37,8 @@ namespace Managers
         private Vector2Int _lastScreenSize;
         private float _hpBarFillMaxWidth;
         private GameObject _activeSubmenu;
+        
+        private List<GameObject> _spawnedNotifications;
 
         /// <summary>
         /// регистрируем менеджер и сразу раскладываем ui
