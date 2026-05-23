@@ -60,6 +60,10 @@ namespace Player
         private const string WalkingTransitionFlag = "isMoving";
         private const string WalkingSpeedParameter = "walkingSpeed";
         
+        private static readonly int HasDied = Animator.StringToHash(DeathTransitionFlag);
+        private static readonly int IsMoving = Animator.StringToHash(WalkingTransitionFlag);
+        private static readonly int WalkingSpeed = Animator.StringToHash(WalkingSpeedParameter);
+        
         private void Awake()
         {
             if (!ReferenceEquals(Instance, null) && !ReferenceEquals(Instance, this))
@@ -224,9 +228,9 @@ namespace Player
         /// </summary>
         private void UpdateAnimFlags()
         {
-            playerModelAnimator.SetBool(DeathTransitionFlag, _isDying);
-            playerModelAnimator.SetBool(WalkingTransitionFlag, !_isDying && playerMovement.isMoving);
-            playerModelAnimator.SetFloat(WalkingSpeedParameter, playerMovement.walkingSpeed);
+            playerModelAnimator.SetBool(HasDied, _isDying);
+            playerModelAnimator.SetBool(IsMoving, !_isDying && playerMovement.isMoving);
+            playerModelAnimator.SetFloat(WalkingSpeed, playerMovement.walkingSpeed);
         }
 
         private void HandleRespawnAfterDeath()

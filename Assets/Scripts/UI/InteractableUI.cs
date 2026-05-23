@@ -50,10 +50,7 @@ namespace UI
             _playerMovement.OnMovement += MoveInputPrompt;
             inputPromptCanvas.SetActive(true);
             
-            if (!_hasInfoComponent) return;
-            _playerMovement.OnMovement += uiInfoComponent.MoveCanvas;
-            if (hideInfoUIOnColliderExit)
-                uiInfoComponent.SetInfoCanvasActiveState(true);
+            uiInfoComponent?.ShowInfoCanvas(_playerMovement, hideInfoUIOnColliderExit);
         }
         
         /// <inheritdoc/>
@@ -62,12 +59,7 @@ namespace UI
             _playerMovement.OnMovement -= MoveInputPrompt;
             inputPromptCanvas.SetActive(false);
             
-            if (!_hasInfoComponent) return;
-            _playerMovement.OnMovement -= uiInfoComponent.MoveCanvas;
-            uiInfoComponent.SetIsInDefaultSpot();
-            uiInfoComponent.ReturnInfoCanvasToDefaultPos();
-            if (!hideInfoUIOnColliderExit) return;
-            uiInfoComponent.SetInfoCanvasActiveState(false);
+            uiInfoComponent?.HideInfoCanvas(_playerMovement, hideInfoUIOnColliderExit);
         }
         
         /// <summary>
@@ -103,11 +95,9 @@ namespace UI
         /// </summary>
         public void DisableUIComponents()
         {
-            inputPromptCanvas.SetActive(false);
-            if (!_hasInfoComponent) return;
-            _playerMovement.OnMovement -= uiInfoComponent.MoveCanvas;
-            uiInfoComponent.SetInfoCanvasActiveState(false);
             collider.enabled = false;
+            if (_hasInfoComponent)
+                _playerMovement.OnMovement -= uiInfoComponent.MoveCanvas;
         }
 
         /// <summary>
@@ -115,11 +105,9 @@ namespace UI
         /// </summary>
         public void EnableUIComponents()
         {
-            inputPromptCanvas.SetActive(true);
-            if (!_hasInfoComponent) return;
-            _playerMovement.OnMovement += uiInfoComponent.MoveCanvas;
-            uiInfoComponent.SetInfoCanvasActiveState(false);
             collider.enabled = true;
+            if (_hasInfoComponent)
+                _playerMovement.OnMovement += uiInfoComponent.MoveCanvas;
         }
     }
 }

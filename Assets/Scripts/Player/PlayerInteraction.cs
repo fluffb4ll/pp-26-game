@@ -17,7 +17,8 @@ namespace Player
     
         public Transform brainrotCarryPoint;
         public BrainrotObject heldBrainrot;
-
+        [SerializeField] private float brainrotDropDistance;
+        
         private InputAction _interactAction;
         private List<IInteractable> _activeInteractables = new();
         private IInteractable _currentInteractable;
@@ -76,6 +77,12 @@ namespace Player
         /// <param name="context">Информация о том, что вызвало <c>InputAction</c></param>
         private void OnInteract(InputAction.CallbackContext context)
         {
+            if (_currentInteractable is null && heldBrainrot is not null)
+            {
+                PutBrainrotDown();
+                return;
+            }
+            
             _currentInteractable?.Interact(this);
         }
         
@@ -160,6 +167,17 @@ namespace Player
             _activeInteractables.Clear();
             _currentInteractable = null;
             _uiManager.ToggleInteractButton(false);
+        }
+
+        /// <summary>
+        /// Ставит брейнрота на землю
+        /// </summary>
+        private void PutBrainrotDown()
+        {
+            heldBrainrot.transform.position = transform.position + transform.forward * brainrotDropDistance;
+            heldBrainrot.GetUIComponent().EnableUIComponents();
+            heldBrainrot.transform.parent = null;
+            heldBrainrot = null;
         }
     }
 }

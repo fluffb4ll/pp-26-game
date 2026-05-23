@@ -1,5 +1,6 @@
 using Camera;
 using Interfaces;
+using Player;
 using UnityEngine;
 
 namespace UI
@@ -85,5 +86,21 @@ namespace UI
         /// Присваивает <c>_isInfoCanvasInDefaultPos</c> значение false
         /// </summary>
         public void SetIsInDefaultSpot() => _isInfoCanvasInDefaultPos = false;
+
+        public void ShowInfoCanvas(PlayerMovement player, bool hideInfoUIOnColliderExit = false)
+        {
+            player.OnMovement += MoveCanvas;
+            if (hideInfoUIOnColliderExit)
+                SetInfoCanvasActiveState(true);
+        }
+
+        public void HideInfoCanvas(PlayerMovement player, bool hideInfoUIOnColliderExit = false)
+        {
+            player.OnMovement -= MoveCanvas;
+            SetIsInDefaultSpot();
+            ReturnInfoCanvasToDefaultPos();
+            if (hideInfoUIOnColliderExit)
+                SetInfoCanvasActiveState(false);
+        }
     }
 }
