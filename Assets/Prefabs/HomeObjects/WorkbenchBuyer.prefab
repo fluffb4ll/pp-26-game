@@ -504,7 +504,6 @@ MonoBehaviour:
   priceMultiplier: 100
   spawnXOffset: -4.55
   spawnZOffset: -3.45
-  rotationYOffset: 0
   workbenchLimit: 10
   workbenchPrefab: {fileID: 7500374534252478490, guid: efbfa3e86bd89c246940bb21f905697e, type: 3}
   uiComponent: {fileID: 8640814492512141789}
@@ -521,10 +520,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.InteractableUI
   inputPromptCanvas: {fileID: 5627210757288986258}
-  uiMovementRadius: 1
+  uiMovementRadius: 0.5
   uiMovementSpeed: 10
   collider: {fileID: 1748490746033865639}
   uiInfoComponent: {fileID: 8331587628999158857}
+  hideInfoUIOnColliderExit: 1
 --- !u!114 &8331587628999158857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -538,7 +538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorkbenchBuyer.BuyerUI
   infoCanvas: {fileID: 1969473314344830976}
-  uiMovementRadius: 1
+  uiMovementRadius: 0.5
   uiMovementSpeed: 10
   buyerController: {fileID: 1647325488683112275}
   priceTag: {fileID: 2188026631795667159}

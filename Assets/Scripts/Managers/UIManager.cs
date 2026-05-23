@@ -141,9 +141,13 @@ namespace Managers
         /// </summary>
         private bool ShouldShowTouchControls()
         {
-            return !blockTouchControls && (Application.isMobilePlatform ||
-                                           !ReferenceEquals(Touchscreen.current, null) ||
-                                           (showTouchControlsInEditor && Application.isEditor));
+            #if UNITY_WEBGL && !UNITY_EDITOR
+                return !blockTouchControls && Application.isMobilePlatform;
+            #else
+                return !blockTouchControls && (Application.isMobilePlatform ||
+                                               !ReferenceEquals(Touchscreen.current, null) ||
+                                                (showTouchControlsInEditor && Application.isEditor));
+            #endif
         }
 
         /// <summary>

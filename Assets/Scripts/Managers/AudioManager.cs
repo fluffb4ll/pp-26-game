@@ -16,7 +16,9 @@ namespace Managers
         public AudioMixer audioMixer;
         public List<String> audioMixerGroups;
 
-        private const float VolumeMinValue = 0.0001f;
+        public List<AudioClip> music;
+        
+        //private const float VolumeMinValue = 0.0001f;
 
         private void Awake()
         {
@@ -28,6 +30,11 @@ namespace Managers
             
             Instance = this;
         }
+
+        private void Start()
+        {
+            SetVolume("MusicVol", PlayerPrefs.GetFloat("MusicVol", 1f));
+        }
         
         /// <summary>
         /// Изменяет значение громкости и сохраняет его в <see cref="PlayerPrefs"/>
@@ -36,9 +43,17 @@ namespace Managers
         /// <param name="value">Устанавливаемое значение</param>
         public void SetVolume(string groupName, float value)
         {
-            var volume = Mathf.Log10(Mathf.Clamp(value, VolumeMinValue, 1f)) * 20;
+            var clampedValue = Mathf.Clamp01(value);
+            float volume;
+            
+            if (clampedValue <= 0f)
+                volume = -80f;
+            else        
+                volume = Mathf.Lerp(-80f, 0f, Mathf.Log10(clampedValue) + 1f);
+            
             audioMixer.SetFloat(groupName, volume);
-            PlayerPrefs.SetFloat(groupName, volume);
+            PlayerPrefs.SetFloat(groupName, clampedValue);
+            PlayerPrefs.Save();
         }
     }
 }

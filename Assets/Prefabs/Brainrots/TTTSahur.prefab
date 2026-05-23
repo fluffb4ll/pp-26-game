@@ -677,6 +677,7 @@ MonoBehaviour:
   uiMovementSpeed: 10
   collider: {fileID: 2838292028076350621}
   uiInfoComponent: {fileID: 189488160072507813}
+  hideInfoUIOnColliderExit: 1
 --- !u!65 &2838292028076350621
 BoxCollider:
   m_ObjectHideFlags: 0

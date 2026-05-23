@@ -12,11 +12,12 @@ namespace UI
         [SerializeField] private float uiMovementSpeed = 10f;
         [SerializeField] private new Collider collider;
         
-        [SerializeField] private InfoUI uiInfoComponent; 
+        [SerializeField] private InfoUI uiInfoComponent;
+        [SerializeField] private bool hideInfoUIOnColliderExit;
             
         private SimpleFollowCamera _camera;
         private PlayerMovement _playerMovement;
-        private bool hasInfoComponent;
+        private bool _hasInfoComponent;
         
         private void Awake()
         {
@@ -27,7 +28,10 @@ namespace UI
         private void Start()
         {
             inputPromptCanvas.SetActive(false);
-            hasInfoComponent = uiInfoComponent is not null;
+            _hasInfoComponent = uiInfoComponent is not null;
+            
+            if (_hasInfoComponent && hideInfoUIOnColliderExit)
+                uiInfoComponent.SetInfoCanvasActiveState(false);
         }
     
         private void OnEnable()
@@ -43,10 +47,13 @@ namespace UI
         /// <inheritdoc/>
         public void ShowInteractionPrompts()
         {
-            if (hasInfoComponent)
-                _playerMovement.OnMovement += uiInfoComponent.MoveCanvas;
             _playerMovement.OnMovement += MoveInputPrompt;
             inputPromptCanvas.SetActive(true);
+            
+            if (!_hasInfoComponent) return;
+            _playerMovement.OnMovement += uiInfoComponent.MoveCanvas;
+            if (hideInfoUIOnColliderExit)
+                uiInfoComponent.SetInfoCanvasActiveState(true);
         }
         
         /// <inheritdoc/>
@@ -54,10 +61,13 @@ namespace UI
         {
             _playerMovement.OnMovement -= MoveInputPrompt;
             inputPromptCanvas.SetActive(false);
-            if (!hasInfoComponent) return;
+            
+            if (!_hasInfoComponent) return;
             _playerMovement.OnMovement -= uiInfoComponent.MoveCanvas;
             uiInfoComponent.SetIsInDefaultSpot();
             uiInfoComponent.ReturnInfoCanvasToDefaultPos();
+            if (!hideInfoUIOnColliderExit) return;
+            uiInfoComponent.SetInfoCanvasActiveState(false);
         }
         
         /// <summary>
@@ -94,7 +104,7 @@ namespace UI
         public void DisableUIComponents()
         {
             inputPromptCanvas.SetActive(false);
-            if (!hasInfoComponent) return;
+            if (!_hasInfoComponent) return;
             _playerMovement.OnMovement -= uiInfoComponent.MoveCanvas;
             uiInfoComponent.SetInfoCanvasActiveState(false);
             collider.enabled = false;
@@ -106,7 +116,7 @@ namespace UI
         public void EnableUIComponents()
         {
             inputPromptCanvas.SetActive(true);
-            if (!hasInfoComponent) return;
+            if (!_hasInfoComponent) return;
             _playerMovement.OnMovement += uiInfoComponent.MoveCanvas;
             uiInfoComponent.SetInfoCanvasActiveState(false);
             collider.enabled = true;

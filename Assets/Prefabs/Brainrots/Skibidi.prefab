@@ -479,7 +479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ba7e554690ba184ea2e3ec9a01f86ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Brainrot.BrainrotUI
-  infoCanvas: {fileID: 0}
+  infoCanvas: {fileID: 8704469409521504372}
   uiMovementRadius: 0.2
   uiMovementSpeed: 10
 --- !u!114 &-1300334827955011557
@@ -499,6 +499,7 @@ MonoBehaviour:
   uiMovementSpeed: 10
   collider: {fileID: 2326547738872320214}
   uiInfoComponent: {fileID: 4864340705536598367}
+  hideInfoUIOnColliderExit: 1
 --- !u!65 &2326547738872320214
 BoxCollider:
   m_ObjectHideFlags: 0
