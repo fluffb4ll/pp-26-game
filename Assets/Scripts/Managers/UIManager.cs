@@ -171,6 +171,7 @@ namespace Managers
             if (!panel.activeSelf)
             {
                 _activeSubmenu = null;
+                _gameManager.SaveData();
                 return;
             }
 

@@ -108,3 +108,6 @@ InitTestScene*.unity*
 
 /[Aa]ssets/Audio/Sources/Placeholders/
 /[Aa]ssets/Audio/Sources/Placeholders.meta
+
+[Aa]ssets/PluginYourGames/Editor/SavesEditorYG2.json
+[Aa]ssets/PluginYourGames/Editor/SavesEditorYG2.json.meta

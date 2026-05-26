@@ -2439,10 +2439,6 @@ MonoBehaviour:
   notificationContent: {fileID: 1558346259}
   notificationLimit: 3
   notificationLifetime: 3
-  volumeSliders:
-  - {fileID: 351591030}
-  - {fileID: 1155243264}
-  - {fileID: 158838966}
 --- !u!4 &1050129549
 Transform:
   m_ObjectHideFlags: 0
@@ -3710,6 +3706,7 @@ MonoBehaviour:
   spawnHealthBonusStep: 5
   killHealthBonusStep: 10
   savingRate: 120
+  savingThreshold: 20
   currentState: 0
   playerTransform: {fileID: 1197920724565565311}
   playerController: {fileID: 8366548381964346177}

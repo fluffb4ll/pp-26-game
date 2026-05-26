@@ -18,10 +18,12 @@ namespace Managers
     /// </summary>
     public class GameManager : MonoBehaviour
     {
+        public static GameManager Instance { get; private set; }
+        
         [SerializeField] private int spawnHealthBonusStep = 5;
         [SerializeField] private int killHealthBonusStep = 10;
         [SerializeField] private float savingRate;
-        public static GameManager Instance { get; private set; }
+        [SerializeField] private int savingThreshold;
         
         public GameState currentState;
         public Transform playerTransform;
@@ -112,8 +114,15 @@ namespace Managers
                 SaveData();
         }
 
+        /// <summary>
+        /// Сохраняет данные игрока
+        /// </summary>
         public void SaveData()
         {
+            // TODO: проверить на соответствие условиям частоты сохранений в ЯИ
+            if (_savingTimer >= savingRate * (1 - Mathf.Clamp(savingThreshold, 0, 100) / 100f))
+                return;
+            
             YG2.SaveProgress();
             _savingTimer = savingRate;
         }
