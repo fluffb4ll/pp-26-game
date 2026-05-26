@@ -5,6 +5,7 @@ using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Managers
 {
@@ -30,14 +31,14 @@ namespace Managers
         [SerializeField] private GameObject notificationContent;
         [SerializeField] private int notificationLimit;
         [SerializeField] private int notificationLifetime;
-
+        
         private GameManager _gameManager;
         private PlayerController _playerController;
         private Rect _lastSafeArea;
         private Vector2Int _lastScreenSize;
         private float _hpBarFillMaxWidth;
         private GameObject _activeSubmenu;
-
+        
         private Queue<ActiveNotification> _spawnedNotifications = new();
 
         /// <summary>

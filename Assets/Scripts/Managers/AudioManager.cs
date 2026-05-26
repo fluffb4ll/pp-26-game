@@ -14,11 +14,10 @@ namespace Managers
         public static AudioManager Instance { get; private set; }
 
         public AudioMixer audioMixer;
-        public List<String> audioMixerGroups;
-
-        public List<AudioClip> music;
+        public List<string> audioMixerGroups;
         
-        //private const float VolumeMinValue = 0.0001f;
+        private const float MaxDb = 0f;
+        private const float MinDb = -80f;
 
         private void Awake()
         {
@@ -33,7 +32,7 @@ namespace Managers
 
         private void Start()
         {
-            SetVolume("MusicVol", PlayerPrefs.GetFloat("MusicVol", 1f));
+            LoadSavedVolumeValues();
         }
         
         /// <summary>
@@ -44,16 +43,25 @@ namespace Managers
         public void SetVolume(string groupName, float value)
         {
             var clampedValue = Mathf.Clamp01(value);
-            float volume;
-            
-            if (clampedValue <= 0f)
-                volume = -80f;
-            else        
-                volume = Mathf.Lerp(-80f, 0f, Mathf.Log10(clampedValue) + 1f);
+            var volume = clampedValue <= 0f ? MinDb : Mathf.Lerp(MinDb, MaxDb, Mathf.Log10(clampedValue) + 1f);
             
             audioMixer.SetFloat(groupName, volume);
             PlayerPrefs.SetFloat(groupName, clampedValue);
-            PlayerPrefs.Save();
+        }
+
+        /// <summary>
+        /// Передаёт сохранённое значение громкости указанной <c>AudioMixerGroup</c>.
+        /// </summary>
+        /// <param name="groupName">Название <c>AudioMixerGroup</c>, значение которой нужно получить</param>
+        public static float GetSavedVolumeValues(string groupName) => PlayerPrefs.GetFloat(groupName, 1f);
+
+        /// <summary>
+        /// Выставляет громкость, равную сохранённым значениям
+        /// </summary>
+        private void LoadSavedVolumeValues()
+        {
+            foreach (var group in audioMixerGroups)
+                SetVolume(group, PlayerPrefs.GetFloat(group, 1f));
         }
     }
 }

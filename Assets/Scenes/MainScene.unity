@@ -536,7 +536,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 1761818831}
   m_HandleRect: {fileID: 1471385841}
   m_Direction: 0
-  m_MinValue: 0.0001
+  m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 1
@@ -546,10 +546,10 @@ MonoBehaviour:
       - m_Target: {fileID: 158838966}
         m_TargetAssemblyTypeName: UI.VolumeSlider, Assembly-CSharp
         m_MethodName: OnValueChanged
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 158838965}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -568,6 +568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.VolumeSlider
   audioMixerGroupIndex: 1
+  slider: {fileID: 158838965}
 --- !u!1 &197928060
 GameObject:
   m_ObjectHideFlags: 0
@@ -1018,7 +1019,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 2078520419}
   m_HandleRect: {fileID: 1161131081}
   m_Direction: 0
-  m_MinValue: 0.0001
+  m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 1
@@ -1028,10 +1029,10 @@ MonoBehaviour:
       - m_Target: {fileID: 351591030}
         m_TargetAssemblyTypeName: UI.VolumeSlider, Assembly-CSharp
         m_MethodName: OnValueChanged
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 351591029}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1050,6 +1051,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.VolumeSlider
   audioMixerGroupIndex: 0
+  slider: {fileID: 351591029}
 --- !u!1 &385986027
 GameObject:
   m_ObjectHideFlags: 0
@@ -1794,7 +1796,6 @@ MonoBehaviour:
   - MasterVol
   - SFXVol
   - MusicVol
-  music: []
 --- !u!4 &558980652
 Transform:
   m_ObjectHideFlags: 0
@@ -2438,6 +2439,10 @@ MonoBehaviour:
   notificationContent: {fileID: 1558346259}
   notificationLimit: 3
   notificationLifetime: 3
+  volumeSliders:
+  - {fileID: 351591030}
+  - {fileID: 1155243264}
+  - {fileID: 158838966}
 --- !u!4 &1050129549
 Transform:
   m_ObjectHideFlags: 0
@@ -2614,7 +2619,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 385986028}
   m_HandleRect: {fileID: 1259153160}
   m_Direction: 0
-  m_MinValue: 0.0001
+  m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 1
@@ -2624,10 +2629,10 @@ MonoBehaviour:
       - m_Target: {fileID: 1155243264}
         m_TargetAssemblyTypeName: UI.VolumeSlider, Assembly-CSharp
         m_MethodName: OnValueChanged
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 1155243263}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2646,6 +2651,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.VolumeSlider
   audioMixerGroupIndex: 2
+  slider: {fileID: 1155243263}
 --- !u!1 &1161131080
 GameObject:
   m_ObjectHideFlags: 0

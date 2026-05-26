@@ -105,3 +105,6 @@ InitTestScene*.unity*
 /[Aa]ssets/_[Rr]ecovery.meta
 /[Aa]ssets/TextMesh Pro/Resources/Fonts & Materials/*Fallback.asset
 /[Aa]ssets/TextMesh Pro/Resources/Fonts & Materials/*Fallback.asset.meta
+
+/[Aa]ssets/Audio/Sources/Placeholders/
+/[Aa]ssets/Audio/Sources/Placeholders.meta
