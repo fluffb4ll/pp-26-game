@@ -1,5 +1,7 @@
 using System;
+using Brainrot;
 using Helpers;
+using Managers;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -13,23 +15,47 @@ namespace Workbench
     {
         [SerializeField] private Workbench workbenchController;
         [SerializeField] private TextMeshProUGUI produceCounter;
+
+        [SerializeField] private GameObject brainrotInfoGroup;
+        
+        [SerializeField] private TextMeshProUGUI brainrotNameText;
+        [SerializeField] private TextMeshProUGUI brainrotTierText;
+        [SerializeField] private TextMeshProUGUI produceRateText;
+        [SerializeField] private TextMeshProUGUI lifeTimeText;
+
+        private UIManager _uiManager;
+        
+        protected override void Awake()
+        {
+            base.Awake();
+            _uiManager = UIManager.Instance;
+        }
         
         protected override void Start()
         {
             base.Start();
             UpdateProduceCounter(workbenchController.storedProduce);
+            DisableProductionInfo();
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
             workbenchController.OnProduceUpdate += UpdateProduceCounter;
+            workbenchController.OnBrainrotLifeTimeUpdate += UpdateLifeTime;
+            workbenchController.OnProduceRateUpdate += UpdateProduceRate;
+            workbenchController.OnBrainrotInsertion += UpdateBrainrotInfo;
+            workbenchController.OnBrainrotDeath += DisableProductionInfo;
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
             workbenchController.OnProduceUpdate -= UpdateProduceCounter;
+            workbenchController.OnBrainrotLifeTimeUpdate -= UpdateLifeTime;
+            workbenchController.OnProduceRateUpdate -= UpdateProduceRate;
+            workbenchController.OnBrainrotInsertion -= UpdateBrainrotInfo;
+            workbenchController.OnBrainrotDeath -= DisableProductionInfo;
         }
         
         /// <summary>
@@ -40,5 +66,38 @@ namespace Workbench
             var data = ValueShortener.CountShortener((long) Math.Round(amount));
             produceCounter.SetText(data.formatTemplate, data.value);
         }
+
+        /// <summary>
+        /// Обновляет счётчик времени жизни брейнрота, находящегося в станке
+        /// </summary>
+        /// <param name="lifeTime">Время жизни брейнрота</param>
+        private void UpdateLifeTime(float lifeTime)
+        {
+            lifeTimeText.SetText(ValueShortener.TimeShortener(lifeTime));
+        }
+
+        private void UpdateProduceRate(float produceRate)
+        {
+            var data = ValueShortener.CountShortener(
+                (long) Math.Round(produceRate), 
+                postfix: " СК/сек.");
+            produceRateText.SetText(data.formatTemplate, data.value);
+        }
+
+        private void UpdateBrainrotInfo(BrainrotObject brainrot)
+        {
+            var data = NameHelper.ParseBrainrotName(brainrot.GetBrainrotInfo().type);
+            brainrotNameText.SetText(data);
+            
+            data = NameHelper.ParseRarity(brainrot.rarity);
+            brainrotTierText.SetText(data);
+            brainrotTierText.color = _uiManager.GetColors()[brainrot.rarity];
+            
+            EnableProductionInfo();
+        }
+
+        private void DisableProductionInfo() => brainrotInfoGroup.SetActive(false);
+        
+        private void EnableProductionInfo() => brainrotInfoGroup.SetActive(true);
     }
 }

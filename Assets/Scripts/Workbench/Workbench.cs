@@ -16,14 +16,20 @@ namespace Workbench
         public float baseProduce;
         public float produceStoreCap;
         public float storedProduce;
-    
+        
         [SerializeField] private Transform brainrotInsertionPos;
         [SerializeField] private BrainrotObject insertedBrainrot;
 
         private const float FloatDiff = 0.0001f;
+        
+        private float _currentProduceRate;
         private GameManager _gameManager;
 
         private Action<float> _onProduceUpdate;
+        private Action<BrainrotObject> _onBrainrotInsertion;
+        private Action<float> _onBrainrotLifeTimeUpdate;
+        private Action<float> _onProduceRateUpdate;
+        private Action _onBrainrotDeath;
         
         [SerializeField] private InteractableUI uiComponent;
         
@@ -42,6 +48,30 @@ namespace Workbench
             add => _onProduceUpdate += value;
             remove => _onProduceUpdate -= value;
         }
+        
+        public event Action<BrainrotObject> OnBrainrotInsertion
+        {
+            add => _onBrainrotInsertion += value;
+            remove => _onBrainrotInsertion -= value;
+        }
+        
+        public event Action<float> OnBrainrotLifeTimeUpdate
+        {
+            add => _onBrainrotLifeTimeUpdate += value;
+            remove => _onBrainrotLifeTimeUpdate -= value;
+        }
+        
+        public event Action<float> OnProduceRateUpdate
+        {
+            add => _onProduceRateUpdate += value;
+            remove => _onProduceRateUpdate -= value;
+        }
+        
+        public event Action OnBrainrotDeath
+        {
+            add => _onBrainrotDeath += value;
+            remove => _onBrainrotDeath -= value;
+        }
     
         /// <summary>
         /// Вырабатывает монетки за единицу времени и снижает ресурс вставленного брейнрота 
@@ -51,19 +81,23 @@ namespace Workbench
             if (insertedBrainrot is null || produceStoreCap - storedProduce < FloatDiff)
                 return;
         
-            storedProduce += (baseProduce + insertedBrainrot.produce) * Time.deltaTime;
+            storedProduce += _currentProduceRate * Time.deltaTime;
             
             if (storedProduce > produceStoreCap)
                 storedProduce = produceStoreCap;
             _onProduceUpdate?.Invoke(storedProduce);
             
             insertedBrainrot.lifetime -= Time.deltaTime;
+            _onBrainrotLifeTimeUpdate?.Invoke(insertedBrainrot.lifetime);
             
             if (!(insertedBrainrot.lifetime <= 0))
                 return;
         
             Destroy(insertedBrainrot.gameObject);
             insertedBrainrot = null;
+            _currentProduceRate = baseProduce;
+            
+            _onBrainrotDeath?.Invoke();
         }
 
         /// <summary>
@@ -94,6 +128,11 @@ namespace Workbench
             
             insertedBrainrot.transform.SetParent(brainrotInsertionPos);
             insertedBrainrot.transform.position = brainrotInsertionPos.position;
+            
+            _currentProduceRate += insertedBrainrot.produce;
+            
+            _onBrainrotInsertion?.Invoke(insertedBrainrot);
+            _onProduceRateUpdate?.Invoke(_currentProduceRate);
         }
         
         /// <inheritdoc/>

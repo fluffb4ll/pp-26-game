@@ -14,7 +14,7 @@ namespace Brainrot
     public class BrainrotUI : InfoUI
     {
         [SerializeField] private TextMeshProUGUI tierText;
-        [SerializeField] private TextMeshProUGUI produceText;
+        [SerializeField] private TextMeshProUGUI produceRateText;
         [SerializeField] private TextMeshProUGUI lifeTimeText;
         
         [SerializeField] private BrainrotObject brainrotObject;
@@ -46,20 +46,11 @@ namespace Brainrot
             if (_isInitialized) return;
             var data = ValueShortener.CountShortener(
                 (long)Math.Round(brainrotObject.produce), 
-                postfix: " СК/сек");
-            produceText.SetText(data.formatTemplate, data.value);
+                postfix: " СК/сек.");
+            produceRateText.SetText(data.formatTemplate, data.value);
             
             tierText.color = _uiManager.GetColors()[brainrotObject.rarity];
-            var tierName = brainrotObject.rarity switch
-            {
-                Rarity.Common => "Обычный",
-                Rarity.Uncommon => "Необычный",
-                Rarity.Rare => "Редкий",
-                Rarity.Epic => "Эпический",
-                Rarity.Legendary => "Легендарный",
-                _ => "???"
-            };
-            tierText.SetText(tierName);
+            tierText.SetText(NameHelper.ParseRarity(brainrotObject.rarity));
             
             _isInitialized = true;
         }

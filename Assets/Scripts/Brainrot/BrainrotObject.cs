@@ -66,6 +66,11 @@ namespace Brainrot
             uiComponent.DisableUIComponents();
         }
         
+        /// <summary>
+        /// Возвращает информацию о брейнроте (см. <see cref="BrainrotLib"/>)
+        /// </summary>
+        public BrainrotLib GetBrainrotInfo() => data;
+        
         /// <inheritdoc/>
         public void Execute(PlayerController playerController)
         {

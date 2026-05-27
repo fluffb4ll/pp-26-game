@@ -48,12 +48,12 @@ namespace Helpers
             var minutes = seconds / 60;
             if (minutes > 0)
             {
-                answer.Append($"{minutes} мин. ");
+                answer.Append($"{minutes} м. ");
                 seconds %= 60;
             }
             
-            if (seconds > 0)
-                answer.Append($"{seconds} сек.");
+            if (seconds >= 0)
+                answer.Append($"{seconds} с.");
             
             return answer.ToString().Trim();
         }

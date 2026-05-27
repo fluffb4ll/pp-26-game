@@ -267,7 +267,7 @@ MonoBehaviour:
   uiMovementRadius: 0.2
   uiMovementSpeed: 10
   tierText: {fileID: 4487244182387340381}
-  produceText: {fileID: 7239843271439806635}
+  produceRateText: {fileID: 7239843271439806635}
   lifeTimeText: {fileID: 2895579632761891175}
   brainrotObject: {fileID: 5438140941097626503}
 --- !u!65 &4972177228121848551
