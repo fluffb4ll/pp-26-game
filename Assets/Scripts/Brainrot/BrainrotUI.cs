@@ -40,6 +40,9 @@ namespace Brainrot
             brainrotObject.OnBrainrotRoll -= UpdateInfoCanvas;
         }
         
+        /// <summary>
+        /// Заполняет <c>InfoCanvas</c> информацией о брейнроте
+        /// </summary>
         private void UpdateInfoCanvas()
         {
             lifeTimeText.SetText(ValueShortener.TimeShortener(brainrotObject.lifetime));

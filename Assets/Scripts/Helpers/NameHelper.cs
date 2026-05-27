@@ -2,6 +2,9 @@
 
 namespace Helpers
 {
+    /// <summary>
+    /// Парсит названия различных предметов.
+    /// </summary>
     public static class NameHelper
     {
         /// <summary>
@@ -22,6 +25,11 @@ namespace Helpers
             };
         }
 
+        /// <summary>
+        /// Парсит название брейнрота, основываясь на его типе. На данный момент выдаёт только русские варианты названий.
+        /// </summary>
+        /// <param name="brainrotType">Тип брейнрота</param>
+        /// <returns>Название брейнрота</returns>
         public static string ParseBrainrotName(BrainrotType brainrotType)
         {
             return brainrotType switch
