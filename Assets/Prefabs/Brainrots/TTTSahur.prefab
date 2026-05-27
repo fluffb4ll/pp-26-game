@@ -313,8 +313,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278249471
-  m_fontColor: {r: 1, g: 0.90511477, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -660,6 +660,10 @@ MonoBehaviour:
   infoCanvas: {fileID: 3213854350348663135}
   uiMovementRadius: 0.2
   uiMovementSpeed: 10
+  tierText: {fileID: 3401742769339793192}
+  produceText: {fileID: 7359918106021117064}
+  lifeTimeText: {fileID: 6069854410314961239}
+  brainrotObject: {fileID: 4911369354049106058}
 --- !u!114 &3978997384424304699
 MonoBehaviour:
   m_ObjectHideFlags: 0

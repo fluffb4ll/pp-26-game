@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using Brainrot;
 using Helpers;
 using Player;
+using Structs;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -32,6 +34,8 @@ namespace Managers
         [SerializeField] private int notificationLimit;
         [SerializeField] private int notificationLifetime;
         
+        [SerializeField] private List<BrainrotRarityToColor> colorsList;
+        
         private GameManager _gameManager;
         private PlayerController _playerController;
         private Rect _lastSafeArea;
@@ -40,6 +44,7 @@ namespace Managers
         private GameObject _activeSubmenu;
         
         private Queue<ActiveNotification> _spawnedNotifications = new();
+        private Dictionary<Rarity, Color> _colors = new();
 
         /// <summary>
         /// регистрируем менеджер и сразу раскладываем ui
@@ -67,6 +72,8 @@ namespace Managers
             SetSubmenusDefaultState();
             UpdateCoinCount();
             ToggleInteractButton(false);
+
+            ConvertColorListToDict();
         }
 
         private void OnEnable()
@@ -204,7 +211,7 @@ namespace Managers
         private void UpdateCoinCount()
         {
             var amount = _gameManager.GetCoinsAmount();
-            var data = ResourceCountHelper.CountShortener(amount);
+            var data = ValueShortener.CountShortener(amount);
             coinCount.SetText(data.formatTemplate, data.value);
         }
 
@@ -258,5 +265,20 @@ namespace Managers
             for (; deletionCount > 0; deletionCount--)
                 Destroy(_spawnedNotifications.Dequeue().GetNotification());
         }
+        
+        /// <summary>
+        /// Переносит пары из списка <c>colorsList</c> в мапу <c>_colors</c> 
+        /// </summary>
+        private void ConvertColorListToDict()
+        {
+            foreach (var pair in colorsList)
+                _colors.Add(pair.rarity, pair.color);
+            colorsList.Clear();
+        }
+
+        /// <summary>
+        /// Возвращает мапу <c>_colors</c>, содержащую пары редкость-цвет для брейнротов
+        /// </summary>
+        public Dictionary<Rarity, Color> GetColors() => _colors;
     }
 }

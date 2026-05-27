@@ -2439,6 +2439,17 @@ MonoBehaviour:
   notificationContent: {fileID: 1558346259}
   notificationLimit: 3
   notificationLifetime: 3
+  colorsList:
+  - color: {r: 1, g: 1, b: 1, a: 1}
+    rarity: 0
+  - color: {r: 0, g: 0.78431374, b: 0.08627451, a: 1}
+    rarity: 1
+  - color: {r: 0, g: 0.6627451, b: 1, a: 1}
+    rarity: 2
+  - color: {r: 0.6784314, g: 0, b: 1, a: 1}
+    rarity: 3
+  - color: {r: 1, g: 0.90588236, b: 0, a: 1}
+    rarity: 4
 --- !u!4 &1050129549
 Transform:
   m_ObjectHideFlags: 0

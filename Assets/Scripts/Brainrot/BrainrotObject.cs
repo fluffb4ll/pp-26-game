@@ -1,3 +1,4 @@
+using System;
 using Interfaces;
 using Player;
 using UI;
@@ -16,19 +17,28 @@ namespace Brainrot
         public Rarity rarity;
         
         [SerializeField] private InteractableUI uiComponent;
+
+        private Action _onBrainrotRoll;
     
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
             var rolledConfig = data.GetRandomizedRarity();
-        
+            
             rarity = rolledConfig.rarity;
             produce = data.baseProduce * rolledConfig.produceMult;
             lifetime = data.baseLifetime * rolledConfig.lifetimeMult;
+            _onBrainrotRoll?.Invoke();
             
             #if UNITY_EDITOR || DEVELOPMENT_BUILD
                 Debug.Log($"Pulled: {rarity} {data.type}.");
             #endif
+        }
+
+        public event Action OnBrainrotRoll
+        {
+            add => _onBrainrotRoll += value;
+            remove => _onBrainrotRoll -= value;
         }
         
         /// <summary>

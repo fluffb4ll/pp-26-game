@@ -482,6 +482,10 @@ MonoBehaviour:
   infoCanvas: {fileID: 8704469409521504372}
   uiMovementRadius: 0.2
   uiMovementSpeed: 10
+  tierText: {fileID: 6770942524412205091}
+  produceText: {fileID: 4105203286241746545}
+  lifeTimeText: {fileID: 4892320037106910394}
+  brainrotObject: {fileID: 3776383210840929640}
 --- !u!114 &-1300334827955011557
 MonoBehaviour:
   m_ObjectHideFlags: 0

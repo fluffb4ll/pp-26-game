@@ -37,7 +37,7 @@ namespace Workbench
         /// </summary>
         private void UpdateProduceCounter(float amount)
         {
-            var data = ResourceCountHelper.CountShortener((long) Math.Round(amount));
+            var data = ValueShortener.CountShortener((long) Math.Round(amount));
             produceCounter.SetText(data.formatTemplate, data.value);
         }
     }

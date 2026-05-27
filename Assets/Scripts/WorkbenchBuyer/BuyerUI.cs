@@ -30,7 +30,7 @@ namespace WorkbenchBuyer
 
         private void UpdatePriceTag(long price)
         {
-            var data = ResourceCountHelper.CountShortener(price, "Цена: ");
+            var data = ValueShortener.CountShortener(price, "Цена: ");
             priceTag.SetText(data.formatTemplate, data.value);
         }
     }
