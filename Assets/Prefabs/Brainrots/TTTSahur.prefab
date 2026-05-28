@@ -660,6 +660,7 @@ MonoBehaviour:
   infoCanvas: {fileID: 3213854350348663135}
   uiMovementRadius: 0.2
   uiMovementSpeed: 10
+  nameText: {fileID: 8175272301722333343}
   tierText: {fileID: 3401742769339793192}
   produceRateText: {fileID: 7359918106021117064}
   lifeTimeText: {fileID: 6069854410314961239}

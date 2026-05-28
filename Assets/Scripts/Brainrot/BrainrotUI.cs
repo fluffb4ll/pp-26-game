@@ -1,7 +1,6 @@
 using System;
 using Helpers;
 using Managers;
-using Mono.Cecil;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -13,6 +12,7 @@ namespace Brainrot
     /// </summary>
     public class BrainrotUI : InfoUI
     {
+        [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI tierText;
         [SerializeField] private TextMeshProUGUI produceRateText;
         [SerializeField] private TextMeshProUGUI lifeTimeText;
@@ -46,7 +46,10 @@ namespace Brainrot
         private void UpdateInfoCanvas()
         {
             lifeTimeText.SetText(ValueShortener.TimeShortener(brainrotObject.lifetime));
+            
             if (_isInitialized) return;
+            nameText.SetText(NameHelper.ParseBrainrotName(brainrotObject.GetBrainrotInfo().type));
+            
             var data = ValueShortener.CountShortener(
                 (long)Math.Round(brainrotObject.produce), 
                 postfix: " СК/сек.");
