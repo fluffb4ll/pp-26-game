@@ -603,6 +603,7 @@ GameObject:
   - component: {fileID: 189488160072507813}
   - component: {fileID: 3978997384424304699}
   - component: {fileID: 2838292028076350621}
+  - component: {fileID: -6027750689963535600}
   m_Layer: 0
   m_Name: TTTSahur
   m_TagString: Untagged
@@ -704,6 +705,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3, y: 1.14, z: 3}
   m_Center: {x: 0, y: 0.57, z: 0}
+--- !u!114 &-6027750689963535600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5145043209413951014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a287658299b047edaf306c68d87c929b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UI.ActiveQuest
+  activeQuestPointerPrefab: {fileID: 0}
 --- !u!1 &6022558115639538971
 GameObject:
   m_ObjectHideFlags: 0

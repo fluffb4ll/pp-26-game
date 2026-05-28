@@ -1,5 +1,6 @@
+using System;
 using Player;
-using UI;
+using Structs;
 using UnityEngine;
 
 namespace Interfaces

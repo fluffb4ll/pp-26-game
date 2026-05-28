@@ -24,7 +24,9 @@ namespace Managers
         [SerializeField] private int killHealthBonusStep = 10;
         [SerializeField] private float savingRate;
         [SerializeField] private int savingThreshold;
-        
+
+        [SerializeField] private List<SpawnManager> spawners;
+            
         public GameState currentState;
         public Transform playerTransform;
         public PlayerController playerController;
@@ -142,5 +144,13 @@ namespace Managers
         {
             _combatSpawnHealthBonus = 0;
         }
+
+        public int GetCurrentQuestID() => YG2.saves.currentQuest;
+        
+        public void SetCurrentQuestID(int currentQuestID) => YG2.saves.currentQuest = currentQuestID;
+        
+        public int IncrementCurrentQuestID() => ++YG2.saves.currentQuest;
+        
+        public List<SpawnManager> GetSpawners() => spawners;
     }
 }

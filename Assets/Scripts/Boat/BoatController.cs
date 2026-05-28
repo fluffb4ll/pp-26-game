@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Interfaces;
 using Managers;
 using Player;
+using Structs;
 using UI;
 using UnityEngine;
 
@@ -17,6 +19,8 @@ namespace Boat
         
         private GameManager _gameManager;
         private PlayerController _playerController;
+        private Action<QuestType> _onInteract;
+        
         private void Awake()
         {
             _gameManager = GameManager.Instance;
@@ -56,6 +60,8 @@ namespace Boat
             
             player.UnregisterInteractable(this);
             isAtHome = !isAtHome;
+            
+            _onInteract?.Invoke(QuestType.Travel);
         }
         
         /// <summary>
@@ -73,6 +79,12 @@ namespace Boat
         public void Interact(PlayerInteraction player)
         {
             Travel(player);
+        }
+        
+        public event Action<QuestType> OnInteract
+        {
+            add => _onInteract += value;
+            remove => _onInteract -= value;
         }
         
         /// <inheritdoc/>

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Brainrot;
 using Enemy;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -19,7 +21,8 @@ namespace Managers
         private List<GameObject> _spawnableBrainrots;
         private float _spawnTimer;
         private bool _isSpawning;
-        
+
+        private Action<GameObject> _onEnemyDeath;
         
         void Awake()
         {
@@ -45,6 +48,12 @@ namespace Managers
         void Update()
         {
             HandleSpawning();
+        }
+        
+        public event Action<GameObject> OnEnemyDeath
+        {
+            add => _onEnemyDeath += value;
+            remove => _onEnemyDeath -= value;
         }
 
         private void HandleSpawning()
@@ -89,6 +98,7 @@ namespace Managers
         public void UnregisterEnemy(GameObject enemy)
         {
             _spawnedEnemies.Remove(enemy);
+            _onEnemyDeath?.Invoke(enemy);
         }
 
         private void ClearSpawnedEnemies()

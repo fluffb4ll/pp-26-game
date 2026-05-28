@@ -10,9 +10,10 @@ namespace YG
     /// </remarks>
     public partial class SavesYG
     {
-        // TODO: разобраться, нужно ли инициализировать значения
         public long lastDailyRewardTime;
         public long coins = 5;
+
+        public int currentQuest = 0;
     }
 }
 

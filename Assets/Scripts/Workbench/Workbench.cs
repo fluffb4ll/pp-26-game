@@ -3,6 +3,7 @@ using Brainrot;
 using Interfaces;
 using Managers;
 using Player;
+using Structs;
 using UI;
 using UnityEngine;
 
@@ -30,6 +31,7 @@ namespace Workbench
         private Action<float> _onBrainrotLifeTimeUpdate;
         private Action<float> _onProduceRateUpdate;
         private Action _onBrainrotDeath;
+        private Action<QuestType> _onInteract;
         
         [SerializeField] private InteractableUI uiComponent;
         
@@ -73,6 +75,12 @@ namespace Workbench
             remove => _onBrainrotDeath -= value;
         }
     
+        public event Action<QuestType> OnInteract
+        {
+            add => _onInteract += value;
+            remove => _onInteract -= value;
+        }
+        
         /// <summary>
         /// Вырабатывает монетки за единицу времени и снижает ресурс вставленного брейнрота 
         /// </summary>
@@ -115,6 +123,7 @@ namespace Workbench
             _gameManager.ChangeCoinsAmount((long) Math.Round(storedProduce));
             storedProduce = 0;
             _onProduceUpdate?.Invoke(storedProduce);
+            _onInteract?.Invoke(QuestType.Collect);
         }
 
         /// <summary>
@@ -133,6 +142,7 @@ namespace Workbench
             
             _onBrainrotInsertion?.Invoke(insertedBrainrot);
             _onProduceRateUpdate?.Invoke(_currentProduceRate);
+            _onInteract?.Invoke(QuestType.Insert);
         }
         
         /// <inheritdoc/>

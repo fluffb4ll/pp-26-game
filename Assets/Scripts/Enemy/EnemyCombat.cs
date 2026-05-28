@@ -268,5 +268,7 @@ namespace Enemy
 
             return closestDistance < float.PositiveInfinity;
         }
+        
+        public GameObject GetSpawnableBrainrot() => _spawnableBrainrot;
     }
 }

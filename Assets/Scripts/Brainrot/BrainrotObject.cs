@@ -1,6 +1,7 @@
 using System;
 using Interfaces;
 using Player;
+using Structs;
 using UI;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace Brainrot
         [SerializeField] private InteractableUI uiComponent;
 
         private Action _onBrainrotRoll;
+        private Action<BrainrotObject> _onInteract;
     
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -51,6 +53,12 @@ namespace Brainrot
                 PickUp(player);
         }
         
+        public event Action<BrainrotObject> OnInteract
+        {
+            add => _onInteract += value;
+            remove => _onInteract -= value;
+        }
+        
         /// <summary>
         /// Обрабатывает подъём брейнрота игроком
         /// </summary>
@@ -64,6 +72,8 @@ namespace Brainrot
             
             player.UnregisterInteractable(this);
             uiComponent.DisableUIComponents();
+            
+            _onInteract?.Invoke(this);
         }
         
         /// <summary>
