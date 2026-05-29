@@ -1,5 +1,7 @@
 using System;
+using Helpers;
 using Interfaces;
+using Managers;
 using Player;
 using Structs;
 using UI;
@@ -19,9 +21,16 @@ namespace Brainrot
         
         [SerializeField] private InteractableUI uiComponent;
 
+        private int _entityIdHash;
         private Action _onBrainrotRoll;
-        private Action<BrainrotObject> _onInteract;
-    
+        private Action _onInteract;
+
+        private void Awake()
+        {
+            _entityIdHash = EntityRegistry.Instance.AddBrainrot(data.type, this);
+            Debug.Log(_entityIdHash);
+        }
+        
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
@@ -35,6 +44,11 @@ namespace Brainrot
             #if UNITY_EDITOR || DEVELOPMENT_BUILD
                 Debug.Log($"Pulled: {rarity} {data.type}.");
             #endif
+        }
+
+        private void OnDestroy()
+        {
+            EntityRegistry.Instance?.RemoveBrainrot(_entityIdHash);
         }
 
         public event Action OnBrainrotRoll
@@ -53,7 +67,7 @@ namespace Brainrot
                 PickUp(player);
         }
         
-        public event Action<BrainrotObject> OnInteract
+        public event Action OnInteract
         {
             add => _onInteract += value;
             remove => _onInteract -= value;
@@ -73,7 +87,7 @@ namespace Brainrot
             player.UnregisterInteractable(this);
             uiComponent.DisableUIComponents();
             
-            _onInteract?.Invoke(this);
+            _onInteract?.Invoke();
         }
         
         /// <summary>

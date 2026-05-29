@@ -19,7 +19,7 @@ namespace Boat
         
         private GameManager _gameManager;
         private PlayerController _playerController;
-        private Action<QuestType> _onInteract;
+        private Action _onTravel;
         
         private void Awake()
         {
@@ -61,7 +61,7 @@ namespace Boat
             player.UnregisterInteractable(this);
             isAtHome = !isAtHome;
             
-            _onInteract?.Invoke(QuestType.Travel);
+            _onTravel?.Invoke();
         }
         
         /// <summary>
@@ -81,10 +81,10 @@ namespace Boat
             Travel(player);
         }
         
-        public event Action<QuestType> OnInteract
+        public event Action OnTravel
         {
-            add => _onInteract += value;
-            remove => _onInteract -= value;
+            add => _onTravel += value;
+            remove => _onTravel -= value;
         }
         
         /// <inheritdoc/>

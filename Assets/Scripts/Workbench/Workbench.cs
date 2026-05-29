@@ -1,5 +1,6 @@
 using System;
 using Brainrot;
+using Helpers;
 using Interfaces;
 using Managers;
 using Player;
@@ -20,9 +21,10 @@ namespace Workbench
         
         [SerializeField] private Transform brainrotInsertionPos;
         [SerializeField] private BrainrotObject insertedBrainrot;
-
+        
         private const float FloatDiff = 0.0001f;
         
+        private int _entityIdHash;
         private float _currentProduceRate;
         private GameManager _gameManager;
 
@@ -37,7 +39,9 @@ namespace Workbench
         
         private void Awake()
         {
-            _gameManager = GameManager.Instance;    
+            _gameManager = GameManager.Instance;   
+            
+            _entityIdHash = EntityRegistry.Instance.AddWorkbench(this);
         }
         
         private void Update()

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Boat;
 using Brainrot;
 using Enemy;
 using Managers;
@@ -19,11 +20,13 @@ namespace UI
         
         private Quest _currentQuest;
         private GameManager _gameManager;
+        private EntityRegistry _entityRegistry;
         private ActiveQuest _activeQuest;
         
         private void Awake()
         {
             _gameManager = GameManager.Instance;
+            _entityRegistry = EntityRegistry.Instance;
         }
         
         private void Start()
@@ -33,22 +36,39 @@ namespace UI
 
         private void ChangeQuests(int currentQuestID)
         {
+            if (currentQuestID >= quests.Count)
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+            
             _currentQuest = quests[currentQuestID];
             Debug.Log(currentQuestID);
             questDescText.SetText(_currentQuest.description);
-            _activeQuest = _currentQuest.objective?.AddComponent<ActiveQuest>();
+            //_activeQuest = _currentQuest.objective?.AddComponent<ActiveQuest>();
 
             switch (_currentQuest.type)
             {
                 case QuestType.Kill:
-                    foreach (var spawner in _gameManager.GetSpawners())
+                    foreach (var spawner in _entityRegistry.GetSpawners().Values)
                         spawner.OnEnemyDeath += FinishKillQuest;
                     break;
                 case QuestType.Buy:
                     _currentQuest.objective.GetComponent<BuyerController>().OnBuyWorkbench += FinishBuyQuest;
                     break;
                 case QuestType.PickUp:
-                    _currentQuest.objective.GetComponent<BrainrotObject>().OnInteract += FinishPickUpQuest;
+                    _entityRegistry.OnBrainrotAdded += SubscribeToNewBrainrotEvents;
+                    foreach (var brainrot in _entityRegistry.GetBrainrots().Values)
+                        brainrot.OnInteract += FinishPickUpQuest;
+                    break;
+                case QuestType.Insert:
+                case QuestType.Collect:
+                    _entityRegistry.OnWorkbenchAdded += SubscribeToNewWorkbenchEvents;
+                    foreach (var workbench in _entityRegistry.GetWorkbenches().Values)
+                        workbench.OnInteract += FinishWorkbenchQuest;
+                    break;
+                case QuestType.Travel:
+                    _currentQuest.objective.GetComponent<BoatController>().OnTravel += FinishTravelQuest;
                     break;
             }
         }
@@ -57,43 +77,53 @@ namespace UI
         {
             foreach (var spawner in _gameManager.GetSpawners())
                 spawner.OnEnemyDeath -= FinishKillQuest;
-            
             var questID = _gameManager.IncrementCurrentQuestID();
-            var newQuest = quests[questID];
-            Debug.Log(enemy);
-            // TODO: добавить в список для квестов
-            newQuest.objective = enemy
-                .GetComponent<EnemyCombat>()
-                .GetSpawnableBrainrot();
-            quests[questID] = newQuest;
-            
             ChangeQuests(questID);
         }
 
         private void FinishBuyQuest(Workbench.Workbench workbench)
         {
             _currentQuest.objective.GetComponent<BuyerController>().OnBuyWorkbench -= FinishBuyQuest;
-            
             var questID = _gameManager.IncrementCurrentQuestID();
-            var newQuest = quests[questID];
-            // TODO: поменять так, чтобы для выполнения подходил любой из станков (список станков и ивент на каждом?)
-            // мб также сделать эту хуйню более динамической, чтобы всё работало, если следующий квест не на Insert
-            newQuest.objective = workbench.gameObject;
-            quests[questID] = newQuest;
-            
             ChangeQuests(questID);
         }
 
-        private void FinishPickUpQuest(BrainrotObject brainrot)
+        private void FinishPickUpQuest()
         {
-            brainrot.OnInteract -= FinishPickUpQuest;
+            _entityRegistry.OnBrainrotAdded -= SubscribeToNewBrainrotEvents;
+            foreach (var brainrot in _entityRegistry.GetBrainrots().Values)
+                brainrot.OnInteract -= FinishPickUpQuest;
             var questID = _gameManager.IncrementCurrentQuestID();
             ChangeQuests(questID);
         }
-        
-        private void FinishQuest()
+
+        private void FinishWorkbenchQuest(QuestType questType)
         {
+            if (questType != _currentQuest.type)
+                return;
             
+            foreach (var workbench in _entityRegistry.GetWorkbenches().Values)
+                workbench.OnInteract -= FinishWorkbenchQuest;
+            var questID = _gameManager.IncrementCurrentQuestID();
+            ChangeQuests(questID);
+        }
+
+        private void FinishTravelQuest()
+        {
+            _currentQuest.objective.GetComponent<BoatController>().OnTravel -= FinishTravelQuest;
+            Debug.Log(_currentQuest.objective.GetComponent<BoatController>());
+            var questID = _gameManager.IncrementCurrentQuestID();
+            ChangeQuests(questID);
+        }
+
+        private void SubscribeToNewBrainrotEvents(BrainrotObject brainrot)
+        {
+            brainrot.OnInteract += FinishPickUpQuest;
+        }
+
+        private void SubscribeToNewWorkbenchEvents(Workbench.Workbench workbench)
+        {
+            workbench.OnInteract += FinishWorkbenchQuest;
         }
     }
 }

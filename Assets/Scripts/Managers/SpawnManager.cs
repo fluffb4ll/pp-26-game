@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Brainrot;
 using Enemy;
+using Helpers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,9 +13,13 @@ namespace Managers
     /// </summary>
     public class SpawnManager : MonoBehaviour
     {
+        [SerializeField] private string entityId;
+        
         [SerializeField] private GameObject spawnablePrefab;
         [SerializeField] private int enemyLimit;
         [SerializeField] private float spawnRate;
+
+        private int _entityIdHash;
         
         private GameManager _gameManager;
         private HashSet<GameObject> _spawnedEnemies;
@@ -23,6 +28,7 @@ namespace Managers
         private bool _isSpawning;
 
         private Action<GameObject> _onEnemyDeath;
+        private Action _onBrainrotSpawn;
         
         void Awake()
         {
@@ -30,6 +36,8 @@ namespace Managers
             _gameManager = GameManager.Instance;
             _spawnableBrainrots = _gameManager.spawnableBrainrots;
             _spawnedEnemies = new HashSet<GameObject>();
+            
+            _entityIdHash = EntityRegistry.Instance.AddSpawner(this);
         }
 
         void OnEnable()
@@ -43,17 +51,28 @@ namespace Managers
             _gameManager.OnGameStateEnd -= OnCombatEnd;
             _gameManager.OnGameStateStart -= OnCombatStart;
         }
-
+        
         // Update is called once per frame
         void Update()
         {
             HandleSpawning();
+        }
+
+        private void OnDestroy()
+        {
+            EntityRegistry.Instance?.RemoveSpawner(_entityIdHash);
         }
         
         public event Action<GameObject> OnEnemyDeath
         {
             add => _onEnemyDeath += value;
             remove => _onEnemyDeath -= value;
+        }
+        
+        public event Action OnBrainrotSpawn
+        {
+            add => _onBrainrotSpawn += value;
+            remove => _onBrainrotSpawn -= value;
         }
 
         private void HandleSpawning()
@@ -99,6 +118,9 @@ namespace Managers
         {
             _spawnedEnemies.Remove(enemy);
             _onEnemyDeath?.Invoke(enemy);
+            
+            enemy.GetComponent<EnemyCombat>().GetSpawnableBrainrot().GetComponent<BrainrotObject>().OnInteract +=
+                _onBrainrotSpawn;
         }
 
         private void ClearSpawnedEnemies()

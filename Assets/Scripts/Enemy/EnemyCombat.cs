@@ -132,11 +132,11 @@ namespace Enemy
             _destroyTimer = timeBeforeDestroyingBody;
             _deathTargetRotation = _transform.rotation * Quaternion.Euler(-90f, 0f, 0f);
             
+            SpawnBrainrot();
             spawnManager?.UnregisterEnemy(gameObject);
             _gameManager.ResetCombatSpawnHealthBonus();
             _gameManager.RegisterEnemyKill();
             
-            SpawnBrainrot();
             _onDeath?.Invoke();
         }
 

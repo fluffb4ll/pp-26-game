@@ -25,6 +25,8 @@ namespace WorkbenchBuyer
         private int _currentWorkbenchCount;
         private int _rowCount = 1;
         
+        private int _entityIdHash;
+        
         private GameManager _gameManager;
         private UIManager _uiManager;
         
@@ -32,6 +34,11 @@ namespace WorkbenchBuyer
         private Action<QuestType> _onInteract;
         private Action<Workbench.Workbench> _onBuyWorkbench;
 
+        private void Awake()
+        {
+            _entityIdHash = EntityRegistry.Instance.AddBuyer(this);
+        }
+        
         private void Start()
         {
             _uiManager = UIManager.Instance;
