@@ -37,7 +37,8 @@ namespace Workbench
             base.Start();
             
             UpdateProduceCounter(workbenchController.storedProduce);
-            DisableProductionInfo();
+            if (workbenchController.GetInsertedBrainrot() is null)
+                DisableProductionInfo();
         }
 
         protected override void OnEnable()

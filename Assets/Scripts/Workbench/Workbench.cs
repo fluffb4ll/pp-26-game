@@ -166,5 +166,28 @@ namespace Workbench
         
         /// <inheritdoc/>
         public Vector3 GetPosition() => transform.position;
+
+        public BrainrotObject GetInsertedBrainrot() => insertedBrainrot;
+        
+        /// <summary>
+        /// Рассчитывает количество монет, которое было выработано за время отсутствия игрока
+        /// </summary>
+        /// <param name="timeDelta">Разница во времени между последним и нынешним логинами</param>
+        public void CalculateOfflineWork(long timeDelta)
+        {
+            var delta = _currentProduceRate;
+            
+            if (timeDelta > insertedBrainrot.lifetime)
+            {
+                delta *= insertedBrainrot.lifetime;
+                Destroy(insertedBrainrot.gameObject);
+                insertedBrainrot = null;
+                _currentProduceRate = baseProduce;
+            }
+            else
+                delta *= timeDelta;
+            
+            storedProduce = delta + storedProduce <= produceStoreCap ? delta + storedProduce : produceStoreCap;
+        }
     }
 }

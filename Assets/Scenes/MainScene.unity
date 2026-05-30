@@ -3175,6 +3175,52 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c2cb5ac08b866d4d83e917dad110c65, type: 3}
+--- !u!1 &1208121360
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1208121362}
+  - component: {fileID: 1208121361}
+  m_Layer: 0
+  m_Name: SaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1208121361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208121360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74839576d176e2f688c43d7c15f47859, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Managers.SaveManager
+  savingRate: 120
+  savingThreshold: 20
+--- !u!4 &1208121362
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208121360}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.20429, y: 5.46324, z: -5.03065}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1259153159
 GameObject:
   m_ObjectHideFlags: 0
@@ -3250,17 +3296,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1259153159}
   m_CullTransparentMesh: 1
---- !u!114 &1282729027 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7628304855293370065, guid: 7163dd4b2b8ac21478220a5814610517, type: 3}
-  m_PrefabInstance: {fileID: 2124445144}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 674c960875893b3b599df615a4d3e920, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Managers.SpawnManager
 --- !u!1 &1300677743
 GameObject:
   m_ObjectHideFlags: 0
@@ -4000,10 +4035,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Managers.GameManager
   spawnHealthBonusStep: 5
   killHealthBonusStep: 10
-  savingRate: 120
-  savingThreshold: 20
-  spawners:
-  - {fileID: 1282729027}
   currentState: 0
   playerTransform: {fileID: 1197920724565565311}
   playerController: {fileID: 8366548381964346177}
@@ -5935,6 +5966,7 @@ SceneRoots:
   - {fileID: 17526396}
   - {fileID: 1483602129}
   - {fileID: 558980652}
+  - {fileID: 1208121362}
   - {fileID: 1186440875}
   - {fileID: 2124445144}
   - {fileID: 3055635521046012128}

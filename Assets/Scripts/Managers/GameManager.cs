@@ -22,7 +22,8 @@ namespace Managers
         
         [SerializeField] private int spawnHealthBonusStep = 5;
         [SerializeField] private int killHealthBonusStep = 10;
-            
+        [SerializeField] private int enemyInitialMaxHealth = 100;
+        
         public GameState currentState;
         public Transform playerTransform;
         public PlayerController playerController;
@@ -69,8 +70,8 @@ namespace Managers
 
         public int GetNextEnemyHealthBonus()
         {
-            _combatSpawnHealthBonus += spawnHealthBonusStep;
-            return _combatSpawnHealthBonus + _killHealthBonus;
+            //_combatSpawnHealthBonus += spawnHealthBonusStep;
+            return _combatSpawnHealthBonus += spawnHealthBonusStep;
         }
 
         public void RegisterEnemyKill()
@@ -78,9 +79,10 @@ namespace Managers
             _killHealthBonus += killHealthBonusStep;
         }
 
-        public void ResetCombatSpawnHealthBonus()
+        public void LowerCombatSpawnHealthBonus()
         {
-            _combatSpawnHealthBonus = 0;
+            var finalValue = _combatSpawnHealthBonus - spawnHealthBonusStep * 5;
+            _combatSpawnHealthBonus = finalValue < enemyInitialMaxHealth ? enemyInitialMaxHealth : finalValue;
         }
     }
 }

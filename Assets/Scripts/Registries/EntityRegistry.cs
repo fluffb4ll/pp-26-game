@@ -14,6 +14,8 @@ namespace Registries
     public class EntityRegistry : MonoBehaviour
     {
         public static EntityRegistry Instance { get; private set; }
+
+        [SerializeField] private GameObject workbenchPrefab;
         
         private Dictionary<int, BrainrotObject> _brainrots = new();
         private Dictionary<BrainrotType, int> _brainrotTypesCounts = new();
@@ -24,7 +26,6 @@ namespace Registries
         private Action<BrainrotObject> _onBrainrotAdded;
         private Action<Workbench.Workbench> _onWorkbenchAdded;
         
-
         private void Awake()
         {
             if (Instance is not null && Instance != this)
@@ -113,6 +114,8 @@ namespace Registries
         public Workbench.Workbench FindWorkbench(int id) => _workbenches.GetValueOrDefault(id);
         
         public SpawnManager FindSpawner(int id) => _spawners.GetValueOrDefault(id);
+        
+        public GameObject GetWorkbenchPrefab() => workbenchPrefab;
         
     }
 }

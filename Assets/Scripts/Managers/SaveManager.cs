@@ -1,4 +1,7 @@
 using System;
+using Registries;
+using SDK;
+using Structs;
 using UnityEngine;
 using YG;
 
@@ -8,10 +11,12 @@ namespace Managers
     {
         public static SaveManager Instance { get; private set; }
         
-        [SerializeField] private float savingRate;
-        [SerializeField] private int savingThreshold;
+        [SerializeField] private float savingRate = 30f;
+        [SerializeField] private const float SaveCooldownThreshold = 20f;
         
         private float _savingTimer;
+        
+        private EntityRegistry _entityRegistry;
         
         private Action _onCoinsChanged;
 
@@ -25,18 +30,40 @@ namespace Managers
 
             Instance = this;
             
-            _savingTimer = savingRate;
+            _entityRegistry = EntityRegistry.Instance;
         }
         
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+        private void Start()
         {
-        
+            LoadWorkbenches();
+            CalculateOfflineWork();
+            HandleSavingData();
         }
         
         private void Update()
         {
             HandleSavingData();
+        }
+
+        private void OnEnable()
+        {
+            _entityRegistry.OnWorkbenchAdded += SaveNewWorkbench;
+        }
+
+        private void OnDisable()
+        {
+            _entityRegistry.OnWorkbenchAdded -= SaveNewWorkbench;
+        }
+
+        private void OnApplicationQuit()
+        {
+            TrySavingData();
+        }
+
+        private void OnApplicationFocus(bool focusStatus)
+        {
+            if (!focusStatus)
+                SaveData();
         }
         
         public event Action OnCoinsChanged
@@ -48,9 +75,13 @@ namespace Managers
         private void HandleSavingData()
         {
             if (_savingTimer > 0)
+            {
                 _savingTimer -= Time.deltaTime;
-            else
-                SaveData();
+                return;
+            }
+            
+            SetNewLastSaveTime();
+            SaveData();
         }
         
         /// <summary>
@@ -58,12 +89,19 @@ namespace Managers
         /// </summary>
         public void SaveData()
         {
-            // TODO: проверить на соответствие условиям частоты сохранений в ЯИ
-            if (_savingTimer >= savingRate * (1 - Mathf.Clamp(savingThreshold, 0, 100) / 100f))
-                return;
-            
             YG2.SaveProgress();
             _savingTimer = savingRate;
+        }
+
+        /// <summary>
+        /// Обёртка вокруг <see cref="SaveData"/>, защищающая от спама сохранениями.
+        /// </summary>
+        public void TrySavingData()
+        {
+            if (_savingTimer >= savingRate * (1 - SaveCooldownThreshold / 100))
+                return;
+
+            SaveData();
         }
         
         /// <summary>
@@ -93,5 +131,42 @@ namespace Managers
         public void SetCurrentQuestID(int currentQuestID) => YG2.saves.currentQuest = currentQuestID;
         
         public int IncrementCurrentQuestID() => ++YG2.saves.currentQuest;
+        
+        private void SetNewLastSaveTime() => YG2.saves.lastSaveTime = DailyRewards.GetServerTime;
+
+        /// <summary>
+        /// Вызывает методы <see cref="Workbench.Workbench.CalculateOfflineWork"/> у всех загруженных станков
+        /// </summary>
+        private void CalculateOfflineWork()
+        {
+            var timedelta = DailyRewards.GetServerTime - YG2.saves.lastSaveTime;
+            foreach (var workbench in _entityRegistry.GetWorkbenches().Values)
+                workbench.CalculateOfflineWork(timedelta);
+        }
+
+        /// <summary>
+        /// Сохраняет купленный станок в облако
+        /// </summary>
+        /// <param name="workbench">Купленный станок</param>
+        private void SaveNewWorkbench(Workbench.Workbench workbench)
+        {
+            var save = new WorkbenchSave(workbench.storedProduce, workbench.GetInsertedBrainrot(),
+                workbench.transform.position, workbench.transform.rotation);
+            YG2.saves.workbenches.Add(save);
+            
+            SaveData();
+        }
+
+        private void LoadWorkbenches()
+        {
+            if (YG2.saves.workbenches.Count == 0)
+                return;
+            
+            var workbenchPrefab = _entityRegistry.GetWorkbenchPrefab();
+            foreach (var workbench in YG2.saves.workbenches)
+            {
+                Instantiate(workbenchPrefab, workbench.position, workbench.rotation);
+            }
+        }
     }
 }

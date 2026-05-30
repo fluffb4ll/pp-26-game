@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Structs;
+
 namespace YG
 {
     /// <summary>
@@ -11,9 +14,15 @@ namespace YG
     public partial class SavesYG
     {
         public long lastDailyRewardTime;
+        public long lastSaveTime;
+        
         public long coins = 5;
 
         public int currentQuest = 0;
+
+        public int enemyHealthBonus;
+
+        public List<WorkbenchSave> workbenches;
     }
 }
 

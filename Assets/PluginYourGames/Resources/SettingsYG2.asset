@@ -20,8 +20,8 @@ MonoBehaviour:
     playerPhoto: demo image
     payingStatus: 0
   InterstitialAdv:
-    showFirstAdv: 0
-    interAdvInterval: 60
+    showFirstAdv: 1
+    interAdvInterval: 100
     postponeCallByFail: 0
     postponeCallTimer: 10
     labelAdvSimLabel: 0
@@ -252,7 +252,7 @@ MonoBehaviour:
     enableInterAdv: 1
     advIntervalSimulation: 60
     durationAdv: 0.5
-    loadAdv: 0
+    loadAdv: 3
     testFailAds: 0
     pauseOnFocusGame: 0
   Templates:

@@ -7,7 +7,7 @@ namespace SDK
     /// <summary>
     /// Содержит идентификаторы <c>rewardId</c>, используемые для выдачи наград за просмотр рекламы
     /// </summary>
-    /// <remarks>Меняете константы - меняйте и кейсы в <see cref="AdManager.ShowRewardAdv()"/></remarks>
+    /// <remarks>Меняете константы - меняйте и кейсы в <see cref="Ads.ShowRewardAdv()"/></remarks>
     public static class AdRewards
     {
         public const string Coins = "coins";
@@ -17,7 +17,7 @@ namespace SDK
     /// Управляет показом рекламы в игре.
     /// Используйте в соответствии с гайдлайнами: https://yandex.ru/dev/games/doc/ru/requirements/4/4
     /// </summary>
-    public class AdManager
+    public class Ads
     {
         /// <summary>
         /// Показывает игроку рекламу и выдаёт награду, основываясь на переданном <c>rewardId</c>.

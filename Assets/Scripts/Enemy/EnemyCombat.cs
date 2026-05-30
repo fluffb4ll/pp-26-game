@@ -134,7 +134,7 @@ namespace Enemy
             
             SpawnBrainrot();
             spawnManager?.UnregisterEnemy(gameObject);
-            _gameManager.ResetCombatSpawnHealthBonus();
+            _gameManager.LowerCombatSpawnHealthBonus();
             _gameManager.RegisterEnemyKill();
             
             _onDeath?.Invoke();
