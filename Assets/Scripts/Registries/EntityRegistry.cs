@@ -16,13 +16,21 @@ namespace Registries
         public static EntityRegistry Instance { get; private set; }
 
         [SerializeField] private GameObject workbenchPrefab;
-        
+        [SerializeField] private List<BrainrotType> brainrotTypes;
+        [SerializeField] private List<GameObject> brainrotPrefabList;
+            
         private Dictionary<int, BrainrotObject> _brainrots = new();
         private Dictionary<BrainrotType, int> _brainrotTypesCounts = new();
         private Dictionary<int, Workbench.Workbench> _workbenches = new();
         private Dictionary<int, SpawnManager> _spawners = new();
         private Dictionary<int, BuyerController> _buyers = new();
 
+        private Dictionary<BrainrotType, GameObject> _brainrotPrefabs = new();
+
+        private bool _isIgnoringSavedObjects = true;
+
+        private SaveManager _saveManager;
+        
         private Action<BrainrotObject> _onBrainrotAdded;
         private Action<Workbench.Workbench> _onWorkbenchAdded;
         
@@ -35,6 +43,9 @@ namespace Registries
             }
 
             Instance = this;
+
+            _saveManager = SaveManager.Instance;
+            FillBrainrotPrefabDict();
         }
         
         public event Action<BrainrotObject> OnBrainrotAdded
@@ -67,7 +78,9 @@ namespace Registries
             
             if (!_brainrots.TryAdd(idHash, brainrot)) return 0;
             
-            _onBrainrotAdded?.Invoke(brainrot);
+            if (!_isIgnoringSavedObjects)
+                _onBrainrotAdded?.Invoke(brainrot);
+            
             return idHash;
         }
 
@@ -77,7 +90,10 @@ namespace Registries
             var idHash = HashFunctions.GetDeterministicHashCode(id);
             if (!_workbenches.TryAdd(idHash, workbench)) return 0;
             
-            _onWorkbenchAdded?.Invoke(workbench);
+            workbench.SetEntityIdHash(idHash);
+            if (!_isIgnoringSavedObjects)
+                _onWorkbenchAdded?.Invoke(workbench);
+            
             return idHash;
         }
         
@@ -116,6 +132,15 @@ namespace Registries
         public SpawnManager FindSpawner(int id) => _spawners.GetValueOrDefault(id);
         
         public GameObject GetWorkbenchPrefab() => workbenchPrefab;
+
+        public void FinishIgnoringSavedObjects() => _isIgnoringSavedObjects = false;
+
+        private void FillBrainrotPrefabDict()
+        {
+            for (var i = 0; i < brainrotTypes.Count; i++)
+                _brainrotPrefabs.Add(brainrotTypes[i], brainrotPrefabList[i]);
+        }
         
+        public GameObject FindBrainrotPrefab(BrainrotType type) => _brainrotPrefabs.GetValueOrDefault(type);
     }
 }

@@ -28,6 +28,7 @@ namespace Enemy
         public SpawnManager spawnManager;
         
         private GameManager _gameManager;
+        private SaveManager _saveManager;
         private GameObject _spawnableBrainrot;
         private Transform _playerTransform;
         private Transform _transform;
@@ -51,6 +52,8 @@ namespace Enemy
             _playerTransform = _gameManager.playerTransform;
             _playerController = _gameManager.playerController;
             _transform = transform;
+
+            _saveManager = SaveManager.Instance;
         }
 
         public void InitializeSpawn(SpawnManager owner, int healthBonus, GameObject spawnableBrainrot)
@@ -134,8 +137,7 @@ namespace Enemy
             
             SpawnBrainrot();
             spawnManager?.UnregisterEnemy(gameObject);
-            _gameManager.LowerCombatSpawnHealthBonus();
-            _gameManager.RegisterEnemyKill();
+            _saveManager.LowerCombatSpawnHealthBonus();
             
             _onDeath?.Invoke();
         }

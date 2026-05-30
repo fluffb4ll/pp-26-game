@@ -1,5 +1,6 @@
 using System;
 using Brainrot;
+using Helpers;
 using Interfaces;
 using Managers;
 using Player;
@@ -23,17 +24,20 @@ namespace Workbench
         [SerializeField] private BrainrotObject insertedBrainrot;
         
         private const float FloatDiff = 0.0001f;
-        
+
+        private string _entityId;
         private int _entityIdHash;
+        
         private float _currentProduceRate;
         private SaveManager _saveManager;
 
         private Action<float> _onProduceUpdate;
-        private Action<BrainrotObject> _onBrainrotInsertion;
+        private Action<Workbench> _onBrainrotInsertion;
         private Action<float> _onBrainrotLifeTimeUpdate;
         private Action<float> _onProduceRateUpdate;
-        private Action _onBrainrotDeath;
+        private Action<Workbench> _onBrainrotDeath;
         private Action<QuestType> _onInteract;
+        private Action<Workbench> _onCollectCoins;
         
         [SerializeField] private InteractableUI uiComponent;
         
@@ -41,7 +45,7 @@ namespace Workbench
         {
             _saveManager = SaveManager.Instance;   
             
-            _entityIdHash = EntityRegistry.Instance.AddWorkbench(this);
+            EntityRegistry.Instance.AddWorkbench(this);
         }
         
         private void Update()
@@ -55,7 +59,7 @@ namespace Workbench
             remove => _onProduceUpdate -= value;
         }
         
-        public event Action<BrainrotObject> OnBrainrotInsertion
+        public event Action<Workbench> OnBrainrotInsertion
         {
             add => _onBrainrotInsertion += value;
             remove => _onBrainrotInsertion -= value;
@@ -73,7 +77,7 @@ namespace Workbench
             remove => _onProduceRateUpdate -= value;
         }
         
-        public event Action OnBrainrotDeath
+        public event Action<Workbench> OnBrainrotDeath
         {
             add => _onBrainrotDeath += value;
             remove => _onBrainrotDeath -= value;
@@ -83,6 +87,12 @@ namespace Workbench
         {
             add => _onInteract += value;
             remove => _onInteract -= value;
+        }
+        
+        public event Action<Workbench> OnCollectCoins
+        {
+            add => _onCollectCoins += value;
+            remove => _onCollectCoins -= value;
         }
         
         /// <summary>
@@ -109,7 +119,7 @@ namespace Workbench
             insertedBrainrot = null;
             _currentProduceRate = baseProduce;
             
-            _onBrainrotDeath?.Invoke();
+            _onBrainrotDeath?.Invoke(this);
         }
 
         /// <summary>
@@ -128,6 +138,7 @@ namespace Workbench
             storedProduce = 0;
             _onProduceUpdate?.Invoke(storedProduce);
             _onInteract?.Invoke(QuestType.Collect);
+            _onCollectCoins?.Invoke(this);
         }
 
         /// <summary>
@@ -144,7 +155,7 @@ namespace Workbench
             
             _currentProduceRate += insertedBrainrot.produce;
             
-            _onBrainrotInsertion?.Invoke(insertedBrainrot);
+            _onBrainrotInsertion?.Invoke(this);
             _onProduceRateUpdate?.Invoke(_currentProduceRate);
             _onInteract?.Invoke(QuestType.Insert);
         }
@@ -172,22 +183,50 @@ namespace Workbench
         /// <summary>
         /// Рассчитывает количество монет, которое было выработано за время отсутствия игрока
         /// </summary>
-        /// <param name="timeDelta">Разница во времени между последним и нынешним логинами</param>
+        /// <param name="timeDelta">Разница во времени между последним и нынешним логинами в миллисекундах</param>
         public void CalculateOfflineWork(long timeDelta)
         {
+            var seconds = timeDelta / 1000;
+            if (insertedBrainrot is null)
+                return;
+            
             var delta = _currentProduceRate;
             
-            if (timeDelta > insertedBrainrot.lifetime)
+            if (seconds > insertedBrainrot.lifetime)
             {
                 delta *= insertedBrainrot.lifetime;
                 Destroy(insertedBrainrot.gameObject);
                 insertedBrainrot = null;
                 _currentProduceRate = baseProduce;
+                _onBrainrotDeath?.Invoke(this);
             }
             else
-                delta *= timeDelta;
+                delta *= seconds;
             
             storedProduce = delta + storedProduce <= produceStoreCap ? delta + storedProduce : produceStoreCap;
         }
+
+        public void LoadSavedData(float baseProduce, float produceStoreCap, float storedProduce)
+        {
+            this.baseProduce = baseProduce;
+            this.produceStoreCap = produceStoreCap;
+            this.storedProduce = storedProduce;
+        }
+
+        public void LoadBrainrotData(float produce, float lifetime, BrainrotType type, Rarity rarity)
+        {
+            insertedBrainrot = Instantiate(EntityRegistry.Instance.FindBrainrotPrefab(type), Vector3.zero, Quaternion.identity, brainrotInsertionPos.transform)
+                .GetComponent<BrainrotObject>();
+            insertedBrainrot.rarity = rarity;
+            insertedBrainrot.lifetime = lifetime;
+            insertedBrainrot.produce = produce;
+            
+            _currentProduceRate = baseProduce + produce;
+            _onBrainrotInsertion?.Invoke(this);
+        }
+
+        public int GetEntityIdHash() => _entityIdHash;
+        
+        public void SetEntityIdHash(int hash) => _entityIdHash = hash;
     }
 }

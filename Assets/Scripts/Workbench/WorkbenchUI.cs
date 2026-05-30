@@ -38,7 +38,7 @@ namespace Workbench
             
             UpdateProduceCounter(workbenchController.storedProduce);
             if (workbenchController.GetInsertedBrainrot() is null)
-                DisableProductionInfo();
+                DisableProductionInfo(workbenchController);
         }
 
         protected override void OnEnable()
@@ -96,9 +96,10 @@ namespace Workbench
         /// <summary>
         /// Обновляет информацию о брейнроте, находящемся в станке
         /// </summary>
-        /// <param name="brainrot">Брейнрот, находящийся в станке</param>
-        private void UpdateBrainrotInfo(BrainrotObject brainrot)
+        /// <param name="workbench">Станок, из которого берётся информация о брейнроте</param>
+        private void UpdateBrainrotInfo(Workbench workbench)
         {
+            var brainrot = workbench.GetInsertedBrainrot();
             var data = NameHelper.ParseBrainrotName(brainrot.GetBrainrotInfo().type);
             brainrotNameText.SetText(data);
             
@@ -112,7 +113,7 @@ namespace Workbench
         /// <summary>
         /// Отключает элементы интерфейса, отображающие информацию о производстве в станке
         /// </summary>
-        private void DisableProductionInfo() => brainrotInfoGroup.SetActive(false);
+        private void DisableProductionInfo(Workbench workbench) => brainrotInfoGroup.SetActive(false);
         
         /// <summary>
         /// Включает элементы интерфейса, отображающие информацию о производстве в станке

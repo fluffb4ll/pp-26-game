@@ -23,6 +23,7 @@ namespace Managers
         private int _entityIdHash;
         
         private GameManager _gameManager;
+        private SaveManager _saveManager;
         private HashSet<GameObject> _spawnedEnemies;
         private List<GameObject> _spawnableBrainrots;
         private float _spawnTimer;
@@ -37,6 +38,8 @@ namespace Managers
             _gameManager = GameManager.Instance;
             _spawnableBrainrots = _gameManager.spawnableBrainrots;
             _spawnedEnemies = new HashSet<GameObject>();
+            
+            _saveManager = SaveManager.Instance;
             
             _entityIdHash = EntityRegistry.Instance.AddSpawner(this);
         }
@@ -92,7 +95,7 @@ namespace Managers
                 .GetComponent<EnemyCombat>()
                 .InitializeSpawn(
                     this, 
-                    _gameManager.GetNextEnemyHealthBonus(), 
+                    _saveManager.GetNextEnemyHealthBonus(), 
                     assignedBrainrot);
             
             _spawnedEnemies.Add(spawnedEnemy);

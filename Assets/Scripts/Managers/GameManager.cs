@@ -20,9 +20,8 @@ namespace Managers
     {
         public static GameManager Instance { get; private set; }
         
-        [SerializeField] private int spawnHealthBonusStep = 5;
-        [SerializeField] private int killHealthBonusStep = 10;
-        [SerializeField] private int enemyInitialMaxHealth = 100;
+        public int spawnHealthBonusStep = 5;
+        public int enemyInitialMaxHealth = 100;
         
         public GameState currentState;
         public Transform playerTransform;
@@ -32,7 +31,6 @@ namespace Managers
         private Action<GameState> _onGameStateStart;
         private Action<GameState> _onGameStateEnd;
         private int _combatSpawnHealthBonus;
-        private int _killHealthBonus;
         
         void Awake()
         {
@@ -66,23 +64,6 @@ namespace Managers
             _onGameStateEnd?.Invoke(currentState);
             currentState = newState;
             _onGameStateStart?.Invoke(newState);
-        }
-
-        public int GetNextEnemyHealthBonus()
-        {
-            //_combatSpawnHealthBonus += spawnHealthBonusStep;
-            return _combatSpawnHealthBonus += spawnHealthBonusStep;
-        }
-
-        public void RegisterEnemyKill()
-        {
-            _killHealthBonus += killHealthBonusStep;
-        }
-
-        public void LowerCombatSpawnHealthBonus()
-        {
-            var finalValue = _combatSpawnHealthBonus - spawnHealthBonusStep * 5;
-            _combatSpawnHealthBonus = finalValue < enemyInitialMaxHealth ? enemyInitialMaxHealth : finalValue;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace YG
 
         public int enemyHealthBonus;
 
-        public List<WorkbenchSave> workbenches;
+        public Dictionary<int, WorkbenchSave> workbenches = new();
     }
 }
 
