@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Brainrot;
 using Helpers;
+using Managers;
 using UnityEngine;
 using WorkbenchBuyer;
 
-namespace Managers
+namespace Registries
 {
     /// <summary>
     /// Реестр игровых сущностей - содержит ссылки на важные игровые объекты.

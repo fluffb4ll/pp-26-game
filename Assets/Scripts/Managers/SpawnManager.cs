@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Brainrot;
 using Enemy;
 using Helpers;
+using Registries;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

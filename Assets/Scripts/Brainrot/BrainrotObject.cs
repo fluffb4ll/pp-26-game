@@ -3,6 +3,7 @@ using Helpers;
 using Interfaces;
 using Managers;
 using Player;
+using Registries;
 using Structs;
 using UI;
 using UnityEngine;
@@ -28,7 +29,6 @@ namespace Brainrot
         private void Awake()
         {
             _entityIdHash = EntityRegistry.Instance.AddBrainrot(data.type, this);
-            Debug.Log(_entityIdHash);
         }
         
         // Start is called once before the first execution of Update after the MonoBehaviour is created

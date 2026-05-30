@@ -4,6 +4,7 @@ using Helpers;
 using Interfaces;
 using Managers;
 using Player;
+using Registries;
 using Structs;
 using UI;
 using UnityEngine;

@@ -3,6 +3,7 @@ using Boat;
 using Brainrot;
 using Enemy;
 using Managers;
+using Registries;
 using Structs;
 using TMPro;
 using UnityEngine;
@@ -43,7 +44,6 @@ namespace UI
             }
             
             _currentQuest = quests[currentQuestID];
-            Debug.Log(currentQuestID);
             questDescText.SetText(_currentQuest.description);
             //_activeQuest = _currentQuest.objective?.AddComponent<ActiveQuest>();
 
@@ -54,7 +54,8 @@ namespace UI
                         spawner.OnEnemyDeath += FinishKillQuest;
                     break;
                 case QuestType.Buy:
-                    _currentQuest.objective.GetComponent<BuyerController>().OnBuyWorkbench += FinishBuyQuest;
+                    foreach (var buyer in _entityRegistry.GetBuyers().Values)
+                        buyer.OnBuyWorkbench += FinishBuyQuest;
                     break;
                 case QuestType.PickUp:
                     _entityRegistry.OnBrainrotAdded += SubscribeToNewBrainrotEvents;
@@ -83,7 +84,8 @@ namespace UI
 
         private void FinishBuyQuest(Workbench.Workbench workbench)
         {
-            _currentQuest.objective.GetComponent<BuyerController>().OnBuyWorkbench -= FinishBuyQuest;
+            foreach (var buyer in _entityRegistry.GetBuyers().Values)
+                buyer.OnBuyWorkbench -= FinishBuyQuest;
             var questID = _gameManager.IncrementCurrentQuestID();
             ChangeQuests(questID);
         }
@@ -111,7 +113,6 @@ namespace UI
         private void FinishTravelQuest()
         {
             _currentQuest.objective.GetComponent<BoatController>().OnTravel -= FinishTravelQuest;
-            Debug.Log(_currentQuest.objective.GetComponent<BoatController>());
             var questID = _gameManager.IncrementCurrentQuestID();
             ChangeQuests(questID);
         }
