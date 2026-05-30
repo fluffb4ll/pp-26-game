@@ -388,7 +388,7 @@ GameObject:
   - component: {fileID: 6411324435115521278}
   - component: {fileID: 4832010644876977761}
   - component: {fileID: 210834016864447628}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: InputPromptCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1221,7 +1221,7 @@ GameObject:
   - component: {fileID: 8337051681199610083}
   - component: {fileID: 2147285760505985721}
   - component: {fileID: 5813544767040403484}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1434,7 +1434,7 @@ GameObject:
   - component: {fileID: 5504724450607035120}
   - component: {fileID: 5921982166687958645}
   - component: {fileID: 8827874183368987678}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

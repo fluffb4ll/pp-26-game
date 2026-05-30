@@ -201,6 +201,7 @@ MonoBehaviour:
   uiMovementSpeed: 10
   collider: {fileID: 3378291381097759812}
   uiInfoComponent: {fileID: 0}
+  hideInfoUIOnColliderExit: 0
 --- !u!1 &4569362722813796656
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,7 +251,7 @@ GameObject:
   - component: {fileID: 1609341164203906230}
   - component: {fileID: 7461096063161925127}
   - component: {fileID: 360597076154732819}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -420,7 +421,7 @@ GameObject:
   - component: {fileID: 6054900560926220259}
   - component: {fileID: 8164858227183253993}
   - component: {fileID: 1069867169757091258}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: InputPromptCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -521,7 +522,7 @@ GameObject:
   - component: {fileID: 8964804044098048144}
   - component: {fileID: 4233808465728846178}
   - component: {fileID: 1846196731526604310}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

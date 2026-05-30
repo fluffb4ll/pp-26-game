@@ -22,6 +22,9 @@ namespace Camera
         [SerializeField] private bool lockCursorWhileRotating = true;
         [SerializeField] [Range(0, 100)] private int lookSensitivity = 100;
 
+        [SerializeField] private float xMult;
+        [SerializeField] private float yMult;
+
         private InputAction _lookCamMovementAction;
         private InputAction _lookLockPtrAction;
         private Transform _transform;
@@ -112,8 +115,9 @@ namespace Camera
 
             var orbitRotation = Quaternion.Euler(_pitch, _yaw, 0f);
             var pivotPosition = target.position + Vector3.up * pivotHeight;
-
-            _transform.position = pivotPosition + orbitRotation * (Vector3.back * distance);
+            var back = Vector3.back;
+            
+            _transform.position = pivotPosition + orbitRotation * (new Vector3(back.x + xMult, back.y + yMult, back.z) * distance);
             _transform.rotation = orbitRotation;
             
             _onCamRotation?.Invoke(orbitRotation);

@@ -398,6 +398,8 @@ MonoBehaviour:
   maxPitch: 70
   lockCursorWhileRotating: 1
   lookSensitivity: 100
+  xMult: 0.15
+  yMult: 0.1
 --- !u!114 &155497300
 MonoBehaviour:
   m_ObjectHideFlags: 0
