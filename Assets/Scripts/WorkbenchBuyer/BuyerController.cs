@@ -28,8 +28,9 @@ namespace WorkbenchBuyer
         
         private int _entityIdHash;
         
-        private GameManager _gameManager;
+        private SaveManager _saveManager;
         private UIManager _uiManager;
+        private EntityRegistry _entityRegistry;
         
         private Action<long> _onPriceChange;
         private Action<QuestType> _onInteract;
@@ -37,13 +38,15 @@ namespace WorkbenchBuyer
 
         private void Awake()
         {
-            _entityIdHash = EntityRegistry.Instance.AddBuyer(this);
+            _uiManager = UIManager.Instance;
+            _saveManager = SaveManager.Instance;
+            _entityRegistry = EntityRegistry.Instance;
+            
+            _entityIdHash = _entityRegistry.AddBuyer(this);
         }
         
         private void Start()
         {
-            _uiManager = UIManager.Instance;
-            _gameManager = GameManager.Instance;
             _currentPrice = initialPrice;
         }
         
@@ -67,13 +70,14 @@ namespace WorkbenchBuyer
         
         private void HandleWorkbenchBuying()
         {
+            var currentWorkbenchCount = _entityRegistry.GetWorkbenches().Count;
             if (_currentWorkbenchCount == workbenchLimit)
             {
                 _uiManager.CreateNotification("Достигнут лимит станков!");
                 return;
             }
             
-            var coins = _gameManager.GetCoinsAmount();
+            var coins = _saveManager.GetCoinsAmount();
 
             if (coins < _currentPrice)
             {
@@ -97,7 +101,7 @@ namespace WorkbenchBuyer
                 new Vector3(targetXPos, pos.y, targetZPos), 
                 Quaternion.Euler(0f, targetYAngle, 0f)).GetComponent<Workbench.Workbench>();
             
-            _gameManager.ChangeCoinsAmount(-_currentPrice);
+            _saveManager.ChangeCoinsAmount(-_currentPrice);
             
             _currentWorkbenchCount++;
             

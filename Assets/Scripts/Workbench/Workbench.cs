@@ -1,6 +1,5 @@
 using System;
 using Brainrot;
-using Helpers;
 using Interfaces;
 using Managers;
 using Player;
@@ -27,7 +26,7 @@ namespace Workbench
         
         private int _entityIdHash;
         private float _currentProduceRate;
-        private GameManager _gameManager;
+        private SaveManager _saveManager;
 
         private Action<float> _onProduceUpdate;
         private Action<BrainrotObject> _onBrainrotInsertion;
@@ -40,7 +39,7 @@ namespace Workbench
         
         private void Awake()
         {
-            _gameManager = GameManager.Instance;   
+            _saveManager = SaveManager.Instance;   
             
             _entityIdHash = EntityRegistry.Instance.AddWorkbench(this);
         }
@@ -125,7 +124,7 @@ namespace Workbench
                 return;
             }
             
-            _gameManager.ChangeCoinsAmount((long) Math.Round(storedProduce));
+            _saveManager.ChangeCoinsAmount((long) Math.Round(storedProduce));
             storedProduce = 0;
             _onProduceUpdate?.Invoke(storedProduce);
             _onInteract?.Invoke(QuestType.Collect);

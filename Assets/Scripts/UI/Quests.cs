@@ -20,19 +20,19 @@ namespace UI
         [SerializeField] private Image questIcon;
         
         private Quest _currentQuest;
-        private GameManager _gameManager;
+        private SaveManager _saveManager;
         private EntityRegistry _entityRegistry;
         private ActiveQuest _activeQuest;
         
         private void Awake()
         {
-            _gameManager = GameManager.Instance;
+            _saveManager = SaveManager.Instance;
             _entityRegistry = EntityRegistry.Instance;
         }
         
         private void Start()
         {
-            ChangeQuests(_gameManager.GetCurrentQuestID());
+            ChangeQuests(_saveManager.GetCurrentQuestID());
         }
 
         private void ChangeQuests(int currentQuestID)
@@ -76,9 +76,9 @@ namespace UI
 
         private void FinishKillQuest(GameObject enemy)
         {
-            foreach (var spawner in _gameManager.GetSpawners())
+            foreach (var spawner in _entityRegistry.GetSpawners().Values)
                 spawner.OnEnemyDeath -= FinishKillQuest;
-            var questID = _gameManager.IncrementCurrentQuestID();
+            var questID = _saveManager.IncrementCurrentQuestID();
             ChangeQuests(questID);
         }
 
@@ -86,7 +86,7 @@ namespace UI
         {
             foreach (var buyer in _entityRegistry.GetBuyers().Values)
                 buyer.OnBuyWorkbench -= FinishBuyQuest;
-            var questID = _gameManager.IncrementCurrentQuestID();
+            var questID = _saveManager.IncrementCurrentQuestID();
             ChangeQuests(questID);
         }
 
@@ -95,7 +95,7 @@ namespace UI
             _entityRegistry.OnBrainrotAdded -= SubscribeToNewBrainrotEvents;
             foreach (var brainrot in _entityRegistry.GetBrainrots().Values)
                 brainrot.OnInteract -= FinishPickUpQuest;
-            var questID = _gameManager.IncrementCurrentQuestID();
+            var questID = _saveManager.IncrementCurrentQuestID();
             ChangeQuests(questID);
         }
 
@@ -106,14 +106,14 @@ namespace UI
             
             foreach (var workbench in _entityRegistry.GetWorkbenches().Values)
                 workbench.OnInteract -= FinishWorkbenchQuest;
-            var questID = _gameManager.IncrementCurrentQuestID();
+            var questID = _saveManager.IncrementCurrentQuestID();
             ChangeQuests(questID);
         }
 
         private void FinishTravelQuest()
         {
             _currentQuest.objective.GetComponent<BoatController>().OnTravel -= FinishTravelQuest;
-            var questID = _gameManager.IncrementCurrentQuestID();
+            var questID = _saveManager.IncrementCurrentQuestID();
             ChangeQuests(questID);
         }
 

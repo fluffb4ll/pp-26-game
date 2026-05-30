@@ -31,7 +31,7 @@ namespace SDK
                 switch (rewardId)
                 {
                     case AdRewards.Coins:
-                        GameManager.Instance.ChangeCoinsAmount(100);
+                        SaveManager.Instance.ChangeCoinsAmount(100);
                         break;
                     // ВАЖНО: изменили AdRewards - меняем кейсы
                 }

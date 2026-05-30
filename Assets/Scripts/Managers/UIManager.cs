@@ -38,6 +38,7 @@ namespace Managers
         
         private GameManager _gameManager;
         private PlayerController _playerController;
+        private SaveManager _saveManager;
         private Rect _lastSafeArea;
         private Vector2Int _lastScreenSize;
         private float _hpBarFillMaxWidth;
@@ -61,6 +62,7 @@ namespace Managers
 
             _gameManager = GameManager.Instance;
             _playerController = PlayerController.Instance;
+            _saveManager = SaveManager.Instance;
 
             RefreshLayout(true);
         }
@@ -80,7 +82,7 @@ namespace Managers
         {
             _gameManager.OnGameStateStart += ToggleHpBar;
             _gameManager.OnGameStateEnd += ToggleHpBar;
-            _gameManager.OnCoinsChanged += UpdateCoinCount;
+            _saveManager.OnCoinsChanged += UpdateCoinCount;
             _playerController.OnTakeDamage += UpdateHpBarFill;
             _playerController.OnHeal += UpdateHpBarFill;
         }
@@ -89,7 +91,7 @@ namespace Managers
         {
             _gameManager.OnGameStateStart -= ToggleHpBar;
             _gameManager.OnGameStateEnd -= ToggleHpBar;
-            _gameManager.OnCoinsChanged -= UpdateCoinCount;
+            _saveManager.OnCoinsChanged -= UpdateCoinCount;
             _playerController.OnTakeDamage -= UpdateHpBarFill;
             _playerController.OnHeal -= UpdateHpBarFill;
         }
@@ -178,7 +180,7 @@ namespace Managers
             if (!panel.activeSelf)
             {
                 _activeSubmenu = null;
-                _gameManager.SaveData();
+                _saveManager.SaveData();
                 return;
             }
 
@@ -210,7 +212,7 @@ namespace Managers
         /// </summary>
         private void UpdateCoinCount()
         {
-            var amount = _gameManager.GetCoinsAmount();
+            var amount = _saveManager.GetCoinsAmount();
             var data = ValueShortener.CountShortener(amount);
             coinCount.SetText(data.formatTemplate, data.value);
         }

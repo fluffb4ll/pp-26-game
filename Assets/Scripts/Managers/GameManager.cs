@@ -22,33 +22,20 @@ namespace Managers
         
         [SerializeField] private int spawnHealthBonusStep = 5;
         [SerializeField] private int killHealthBonusStep = 10;
-        [SerializeField] private float savingRate;
-        [SerializeField] private int savingThreshold;
-
-        [SerializeField] private List<SpawnManager> spawners;
             
         public GameState currentState;
         public Transform playerTransform;
         public PlayerController playerController;
         public List<GameObject> spawnableBrainrots;
         
-        private float _savingTimer;
         private Action<GameState> _onGameStateStart;
         private Action<GameState> _onGameStateEnd;
         private int _combatSpawnHealthBonus;
         private int _killHealthBonus;
-
-        private Action _onCoinsChanged;
         
         void Awake()
         {
             Instance = this;
-            _savingTimer = savingRate;
-        }
-
-        void Update()
-        {
-            HandleSavingData();
         }
         
         /// <summary>
@@ -69,12 +56,6 @@ namespace Managers
             remove => _onGameStateEnd -= value;
         }
         
-        public event Action OnCoinsChanged
-        {
-            add => _onCoinsChanged += value;
-            remove => _onCoinsChanged -= value;
-        }
-        
         /// <summary>
         /// Изменяет текущий геймстейт на указанный
         /// </summary>
@@ -84,49 +65,6 @@ namespace Managers
             _onGameStateEnd?.Invoke(currentState);
             currentState = newState;
             _onGameStateStart?.Invoke(newState);
-        }
-        
-        /// <summary>
-        /// Возвращает количество монет у игрока
-        /// </summary>
-        public long GetCoinsAmount()
-        {
-            return YG2.saves.coins;
-        }
-        
-        /// <summary>
-        /// Изменяет число монет у игрока.
-        /// Обновлять число монет стоит ТОЛЬКО через этот метод.
-        /// </summary>
-        /// <param name="delta">Изменение количества монет</param>
-        public void ChangeCoinsAmount(long delta)
-        {
-            if (YG2.saves.coins + delta < 0)
-                return;
-            
-            YG2.saves.coins += delta;
-            _onCoinsChanged?.Invoke();
-        }
-        
-        private void HandleSavingData()
-        {
-            if (_savingTimer > 0)
-                _savingTimer -= Time.deltaTime;
-            else
-                SaveData();
-        }
-
-        /// <summary>
-        /// Сохраняет данные игрока
-        /// </summary>
-        public void SaveData()
-        {
-            // TODO: проверить на соответствие условиям частоты сохранений в ЯИ
-            if (_savingTimer >= savingRate * (1 - Mathf.Clamp(savingThreshold, 0, 100) / 100f))
-                return;
-            
-            YG2.SaveProgress();
-            _savingTimer = savingRate;
         }
 
         public int GetNextEnemyHealthBonus()
@@ -144,13 +82,5 @@ namespace Managers
         {
             _combatSpawnHealthBonus = 0;
         }
-
-        public int GetCurrentQuestID() => YG2.saves.currentQuest;
-        
-        public void SetCurrentQuestID(int currentQuestID) => YG2.saves.currentQuest = currentQuestID;
-        
-        public int IncrementCurrentQuestID() => ++YG2.saves.currentQuest;
-        
-        public List<SpawnManager> GetSpawners() => spawners;
     }
 }
