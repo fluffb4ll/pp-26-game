@@ -148,6 +148,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40c2f9b68ff24229910faf18cac45d0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Managers.EntityRegistry
+  workbenchPrefab: {fileID: 7500374534252478490, guid: efbfa3e86bd89c246940bb21f905697e, type: 3}
+  brainrotTypes: 000000000100000002000000
+  brainrotPrefabList:
+  - {fileID: 871746005220737714, guid: 03143b03b288b3d418f69389b579b2f9, type: 3}
+  - {fileID: 1337268276677933175, guid: e0619c7d76a9ff64cbf5539fbbcac479, type: 3}
+  - {fileID: 5145043209413951014, guid: 923210b3946029de6a59bf0acf05ffdb, type: 3}
 --- !u!4 &17526396
 Transform:
   m_ObjectHideFlags: 0
@@ -3205,7 +3211,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Managers.SaveManager
   savingRate: 120
-  savingThreshold: 20
 --- !u!4 &1208121362
 Transform:
   m_ObjectHideFlags: 0
@@ -4034,7 +4039,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Managers.GameManager
   spawnHealthBonusStep: 5
-  killHealthBonusStep: 10
+  enemyInitialMaxHealth: 100
   currentState: 0
   playerTransform: {fileID: 1197920724565565311}
   playerController: {fileID: 8366548381964346177}
